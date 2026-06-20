@@ -1,0 +1,185 @@
+"use client"
+
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { BookOpen, Plus, Trash2, ChevronLeft, Menu, X, FileText, BookX } from "lucide-react"
+import type { Subject } from "@/lib/types"
+
+interface SidebarProps {
+  subjects: Subject[]
+  activeSubjectId: string | null
+  onSelect: (id: string) => void
+  onCreate: (name: string) => void
+  onDelete: (id: string) => void
+  wrongCount: number
+  questionCount: number
+  collapsed: boolean
+  onToggle: () => void
+}
+
+export function Sidebar({
+  subjects,
+  activeSubjectId,
+  onSelect,
+  onCreate,
+  onDelete,
+  wrongCount,
+  questionCount,
+  collapsed,
+  onToggle,
+}: SidebarProps) {
+  const [showNewInput, setShowNewInput] = useState(false)
+  const [newName, setNewName] = useState("")
+
+  const handleCreate = () => {
+    if (newName.trim()) {
+      onCreate(newName.trim())
+      setNewName("")
+      setShowNewInput(false)
+    }
+  }
+
+  return (
+    <>
+      {/* Mobile overlay */}
+      <AnimatePresence>
+        {!collapsed && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/20 z-30 lg:hidden"
+            onClick={onToggle}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Sidebar */}
+      <motion.aside
+        initial={false}
+        animate={{ width: collapsed ? 0 : 240 }}
+        className="h-full border-r border-foreground/20 bg-background/95 backdrop-blur-sm overflow-hidden flex flex-col shrink-0 z-40 fixed lg:relative"
+      >
+        <div className="min-w-[240px] flex flex-col h-full">
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-3 border-b border-foreground/10">
+            {!collapsed && (
+              <>
+                <span className="text-xs font-mono tracking-[0.15em] uppercase font-bold text-foreground">
+                  科目列表
+                </span>
+                <button
+                  onClick={onToggle}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <ChevronLeft size={14} strokeWidth={1.5} />
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* Subject list */}
+          {!collapsed && (
+            <div className="flex-1 overflow-y-auto py-2">
+              {subjects.length === 0 && (
+                <div className="px-4 py-6 text-center">
+                  <p className="text-[10px] font-mono text-muted-foreground">
+                    暂无科目
+                  </p>
+                  <p className="text-[10px] font-mono text-muted-foreground mt-1">
+                    点击下方新建
+                  </p>
+                </div>
+              )}
+              {subjects.map((s) => (
+                <div key={s.id} className="px-2">
+                  <button
+                    onClick={() => {
+                      onSelect(s.id)
+                      if (window.innerWidth < 1024) onToggle()
+                    }}
+                    className={`w-full flex items-center gap-2 px-3 py-2.5 text-xs font-mono text-left transition-colors border-l-2 group ${
+                      activeSubjectId === s.id
+                        ? "border-accent bg-accent/5 text-accent"
+                        : "border-transparent text-muted-foreground hover:text-foreground hover:bg-foreground/5"
+                    }`}
+                  >
+                    <BookOpen size={12} strokeWidth={1.5} className="shrink-0" />
+                    <span className="truncate flex-1">{s.name}</span>
+                    <span
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        if (confirm(`删除科目「${s.name}」？`)) onDelete(s.id)
+                      }}
+                      className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-all cursor-pointer"
+                    >
+                      <Trash2 size={10} strokeWidth={1.5} />
+                    </span>
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Stats */}
+          {!collapsed && activeSubjectId && (
+            <div className="px-4 py-2 border-t border-foreground/10 space-y-1">
+              <div className="flex items-center justify-between text-[10px] font-mono text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <FileText size={10} strokeWidth={1.5} />
+                  题目
+                </span>
+                <span>{questionCount}</span>
+              </div>
+              {wrongCount > 0 && (
+                <div className="flex items-center justify-between text-[10px] font-mono text-accent">
+                  <span className="flex items-center gap-1">
+                    <BookX size={10} strokeWidth={1.5} />
+                    错题
+                  </span>
+                  <span>{wrongCount}</span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* New subject */}
+          {!collapsed && (
+            <div className="px-3 py-3 border-t border-foreground/10">
+              {showNewInput ? (
+                <div className="flex gap-1">
+                  <input
+                    type="text"
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleCreate()
+                      if (e.key === "Escape") setShowNewInput(false)
+                    }}
+                    placeholder="科目名称"
+                    autoFocus
+                    className="flex-1 border border-foreground/20 bg-transparent px-2 py-1.5 text-xs font-mono text-foreground placeholder:text-muted-foreground/50 outline-none focus:border-foreground/40"
+                  />
+                  <button
+                    onClick={handleCreate}
+                    className="bg-accent text-accent-foreground px-2 py-1.5 text-[10px] font-mono"
+                  >
+                    确定
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setShowNewInput(true)}
+                  className="w-full flex items-center justify-center gap-1.5 border border-dashed border-foreground/20 px-3 py-2 text-[10px] font-mono text-muted-foreground hover:text-foreground hover:border-foreground/40 transition-colors"
+                >
+                  <Plus size={12} strokeWidth={1.5} />
+                  新建科目
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      </motion.aside>
+    </>
+  )
+}

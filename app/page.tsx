@@ -1,0 +1,265 @@
+"use client"
+
+import { useState, useEffect, useCallback } from "react"
+import { ImportPanel } from "@/components/import-panel"
+import { QuizView } from "@/components/quiz-view"
+import { Sidebar } from "@/components/sidebar"
+import { Menu } from "lucide-react"
+import {
+  loadSubjects,
+  saveSubjects,
+  loadActiveSubject,
+  saveActiveSubject,
+  loadSubjectData,
+  saveSubjectData,
+  deleteSubject,
+} from "@/lib/storage"
+import type { Question, Subject } from "@/lib/types"
+
+type View = "import" | "quiz" | "wrong-book"
+
+let idCounter = 0
+function genId() {
+  return `subj-${Date.now()}-${++idCounter}`
+}
+
+export default function Page() {
+  const [subjects, setSubjects] = useState<Subject[]>([])
+  const [activeSubjectId, setActiveSubjectId] = useState<string | null>(null)
+  const [questions, setQuestions] = useState<Question[]>([])
+  const [wrongIds, setWrongIds] = useState<string[]>([])
+  const [view, setView] = useState<View>("import")
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true)
+  const [importCount, setImportCount] = useState(0)
+  const [hasEnteredQuiz, setHasEnteredQuiz] = useState(false)
+  const [focusMode, setFocusMode] = useState(false)
+
+  // Reset quiz-entered flag on re-import
+  useEffect(() => {
+    setHasEnteredQuiz(false)
+  }, [importCount])
+
+  // Track when user enters quiz view
+  useEffect(() => {
+    if (view === "quiz") {
+      setHasEnteredQuiz(true)
+    }
+  }, [view])
+
+  // Load on mount
+  useEffect(() => {
+    const loaded = loadSubjects()
+    setSubjects(loaded)
+
+    const activeId = loadActiveSubject()
+    if (activeId && loaded.some((s) => s.id === activeId)) {
+      switchSubject(activeId, loaded)
+    } else if (loaded.length > 0) {
+      switchSubject(loaded[0].id, loaded)
+    }
+  }, [])
+
+
+  const persistSubjectData = useCallback(
+    (subjId: string, qs: Question[], wrong: string[]) => {
+      saveSubjectData(subjId, { questions: qs, wrongIds: wrong })
+    },
+    []
+  )
+
+  const switchSubject = useCallback(
+    (id: string, subjList?: Subject[]) => {
+      const list = subjList || subjects
+      setActiveSubjectId(id)
+      saveActiveSubject(id)
+      const data = loadSubjectData(id)
+      setQuestions(data?.questions || [])
+      setWrongIds(data?.wrongIds || [])
+      setView("import")
+    },
+    [subjects]
+  )
+
+  const handleCreateSubject = useCallback(
+    (name: string) => {
+      if (subjects.some((s) => s.name === name)) {
+        alert(`科目「${name}」已存在`)
+        return
+      }
+      const newSubj: Subject = {
+        id: genId(),
+        name,
+        createdAt: Date.now(),
+      }
+      const updated = [...subjects, newSubj]
+      setSubjects(updated)
+      saveSubjects(updated)
+      setActiveSubjectId(newSubj.id)
+      saveActiveSubject(newSubj.id)
+      setQuestions([])
+      setWrongIds([])
+      setView("import")
+    },
+    [subjects]
+  )
+
+  const handleDeleteSubject = useCallback(
+    (id: string) => {
+      const updated = subjects.filter((s) => s.id !== id)
+      setSubjects(updated)
+      saveSubjects(updated)
+      deleteSubject(id)
+      if (activeSubjectId === id) {
+        if (updated.length > 0) {
+          switchSubject(updated[0].id, updated)
+        } else {
+          setActiveSubjectId(null)
+          setQuestions([])
+          setWrongIds([])
+        }
+      }
+    },
+    [subjects, activeSubjectId, switchSubject]
+  )
+
+  const handleImport = useCallback(
+    (qs: Question[]) => {
+      setQuestions(qs)
+      setWrongIds([])
+      setImportCount((c) => c + 1)
+      if (activeSubjectId) {
+        saveSubjectData(activeSubjectId, { questions: qs, wrongIds: [] })
+      }
+      // Stay on import view if some questions lack answers, else go to quiz
+      const hasMissing = qs.some((q) => !q.answer)
+      setView(hasMissing ? "import" : "quiz")
+    },
+    [activeSubjectId]
+  )
+
+  const handleReset = useCallback(() => {
+    setView("import")
+  }, [])
+
+  const handleUpdateWrong = useCallback(
+    (ids: string[]) => {
+      setWrongIds(ids)
+      if (activeSubjectId) {
+        saveSubjectData(activeSubjectId, { questions, wrongIds: ids })
+      }
+    },
+    [activeSubjectId, questions]
+  )
+
+  const handleClearWrong = useCallback(() => {
+    setWrongIds([])
+    if (activeSubjectId) {
+      saveSubjectData(activeSubjectId, { questions, wrongIds: [] })
+    }
+  }, [activeSubjectId, questions])
+
+  const handleRemoveWrong = useCallback((id: string) => {
+    setWrongIds((prev) => {
+      const newWrongIds = prev.filter((wid) => wid !== id)
+      if (activeSubjectId) {
+        saveSubjectData(activeSubjectId, { questions, wrongIds: newWrongIds })
+      }
+      return newWrongIds
+    })
+  }, [activeSubjectId, questions])
+
+  const handleOpenWrongBook = useCallback(() => {
+    if (wrongIds.length > 0) {
+      setView("wrong-book")
+    }
+  }, [wrongIds])
+
+  return (
+    <div className="min-h-screen dot-grid-bg flex">
+      {/* Sidebar */}
+      <div className={focusMode ? "hidden" : ""}>
+        <Sidebar
+        subjects={subjects}
+        activeSubjectId={activeSubjectId}
+        onSelect={(id) => {
+          if (activeSubjectId) {
+            persistSubjectData(activeSubjectId, questions, wrongIds)
+          }
+          switchSubject(id)
+        }}
+        onCreate={handleCreateSubject}
+        onDelete={handleDeleteSubject}
+        wrongCount={wrongIds.length}
+        questionCount={questions.length}
+        collapsed={sidebarCollapsed}
+        onToggle={() => setSidebarCollapsed((c) => !c)}
+      />
+      </div>
+
+      {/* Main content */}
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Top bar */}
+        <div className={focusMode ? "hidden" : "w-full px-4 pt-4 lg:px-6 lg:pt-6"}>
+          <div className="border border-foreground/20 bg-background/80 backdrop-blur-sm px-5 py-3 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              {/* Sidebar toggle (desktop) */}
+              <button
+                onClick={() => setSidebarCollapsed((c) => !c)}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Menu size={14} strokeWidth={1.5} />
+              </button>
+              <span className="text-xs font-mono tracking-[0.15em] uppercase font-bold text-foreground">
+                {activeSubjectId
+                  ? subjects.find((s) => s.id === activeSubjectId)?.name || "期末复习"
+                  : "期末复习"}
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-[10px] font-mono text-muted-foreground">
+                {questions.length} 题
+              </span>
+              {view === "import" && questions.length > 0 && (
+                <button
+                  onClick={() => setView("quiz")}
+                  className="bg-accent text-accent-foreground px-2 py-1 text-[10px] font-mono uppercase tracking-wider"
+                >
+                  {hasEnteredQuiz ? "继续答题" : "开始答题"}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <main className={`flex-1 flex relative ${focusMode ? "py-0" : "py-8 lg:py-12"} ${view !== "import" ? "items-stretch" : "items-start justify-center"}`}>
+          {/* Import Panel — hidden when in quiz mode but stays mounted */}
+          <div className={view === "import" ? "" : "hidden"}>
+            <ImportPanel
+              onImport={handleImport}
+              questionCount={questions.length}
+              wrongCount={wrongIds.length}
+              onOpenWrongBook={handleOpenWrongBook}
+              questions={questions}
+            />
+          </div>
+
+          {/* Quiz View — hidden when in import mode but stays mounted to preserve state.
+              Key changes force remount: "quiz" preserves state, "wrong-book" starts fresh */}
+          <div className={`${view !== "import" ? "w-full h-full flex" : "hidden"}`} key={view === "wrong-book" ? "wrong-book" : `quiz-${importCount}`}>
+            <QuizView
+              questions={questions}
+              onReset={handleReset}
+              onUpdateWrong={handleUpdateWrong}
+              onClearWrong={handleClearWrong}
+              onRemoveWrong={handleRemoveWrong}
+              wrongIds={wrongIds}
+              initialMode={view === "wrong-book" ? "wrong-book" : "normal"}
+              focusMode={focusMode}
+              onToggleFocus={() => setFocusMode((f) => !f)}
+            />
+          </div>
+        </main>
+      </div>
+    </div>
+  )
+}
