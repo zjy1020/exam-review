@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ChevronLeft, ChevronRight, RotateCcw, BookX, CheckCircle2, XCircle, ArrowLeft, ListTree, Filter } from "lucide-react"
+import { ChevronLeft, ChevronRight, RotateCcw, BookX, CheckCircle2, XCircle, ArrowLeft, ListTree, Filter, FileText } from "lucide-react"
 import type { Question } from "@/lib/types"
 import {
   Dialog,
@@ -25,8 +25,36 @@ interface QuizViewProps {
 type QuizMode = "normal" | "wrong-book"
 
 function isTrueFalse(q: Question) {
+  if (!q.answer) return false
   const ans = q.answer.replace(/[.。\s]/g, "")
   return ans === "对" || ans === "错"
+}
+
+// Normalize answer for fuzzy matching
+function matchAnswer(userAnswer: string | undefined, correctAnswer: string | undefined): boolean {
+  if (!userAnswer || !correctAnswer) return false
+  const normalize = (s: string) => {
+    let r = s.trim()
+    r = r.replace(/[（(].*?[）)]/g, '').trim()         // "多态（或Polymorphism）" → "多态"
+    r = r.replace(/^[A-Da-d][.、．）)\s]\s*/, '')     // "A. 多态" → "多态"
+    if (r === '对' || r === '正确') return 'TRUE'
+    if (r === '错' || r === '错误') return 'FALSE'
+    r = r.replace(/[.。\s]+$/, '').trim()
+    return r
+  }
+  const a = normalize(userAnswer)
+  const b = normalize(correctAnswer)
+  if (a === b) return true
+  // Check prefix before parentheses
+  const base = correctAnswer.replace(/[（(].*$/, '').trim().replace(/[.。\s]+$/, '')
+  if (normalize(userAnswer) === normalize(base)) return true
+  // Check alternatives inside parentheses: "模块（或单元）" → "单元", "JDK（动态代理，或CGLIB）" → "动态代理"|"CGLIB"
+  const inside = correctAnswer.match(/[（(]\s*或?\s*([^）)]*?)\s*[）)]/)
+  if (inside) {
+    const alts = inside[1].split(/、|，|\s*或\s*/).map((s) => s.trim()).filter(Boolean)
+    if (alts.some((alt) => normalize(userAnswer) === normalize(alt))) return true
+  }
+  return false
 }
 
 function getQuestionType(q: Question): "choice" | "truefalse" | "input" {
@@ -57,10 +85,11 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     setSelectedTypes([])
   }, [questions])
 
-  // Reset shuffle when filters change (recompute from filtered set)
+  // Reset shuffle + position when filters change
   useEffect(() => {
     setShuffledQuestions(null)
     setQuizMode("sequential")
+    setCurrentIndex(0)
   }, [selectedChapters, selectedTypes])
 
   // Reset state when questions change (e.g. subject switch)
@@ -135,7 +164,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     const newSubmitted = new Set(submittedIds)
     newSubmitted.add(current.id)
     setSubmittedIds(newSubmitted)
-    if (textInput.trim() !== current.answer) {
+    if (!matchAnswer(textInput.trim(), current.answer)) {
       if (!wrongIds.includes(current.id)) {
         onUpdateWrong([...wrongIds, current.id])
       }
@@ -148,7 +177,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     newSubmitted.add(current.id)
     setSubmittedIds(newSubmitted)
 
-    if (selectedAnswer !== current.answer) {
+    if (!matchAnswer(selectedAnswer, current.answer)) {
       if (!wrongIds.includes(current.id)) {
         onUpdateWrong([...wrongIds, current.id])
       }
@@ -170,9 +199,6 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
   }
 
   const handleFinish = () => {
-    const correct = displayQuestions.filter(
-      (q) => answers[q.id] === q.answer
-    ).length
     setIsFinished(true)
   }
 
@@ -192,7 +218,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
 
   const unanswered = displayQuestions.filter((q) => !submittedIds.has(q.id)).length
   const totalCorrect = displayQuestions.filter(
-    (q) => submittedIds.has(q.id) && answers[q.id] === q.answer
+    (q) => submittedIds.has(q.id) && matchAnswer(answers[q.id], q.answer)
   ).length
 
   // Adjust currentIndex when list shrinks (e.g. removing from wrong book)
@@ -245,9 +271,9 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
         animate={{ opacity: 1, scale: 1 }}
         className="w-full max-w-2xl mx-auto px-4 text-center"
       >
-        <div className="border-2 border-foreground/20 p-8 lg:p-12">
+        <div className="glass-card p-8 lg:p-12 rounded-xl">
           <h2 className="font-pixel text-2xl sm:text-3xl text-foreground mb-6">
-            答题完成
+            {mode === "wrong-book" ? "错题本答题完成" : "答题完成"}
           </h2>
 
           <div className="flex justify-center gap-8 mb-8">
@@ -281,13 +307,13 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
             </div>
           </div>
 
-          {wrongIds.length > 0 && (
+          {mode !== "wrong-book" && wrongIds.length > 0 && (
             <button
               onClick={() => {
                 setIsFinished(false)
                 switchMode("wrong-book")
               }}
-              className="inline-flex items-center gap-2 border border-foreground/20 px-4 py-2 text-xs font-mono text-foreground hover:bg-foreground/5 transition-colors mb-4"
+              className="inline-flex items-center gap-2 border border-border/60 px-4 py-2 text-xs font-mono text-foreground hover:bg-accent/5 transition-all mb-4 rounded-lg"
             >
               <BookX size={14} strokeWidth={1.5} />
               查看错题本 ({wrongIds.length})
@@ -297,14 +323,14 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           <div className="flex justify-center gap-3">
             <button
               onClick={handleRestart}
-              className="flex items-center gap-2 border border-foreground/20 px-4 py-2 text-xs font-mono text-foreground hover:bg-foreground/5 transition-colors"
+              className="flex items-center gap-2 border border-border/60 px-4 py-2 text-xs font-mono text-foreground hover:bg-accent/5 transition-all rounded-lg"
             >
               <RotateCcw size={14} strokeWidth={1.5} />
               重新答题
             </button>
             <button
               onClick={onReset}
-              className="bg-foreground text-background px-4 py-2 text-xs font-mono hover:opacity-90 transition-opacity"
+              className="bg-foreground text-background px-4 py-2 text-xs font-mono hover:opacity-90 transition-opacity rounded-lg"
             >
               返回首页
             </button>
@@ -355,7 +381,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                   onClearWrong()
                 }
               }}
-              className="text-[10px] font-mono text-muted-foreground hover:text-destructive transition-colors"
+              className="text-xs font-mono text-muted-foreground hover:text-destructive transition-colors"
             >
               清空错题本
             </button>
@@ -363,10 +389,10 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           {mode !== "wrong-book" && (
             <button
               onClick={() => setShowFilter(true)}
-              className="text-[10px] font-mono text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+              className="text-xs font-mono text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
               title="筛选章节和题型"
             >
-              <Filter size={10} strokeWidth={1.5} />
+              <Filter size={14} strokeWidth={1.5} />
               筛选
               {(selectedChapters.length > 0 || selectedTypes.length > 0) && (
                 <span className="text-accent font-bold">
@@ -378,7 +404,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           {mode !== "wrong-book" && (
             <button
               onClick={quizMode === "shuffled" ? setSequential : shuffleQuestions}
-              className="text-[10px] font-mono transition-colors flex items-center gap-1"
+              className="text-xs font-mono transition-colors flex items-center gap-1"
               title={quizMode === "shuffled" ? "顺序答题" : "打乱顺序"}
             >
               <span className={quizMode === "shuffled" ? "text-accent" : "text-muted-foreground hover:text-foreground"}>
@@ -389,7 +415,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           {onToggleFocus && (
             <button
               onClick={onToggleFocus}
-              className="text-[10px] font-mono text-muted-foreground hover:text-foreground transition-colors"
+              className="text-xs font-mono text-muted-foreground hover:text-foreground transition-colors"
               title={focusMode ? "退出专注模式" : "专注答题模式"}
             >
               {focusMode ? "退出专注" : "专注答题"}
@@ -418,9 +444,9 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
       </div>
 
       {/* Progress bar */}
-      <div className="w-full h-1 bg-foreground/10 mb-6 shrink-0">
+      <div className="w-full h-1.5 bg-muted/50 rounded-full mb-6 shrink-0 overflow-hidden">
         <motion.div
-          className="h-full bg-accent"
+          className="h-full bg-accent rounded-full"
           initial={{ width: 0 }}
           animate={{
             width: `${((currentIndex + 1) / displayQuestions.length) * 100}%`,
@@ -435,13 +461,13 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           {currentIndex + 1} / {displayQuestions.length}
           <span className="ml-2">| 未答 {unanswered} 题</span>
         </div>
-        <span className="text-[10px] font-mono uppercase tracking-wider border border-foreground/20 px-2 py-0.5 text-muted-foreground">
+        <span className="text-xs font-mono uppercase tracking-wider border border-accent/20 bg-accent/5 px-2.5 py-0.5 text-accent rounded-full">
           {qType === "choice" ? "选择题" : qType === "truefalse" ? "判断题" : "填空题"}
         </span>
       </div>
 
       {/* Question card */}
-      <div className="flex-1 overflow-y-auto min-h-0">
+      <div className="flex-1 overflow-y-auto min-h-0" style={{ scrollbarGutter: "stable" }}>
       <AnimatePresence mode="wait">
         <motion.div
           key={current.id}
@@ -449,12 +475,12 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.2 }}
-          className="border border-foreground/20 p-5 lg:p-6 mb-4"
+          className="glass-card p-5 lg:p-6 mb-4 rounded-xl"
         >
           {/* Chapter badge row */}
           <div className="flex items-center justify-between mb-2">
             {current.chapter ? (
-              <div className="text-[10px] font-mono text-accent tracking-wider uppercase">
+              <div className="text-xs font-mono text-accent tracking-wider uppercase">
                 {current.chapter}
               </div>
             ) : (
@@ -463,7 +489,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
             {mode === "wrong-book" && onRemoveWrong && (
               <button
                 onClick={() => onRemoveWrong(current.id)}
-                className="text-[10px] font-mono text-muted-foreground hover:text-destructive transition-colors"
+                className="text-xs font-mono text-muted-foreground hover:text-destructive transition-colors"
               >
                 ✕ 移出错题本
               </button>
@@ -478,21 +504,33 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
 
           {/* Result badge */}
           {isSubmitted && (
-            <div className={`mb-4 px-3 py-2 text-xs font-mono font-bold tracking-wider uppercase ${
-              selectedAnswer === current.answer
-                ? "border border-accent/60 bg-accent/10 text-accent"
-                : "border border-destructive/60 bg-destructive/10 text-destructive"
+            <div className={`mb-4 rounded-lg overflow-hidden border ${
+              matchAnswer(selectedAnswer, current.answer)
+                ? "border-accent/60"
+                : "border-destructive/60"
             }`}>
-              {selectedAnswer === current.answer ? (
-                <span className="flex items-center gap-2">
-                  <CheckCircle2 size={14} className="shrink-0" />
-                  正确
-                </span>
-              ) : (
-                <span className="flex items-center gap-2">
-                  <XCircle size={14} className="shrink-0" />
-                  错误 — 正确答案：{current.answer}
-                </span>
+              <div className={`px-4 py-3 text-sm font-mono font-bold tracking-wider uppercase flex items-center gap-2 ${
+                matchAnswer(selectedAnswer, current.answer)
+                  ? "bg-accent/10 text-accent"
+                  : "bg-destructive/10 text-destructive"
+              }`}>
+                {matchAnswer(selectedAnswer, current.answer) ? (
+                  <><CheckCircle2 size={16} className="shrink-0" /> 正确</>
+                ) : (
+                  <><XCircle size={16} className="shrink-0" /> 错误</>
+                )}
+              </div>
+              {selectedAnswer !== current.answer && (
+                <div className="px-4 py-3 space-y-1.5 bg-background/50">
+                  <div className="text-xs font-mono">
+                    <span className="text-muted-foreground">你的答案：</span>
+                    <span className="text-destructive font-bold">{selectedAnswer}</span>
+                  </div>
+                  <div className="text-xs font-mono">
+                    <span className="text-muted-foreground">正确答案：</span>
+                    <span className="text-accent font-bold">{current.answer}</span>
+                  </div>
+                </div>
               )}
             </div>
           )}
@@ -510,7 +548,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                     key={i}
                     onClick={() => handleSelect(opt)}
                     disabled={isSubmitted}
-                    className={`w-full text-left px-3 py-2.5 text-xs font-mono leading-relaxed transition-all border ${
+                    className={`w-full text-left px-3 py-2.5 text-xs font-mono leading-relaxed transition-all rounded-lg border ${
                       isSubmitted
                         ? isAnswer
                           ? "border-accent/60 bg-accent/10 text-foreground"
@@ -518,8 +556,8 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                           ? "border-destructive/60 bg-destructive/10 text-foreground"
                           : "border-transparent text-muted-foreground"
                         : isSelected
-                        ? "border-foreground/40 bg-foreground/5 text-foreground"
-                        : "border-transparent text-muted-foreground hover:border-foreground/20 hover:bg-foreground/5 hover:text-foreground"
+                        ? "border-accent/40 bg-accent/8 text-foreground"
+                        : "border-transparent text-muted-foreground hover:border-border/60 hover:bg-accent/5 hover:text-foreground"
                     }`}
                   >
                     <span className="flex items-center gap-2">
@@ -549,7 +587,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                     key={val}
                     onClick={() => handleSelect(val)}
                     disabled={isSubmitted}
-                    className={`flex-1 px-4 py-3 text-sm font-mono font-bold transition-all border ${
+                    className={`flex-1 px-4 py-3 text-sm font-mono font-bold transition-all rounded-lg border ${
                       isSubmitted
                         ? isAnswer
                           ? "border-accent/60 bg-accent/10 text-accent"
@@ -557,8 +595,8 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                           ? "border-destructive/60 bg-destructive/10 text-destructive"
                           : "border-transparent text-muted-foreground"
                         : isSelected
-                        ? "border-foreground/40 bg-foreground/5 text-foreground"
-                        : "border-transparent text-muted-foreground hover:border-foreground/20 hover:bg-foreground/5 hover:text-foreground"
+                        ? "border-accent/40 bg-accent/8 text-accent"
+                        : "border-transparent text-muted-foreground hover:border-border/60 hover:bg-accent/5 hover:text-foreground"
                     }`}
                   >
                     <span className="flex items-center justify-center gap-2">
@@ -584,25 +622,14 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                   value={textInput}
                   onChange={(e) => setTextInput(e.target.value)}
                   placeholder="在此输入答案..."
-                  className="w-full border border-foreground/20 bg-transparent px-3 py-2.5 text-xs font-mono text-foreground placeholder:text-muted-foreground/50 outline-none focus:border-foreground/40 transition-colors"
+                  className="w-full border border-border/60 bg-foreground/5 px-3 py-2.5 text-xs font-mono text-foreground placeholder:text-muted-foreground/50 outline-none focus:border-accent/50 transition-colors rounded-lg"
                   autoFocus
                 />
               ) : (
-                <div className={`px-3 py-2.5 text-xs font-mono border ${
-                  selectedAnswer === current.answer
-                    ? "border-accent/60 bg-accent/10 text-accent"
-                    : "border-destructive/60 bg-destructive/10 text-destructive"
-                }`}>
+                <div className="px-3 py-2.5 text-xs font-mono text-muted-foreground border border-border/40 rounded-lg">
                   <span className="flex items-center gap-2">
-                    {selectedAnswer === current.answer ? (
-                      <CheckCircle2 size={12} className="shrink-0" />
-                    ) : (
-                      <XCircle size={12} className="shrink-0" />
-                    )}
-                    你的答案：{selectedAnswer}
-                    {selectedAnswer !== current.answer && (
-                      <> | 正确答案：{current.answer}</>
-                    )}
+                    <FileText size={12} strokeWidth={1.5} />
+                    你的回答：{selectedAnswer}
                   </span>
                 </div>
               )}
@@ -615,7 +642,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
               <button
                 onClick={qType === "input" ? handleTextSubmit : handleSubmit}
                 disabled={qType === "input" ? !textInput.trim() : !selectedAnswer}
-                className="w-full bg-foreground text-background py-2.5 text-xs font-mono tracking-wider uppercase hover:opacity-90 transition-opacity disabled:opacity-30"
+                className="w-full bg-accent text-accent-foreground py-2.5 text-xs font-mono tracking-wider uppercase hover:opacity-90 transition-opacity disabled:opacity-30 rounded-lg"
               >
                 确认答案
               </button>
@@ -626,12 +653,12 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                   <motion.div
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-3 border border-foreground/10 bg-foreground/5"
+                    className="p-4 border border-accent/30 bg-accent/[0.07] rounded-lg"
                   >
-                    <span className="text-[10px] font-mono text-accent tracking-wider uppercase block mb-1">
-                      解析
+                    <span className="text-xs font-mono text-accent font-bold tracking-wider uppercase block mb-1.5">
+                      详细解析
                     </span>
-                    <p className="text-xs font-mono text-muted-foreground leading-relaxed">
+                    <p className="text-sm font-mono text-foreground leading-relaxed whitespace-pre-wrap">
                       {current.explanation}
                     </p>
                   </motion.div>
@@ -639,7 +666,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
 
                 <button
                   onClick={goNext}
-                  className="w-full bg-foreground text-background py-2.5 text-xs font-mono tracking-wider uppercase hover:opacity-90 transition-opacity"
+                  className="w-full bg-accent text-accent-foreground py-2.5 text-xs font-mono tracking-wider uppercase hover:opacity-90 transition-opacity rounded-lg"
                 >
                   {currentIndex < displayQuestions.length - 1 ? "下一题" : "查看结果"}
                 </button>
@@ -651,11 +678,11 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
       </div>
 
       {/* Bottom navigation */}
-      <div className="flex items-center justify-between shrink-0">
+      <div className="flex items-center justify-between shrink-0 pb-4">
         <button
           onClick={goPrev}
           disabled={currentIndex === 0}
-          className="flex items-center gap-1 text-xs font-mono text-muted-foreground hover:text-foreground transition-colors disabled:opacity-30"
+          className="flex items-center gap-1 px-4 py-2 text-xs font-mono border border-border/60 text-muted-foreground hover:text-foreground hover:border-accent/30 hover:bg-accent/5 transition-all rounded-lg disabled:opacity-30"
         >
           <ChevronLeft size={14} strokeWidth={1.5} />
           上一题
@@ -674,14 +701,14 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
         {currentIndex === displayQuestions.length - 1 && isSubmitted ? (
           <button
             onClick={handleFinish}
-            className="bg-foreground text-background px-3 py-1.5 text-xs font-mono hover:opacity-90 transition-opacity"
+            className="bg-accent text-accent-foreground px-4 py-2 text-xs font-mono hover:opacity-90 transition-opacity rounded-lg"
           >
             完成答题
           </button>
         ) : currentIndex < displayQuestions.length - 1 ? (
           <button
             onClick={goNext}
-            className="flex items-center gap-1 text-xs font-mono text-muted-foreground hover:text-foreground transition-colors"
+            className="flex items-center gap-1 px-4 py-2 text-xs font-mono border border-border/60 text-muted-foreground hover:text-foreground hover:border-accent/30 hover:bg-accent/5 transition-all rounded-lg"
           >
             下一题
             <ChevronRight size={14} strokeWidth={1.5} />
@@ -691,14 +718,14 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
 
       {/* Filter dialog */}
       <Dialog open={showFilter} onOpenChange={setShowFilter}>
-        <DialogContent className="border border-foreground/20 bg-background dot-grid-bg max-w-sm max-h-[80vh] overflow-y-auto">
+        <DialogContent className="glass-dialog max-w-sm max-h-[80vh] overflow-y-auto rounded-xl">
           <DialogTitle className="text-xs font-mono tracking-wider uppercase text-foreground">
             筛选设置
           </DialogTitle>
 
           {/* Type filters */}
           <div className="mt-3">
-            <div className="text-[10px] font-mono text-muted-foreground mb-2">按题型</div>
+            <div className="text-xs font-mono text-muted-foreground mb-2">按题型</div>
             <div className="flex gap-2">
               {(["choice", "truefalse", "input"] as const).map((t) => {
                 const label = t === "choice" ? "选择题" : t === "truefalse" ? "判断题" : "填空题"
@@ -711,10 +738,10 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                         active ? prev.filter((x) => x !== t) : [...prev, t]
                       )
                     }
-                    className={`flex-1 px-2 py-1.5 text-[10px] font-mono border transition-colors ${
+                    className={`flex-1 px-2 py-1.5 text-xs font-mono border transition-colors rounded-md ${
                       active
                         ? "border-accent bg-accent/10 text-accent"
-                        : "border-foreground/20 text-muted-foreground hover:text-foreground"
+                        : "border-border/60 text-muted-foreground hover:text-foreground hover:border-accent/30"
                     }`}
                   >
                     {active ? "✓ " : ""}{label}
@@ -727,7 +754,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           {/* Chapter filters */}
           <div className="mt-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-mono text-muted-foreground">按章节</span>
+              <span className="text-xs font-mono text-muted-foreground">按章节</span>
               <div className="flex gap-2">
                 <button
                   onClick={() => setSelectedChapters(allChapters)}
@@ -754,10 +781,10 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                         active ? prev.filter((x) => x !== ch) : [...prev, ch]
                       )
                     }
-                    className={`w-full text-left px-2 py-1 text-[10px] font-mono border transition-colors ${
+                    className={`w-full text-left px-2 py-1 text-xs font-mono border transition-colors rounded-md ${
                       active
                         ? "border-accent bg-accent/10 text-accent"
-                        : "border-transparent text-muted-foreground hover:text-foreground hover:border-foreground/20"
+                        : "border-transparent text-muted-foreground hover:text-foreground hover:border-border/60"
                     }`}
                   >
                     {active ? "✓ " : "  "}{ch}
@@ -768,7 +795,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           </div>
 
           {/* Info */}
-          <div className="mt-3 text-[10px] font-mono text-muted-foreground">
+          <div className="mt-3 text-xs font-mono text-muted-foreground">
             {filteredQuestions.length} 题（共 {activeQuestions.length} 题）
           </div>
         </DialogContent>
@@ -776,7 +803,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
 
       {/* Outline dialog */}
       <Dialog open={showOutline} onOpenChange={setShowOutline}>
-        <DialogContent className="border border-foreground/20 bg-background dot-grid-bg max-w-md max-h-[70vh] overflow-y-auto">
+        <DialogContent className="glass-dialog max-w-md max-h-[70vh] overflow-y-auto rounded-xl">
           <DialogTitle className="text-xs font-mono tracking-wider uppercase text-foreground">
             答题大纲 — 点击跳转
           </DialogTitle>
@@ -796,21 +823,21 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
               }
 
               return (
-                <div key={ch} className="border border-foreground/10">
-                  <div className="flex items-center justify-between px-3 py-2 bg-foreground/5">
+                <div key={ch} className="border border-border/40 rounded-lg overflow-hidden">
+                  <div className="flex items-center justify-between px-3 py-2 bg-accent/5">
                     <span className="text-xs font-mono text-accent font-bold">{ch}</span>
-                    <span className="text-[10px] font-mono text-muted-foreground">{chQuestions.length} 题</span>
+                    <span className="text-xs font-mono text-muted-foreground">{chQuestions.length} 题</span>
                   </div>
                   {typeGroups.map((g, gi) => (
                     <div key={`${g.key}-${gi}`}>
-                      <div className="px-3 py-1 text-[8px] font-mono uppercase tracking-wider text-muted-foreground bg-foreground/[0.02]">
+                      <div className="px-3 py-1 text-[8px] font-mono uppercase tracking-wider text-muted-foreground">
                         {g.label}（{g.qs.length}）
                       </div>
                       <div className="divide-y divide-foreground/5">
                         {g.qs.map((q) => {
                           const qIndex = displayQuestions.indexOf(q)
                           const answered = submittedIds.has(q.id)
-                          const correct = answers[q.id] === q.answer
+                          const correct = matchAnswer(answers[q.id], q.answer)
                           return (
                             <button
                               key={q.id}
@@ -819,7 +846,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                                 setTextInput("")
                                 setShowOutline(false)
                               }}
-                              className={`w-full text-left px-3 py-2 text-[10px] font-mono transition-colors flex items-center gap-2 ${
+                              className={`w-full text-left px-3 py-2 text-xs font-mono transition-colors flex items-center gap-2 ${
                                 currentIndex === qIndex
                                   ? "bg-accent/10 text-accent"
                                   : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground"
@@ -845,9 +872,9 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                 </div>
               )
             })}
-            <div className="border border-foreground/10 p-3 bg-foreground/5">
+            <div className="border border-border/40 p-3 bg-accent/5 rounded-lg">
               <div className="text-xs font-mono font-bold text-foreground">总计</div>
-              <div className="text-[10px] font-mono text-muted-foreground mt-0.5">
+              <div className="text-xs font-mono text-muted-foreground mt-0.5">
                 {displayQuestions.length} 题 | 已答 {submittedIds.size} 题 | 未答 {unanswered} 题
               </div>
             </div>

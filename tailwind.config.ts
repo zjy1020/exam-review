@@ -46,6 +46,7 @@ const config: Config = {
       },
       fontFamily: {
         mono: ['var(--font-mono)', 'JetBrains Mono', 'monospace'],
+        serif: ['var(--font-serif)', 'Georgia', 'serif'],
         pixel: ['var(--font-geist-pixel-grid)', 'monospace'],
       },
       borderRadius: {

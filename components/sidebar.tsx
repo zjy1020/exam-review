@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { BookOpen, Plus, Trash2, ChevronLeft, Menu, X, FileText, BookX } from "lucide-react"
+import { BookOpen, Plus, Trash2, ChevronLeft, Pencil, FileText, BookX } from "lucide-react"
 import type { Subject } from "@/lib/types"
 
 interface SidebarProps {
@@ -11,6 +11,7 @@ interface SidebarProps {
   onSelect: (id: string) => void
   onCreate: (name: string) => void
   onDelete: (id: string) => void
+  onRename: (id: string, newName: string) => void
   wrongCount: number
   questionCount: number
   collapsed: boolean
@@ -23,6 +24,7 @@ export function Sidebar({
   onSelect,
   onCreate,
   onDelete,
+  onRename,
   wrongCount,
   questionCount,
   collapsed,
@@ -30,6 +32,8 @@ export function Sidebar({
 }: SidebarProps) {
   const [showNewInput, setShowNewInput] = useState(false)
   const [newName, setNewName] = useState("")
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editName, setEditName] = useState("")
 
   const handleCreate = () => {
     if (newName.trim()) {
@@ -37,6 +41,19 @@ export function Sidebar({
       setNewName("")
       setShowNewInput(false)
     }
+  }
+
+  const startRename = (s: Subject) => {
+    setEditingId(s.id)
+    setEditName(s.name)
+  }
+
+  const handleRename = () => {
+    if (editingId && editName.trim()) {
+      onRename(editingId, editName.trim())
+    }
+    setEditingId(null)
+    setEditName("")
   }
 
   return (
@@ -58,7 +75,7 @@ export function Sidebar({
       <motion.aside
         initial={false}
         animate={{ width: collapsed ? 0 : 240 }}
-        className="h-full border-r border-foreground/20 bg-background/95 backdrop-blur-sm overflow-hidden flex flex-col shrink-0 z-40 fixed lg:relative"
+        className="h-full glass overflow-hidden flex flex-col shrink-0 z-40 fixed lg:relative border-r-0"
       >
         <div className="min-w-[240px] flex flex-col h-full">
           {/* Header */}
@@ -83,39 +100,70 @@ export function Sidebar({
             <div className="flex-1 overflow-y-auto py-2">
               {subjects.length === 0 && (
                 <div className="px-4 py-6 text-center">
-                  <p className="text-[10px] font-mono text-muted-foreground">
+                  <p className="text-xs font-mono text-muted-foreground">
                     暂无科目
                   </p>
-                  <p className="text-[10px] font-mono text-muted-foreground mt-1">
+                  <p className="text-xs font-mono text-muted-foreground mt-1">
                     点击下方新建
                   </p>
                 </div>
               )}
               {subjects.map((s) => (
                 <div key={s.id} className="px-2">
-                  <button
-                    onClick={() => {
-                      onSelect(s.id)
-                      if (window.innerWidth < 1024) onToggle()
-                    }}
-                    className={`w-full flex items-center gap-2 px-3 py-2.5 text-xs font-mono text-left transition-colors border-l-2 group ${
-                      activeSubjectId === s.id
-                        ? "border-accent bg-accent/5 text-accent"
-                        : "border-transparent text-muted-foreground hover:text-foreground hover:bg-foreground/5"
-                    }`}
-                  >
-                    <BookOpen size={12} strokeWidth={1.5} className="shrink-0" />
-                    <span className="truncate flex-1">{s.name}</span>
-                    <span
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        if (confirm(`删除科目「${s.name}」？`)) onDelete(s.id)
+                  {editingId === s.id ? (
+                    <div className="flex gap-1 px-1 py-1">
+                      <input
+                        type="text"
+                        value={editName}
+                        onChange={(e) => setEditName(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") handleRename()
+                          if (e.key === "Escape") setEditingId(null)
+                        }}
+                        autoFocus
+                        className="flex-1 border border-accent/50 bg-foreground/5 px-2 py-1 text-xs font-mono text-foreground outline-none rounded-md"
+                      />
+                      <button
+                        onClick={handleRename}
+                        className="bg-accent text-accent-foreground px-2 py-1 text-xs font-mono rounded-md hover:opacity-90 transition-opacity"
+                      >
+                        确定
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        onSelect(s.id)
+                        if (window.innerWidth < 1024) onToggle()
                       }}
-                      className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-all cursor-pointer"
+                      className={`w-full flex items-center gap-2 px-3 py-2.5 text-xs font-mono text-left transition-all duration-200 border-l-2 group rounded-r-lg ${
+                        activeSubjectId === s.id
+                          ? "border-accent bg-accent/10 text-accent"
+                          : "border-transparent text-muted-foreground hover:text-foreground hover:bg-accent/5 hover:border-l-accent/30"
+                      }`}
                     >
-                      <Trash2 size={10} strokeWidth={1.5} />
-                    </span>
-                  </button>
+                      <BookOpen size={12} strokeWidth={1.5} className="shrink-0" />
+                      <span className="truncate flex-1">{s.name}</span>
+                      <span
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          startRename(s)
+                        }}
+                        className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-accent transition-all cursor-pointer"
+                      >
+                        <Pencil size={10} strokeWidth={1.5} />
+                      </span>
+                      <span
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          if (confirm(`删除科目「${s.name}」？`)) onDelete(s.id)
+                        }}
+                        className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-all cursor-pointer"
+                      >
+                        <Trash2 size={10} strokeWidth={1.5} />
+                      </span>
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
@@ -124,7 +172,7 @@ export function Sidebar({
           {/* Stats */}
           {!collapsed && activeSubjectId && (
             <div className="px-4 py-2 border-t border-foreground/10 space-y-1">
-              <div className="flex items-center justify-between text-[10px] font-mono text-muted-foreground">
+              <div className="flex items-center justify-between text-xs font-mono text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <FileText size={10} strokeWidth={1.5} />
                   题目
@@ -132,7 +180,7 @@ export function Sidebar({
                 <span>{questionCount}</span>
               </div>
               {wrongCount > 0 && (
-                <div className="flex items-center justify-between text-[10px] font-mono text-accent">
+                <div className="flex items-center justify-between text-xs font-mono text-accent">
                   <span className="flex items-center gap-1">
                     <BookX size={10} strokeWidth={1.5} />
                     错题
@@ -158,11 +206,11 @@ export function Sidebar({
                     }}
                     placeholder="科目名称"
                     autoFocus
-                    className="flex-1 border border-foreground/20 bg-transparent px-2 py-1.5 text-xs font-mono text-foreground placeholder:text-muted-foreground/50 outline-none focus:border-foreground/40"
+                    className="flex-1 border border-border/60 bg-foreground/5 px-2 py-1.5 text-xs font-mono text-foreground placeholder:text-muted-foreground/50 outline-none focus:border-accent/50 transition-colors rounded-md"
                   />
                   <button
                     onClick={handleCreate}
-                    className="bg-accent text-accent-foreground px-2 py-1.5 text-[10px] font-mono"
+                    className="bg-accent text-accent-foreground px-3 py-1.5 text-xs font-mono border border-accent/60 rounded-md hover:opacity-90 transition-opacity"
                   >
                     确定
                   </button>
@@ -170,7 +218,7 @@ export function Sidebar({
               ) : (
                 <button
                   onClick={() => setShowNewInput(true)}
-                  className="w-full flex items-center justify-center gap-1.5 border border-dashed border-foreground/20 px-3 py-2 text-[10px] font-mono text-muted-foreground hover:text-foreground hover:border-foreground/40 transition-colors"
+                  className="w-full flex items-center justify-center gap-1.5 border border-dashed border-border/60 px-3 py-2 text-xs font-mono text-muted-foreground hover:text-foreground hover:border-accent/40 hover:bg-accent/5 transition-all rounded-md"
                 >
                   <Plus size={12} strokeWidth={1.5} />
                   新建科目
@@ -200,11 +248,11 @@ export function Sidebar({
                   a.click()
                   URL.revokeObjectURL(url)
                 }}
-                className="flex-1 flex items-center justify-center gap-1 border border-foreground/20 px-2 py-2 text-[10px] font-mono text-muted-foreground hover:text-foreground hover:bg-foreground/5 transition-colors"
+                className="flex-1 flex items-center justify-center gap-1 border border-border/60 px-2 py-2 text-xs font-mono text-muted-foreground hover:text-foreground hover:bg-accent/5 hover:border-accent/30 transition-all rounded-md"
               >
                 导出数据
               </button>
-              <label className="flex-1 flex items-center justify-center gap-1 border border-foreground/20 px-2 py-2 text-[10px] font-mono text-muted-foreground hover:text-foreground hover:bg-foreground/5 transition-colors cursor-pointer">
+              <label className="flex-1 flex items-center justify-center gap-1 border border-border/60 px-2 py-2 text-xs font-mono text-muted-foreground hover:text-foreground hover:bg-accent/5 hover:border-accent/30 transition-all cursor-pointer rounded-md">
                 导入数据
                 <input
                   type="file"

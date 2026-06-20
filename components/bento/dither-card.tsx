@@ -1,11 +1,20 @@
 "use client"
 
-import { useEffect, useRef } from "react"
-import { useTheme } from "next-themes"
+import { useEffect, useRef, useState } from "react"
 
 export function DitherCard() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { resolvedTheme } = useTheme()
+  const [resolvedTheme, setResolvedTheme] = useState("dark")
+
+  useEffect(() => {
+    const isDark = document.documentElement.classList.contains("dark")
+    setResolvedTheme(isDark ? "dark" : "light")
+    const observer = new MutationObserver(() => {
+      setResolvedTheme(document.documentElement.classList.contains("dark") ? "dark" : "light")
+    })
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] })
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current

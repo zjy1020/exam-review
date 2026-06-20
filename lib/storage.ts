@@ -51,3 +51,10 @@ export function deleteSubject(id: string) {
   if (typeof window === 'undefined') return
   localStorage.removeItem(getDataKey(id))
 }
+
+export function renameSubject(id: string, newName: string) {
+  if (typeof window === 'undefined') return
+  const subjects = loadSubjects()
+  const updated = subjects.map((s) => (s.id === id ? { ...s, name: newName } : s))
+  saveSubjects(updated)
+}

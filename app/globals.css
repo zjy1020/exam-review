@@ -3,10 +3,14 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    font-size: 20px;
+  }
   :root {
+    --cover-blur: 4px;
     --background: 43 23% 93%;
     --foreground: 0 0% 4%;
-    --card: 43 23% 93%;
+    --card: 43 15% 88%;
     --card-foreground: 0 0% 4%;
     --popover: 43 23% 93%;
     --popover-foreground: 0 0% 4%;
@@ -23,28 +27,28 @@
     --border: 0 0% 75%;
     --input: 0 0% 75%;
     --ring: 0 0% 4%;
-    --radius: 0rem;
+    --radius: 0.625rem;
   }
   .dark {
-    --background: 0 0% 6%;
-    --foreground: 43 23% 93%;
+    --background: 0 0% 4%;
+    --foreground: 0 0% 93%;
     --card: 0 0% 8%;
-    --card-foreground: 43 23% 93%;
-    --popover: 0 0% 8%;
-    --popover-foreground: 43 23% 93%;
-    --primary: 43 23% 93%;
-    --primary-foreground: 0 0% 6%;
-    --secondary: 0 0% 14%;
-    --secondary-foreground: 43 23% 93%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 60%;
+    --card-foreground: 0 0% 93%;
+    --popover: 0 0% 6%;
+    --popover-foreground: 0 0% 93%;
+    --primary: 0 0% 93%;
+    --primary-foreground: 0 0% 4%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 93%;
+    --muted: 0 0% 14%;
+    --muted-foreground: 0 0% 50%;
     --accent: 20 90% 50%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 25%;
-    --input: 0 0% 25%;
-    --ring: 43 23% 93%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 80%;
   }
 }
 
@@ -57,16 +61,39 @@
   }
 }
 
-/* Dot Grid Background */
-.dot-grid-bg {
-  background-image: radial-gradient(circle, #c4c2b8 1px, transparent 1px);
-  background-size: 24px 24px;
-}
-.dark .dot-grid-bg {
-  background-image: radial-gradient(circle, hsl(0 0% 20%) 1px, transparent 1px);
+/* Glassmorphism utilities — premium style matching cover aesthetic */
+@layer components {
+  .glass {
+    @apply bg-background/60 backdrop-blur-2xl border border-border/40 shadow-lg shadow-black/5;
+  }
+  .glass-card {
+    @apply bg-card/50 backdrop-blur-2xl border border-border/40 shadow-lg shadow-black/5;
+  }
+  .glass-dialog {
+    @apply bg-background/70 backdrop-blur-3xl border border-border/40 shadow-xl shadow-black/10;
+  }
+  .glass-nav {
+    @apply bg-background/50 backdrop-blur-2xl border-b border-border/40 shadow-sm;
+  }
 }
 
-/* Glitch Keyframes */
+/* Dot grid background with ambient gradients */
+.dot-grid-bg {
+  background-color: hsl(var(--background));
+  background-image:
+    radial-gradient(ellipse at 20% 50%, hsl(20 90% 50% / 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, hsl(20 90% 50% / 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, hsl(20 90% 50% / 0.02) 0%, transparent 50%);
+}
+.dark .dot-grid-bg {
+  background-color: hsl(var(--background));
+  background-image:
+    radial-gradient(ellipse at 20% 50%, hsl(20 90% 50% / 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, hsl(20 90% 50% / 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, hsl(20 90% 50% / 0.04) 0%, transparent 50%);
+}
+
+/* Animations */
 @keyframes glitch {
   0%, 90%, 100% {
     transform: translate(0);

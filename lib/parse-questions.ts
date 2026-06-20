@@ -28,6 +28,8 @@ export function parseQuestions(text: string): Question[] {
     .split('\n')
     .map((l) => l.trim())
     .filter((l) => l.length > 0)
+    // Strip markdown code block markers that AI models often add
+    .filter((l) => !l.startsWith('```'))
 
   const questions: Question[] = []
   let current: Partial<Question> & { options: string[] } | null = null
@@ -46,7 +48,7 @@ export function parseQuestions(text: string): Question[] {
         current.options.length > 0
       ) {
         const matched = current.options.find((o) =>
-          o.toUpperCase().startsWith(answerLetter + '.') || o.toUpperCase().startsWith(answerLetter + '、') || o.toUpperCase().startsWith(answerLetter + '）')
+          o.toUpperCase().startsWith(answerLetter + '.') || o.toUpperCase().startsWith(answerLetter + '、') || o.toUpperCase().startsWith(answerLetter + '）') || o.toUpperCase().startsWith(answerLetter + '．')
         )
         if (matched) {
           answer = matched
@@ -68,25 +70,26 @@ export function parseQuestions(text: string): Question[] {
   }
 
   for (const line of lines) {
-    // Detect chapter/section markers: "=== 第X章 ===", "第X章", "第一章" etc.
-    const chapterMatch = line.match(/^={2,}\s*(第\s*[一二三四五六七八九十\d]+\s*[章节部篇])\s*={2,}$|^(第\s*[一二三四五六七八九十\d]+\s*[章节部篇])/)
+    // Detect chapter/section markers: "=== 第X章 ===", "# 第X章", "## 第X章", "第X章", "第一章" etc.
+    const chapterMatch = line.match(/^={2,}\s*(第\s*[一二三四五六七八九十\d]+\s*[章节部篇])\s*={2,}$|^#+\s*(第\s*[一二三四五六七八九十\d]+\s*[章节部篇])|^(第\s*[一二三四五六七八九十\d]+\s*[章节部篇])/)
     if (chapterMatch) {
-      flush() // flush previous chapter's last question before switching chapter
-      currentChapter = (chapterMatch[1] || chapterMatch[2]).replace(/\s+/g, '').trim()
+      flush()
+      currentChapter = (chapterMatch[1] || chapterMatch[2] || chapterMatch[3]).replace(/\s+/g, '').trim()
       continue
     }
 
-    // Detect question number patterns: "1.", "1）", "[1]", "第1题"
-    const numMatch = line.match(/^(?:\[?(\d+)\]?[.、）)\s]|第(\d+)题[.、：:\s]?)/)
+    // Detect question number patterns: "1.", "1．", "1）", "[1]", "第1题", "[题号] 1"
+    const numMatch = line.match(/^(?:\[?(\d+)\]?[.、）)\s．]|第(\d+)题[.、：:\s]?)/)
     const aiNumMatch = line.match(/^\[(\d+)\]/)
-    const hasNumber = numMatch || aiNumMatch
+    const tiHaoMatch = line.match(/^\[题号\]\s*(\d+)/)
+    const hasNumber = numMatch || aiNumMatch || tiHaoMatch
 
     if (hasNumber) {
       flush()
       questionNumber = parseInt(hasNumber[1] || hasNumber[2])
       current = { options: [], number: questionNumber }
       // Extract question text after the number prefix
-      const rest = line.replace(/^(?:\[?\d+\]?[.、）)\s]|第\d+题[.、：:\s]?|\[\d+\])/, '').trim()
+      const rest = line.replace(/^(?:\[?\d+\]?[.、）)\s．]|第\d+题[.、：:\s]?|\[\d+\]|\[题号\]\s*\d+)/, '').trim()
       // Remove "题目：" prefix if present
       const qText = rest.replace(/^题目[：:]\s*/, '').trim()
       if (qText) {
@@ -97,17 +100,34 @@ export function parseQuestions(text: string): Question[] {
       continue
     }
 
-    // "题目：" prefix (in AI cleaned format)
+    // Dash-prefixed lines (from markdown converters that turn numbered lists into "- "):
+    // e.g. "- 软件是（)。" — always a new question boundary.
+    // Skip if the dash is actually part of an option line like "- A. xxx"
+    const dashMatch = line.match(/^-\s+(.+)/)
+    if (dashMatch && !/^-[A-Da-d]/i.test(line)) {
+      flush()
+      questionNumber++
+      current = { options: [], number: questionNumber }
+      current.question = dashMatch[1].trim()
+      inOptions = false
+      inExplanation = false
+      continue
+    }
+
+    // "题目：" prefix (in AI cleaned format) — always starts a new question
     const titleMatch = line.match(/^题目[：:]\s*(.+)/)
-    if (titleMatch && current) {
+    if (titleMatch) {
+      flush()
+      questionNumber++
+      current = { options: [], number: questionNumber }
       current.question = titleMatch[1].trim()
       inOptions = false
       inExplanation = false
       continue
     }
 
-    // Options: A. / B. / C. / D. or A、 B、 C、 D、
-    const optMatch = line.match(/^([A-Da-d])[.、）)\s]\s*(.+)/)
+    // Options: A. / B. / C. / D. or A、 B、 C、 D、 or A．B．C．D．
+    const optMatch = line.match(/^([A-Da-d])[.、）)\s．]\s*(.+)/)
     if (optMatch && current) {
       current.options.push(line)
       inOptions = true
@@ -133,14 +153,14 @@ export function parseQuestions(text: string): Question[] {
       continue
     }
 
-    // Continuation lines: if we're in options or explanation, append
+    // Continuation lines: unrecognized lines append to question text
     if (current) {
       if (inOptions && current.options.length > 0) {
         current.options[current.options.length - 1] += ' ' + line
       } else if (inExplanation) {
         current.explanation = (current.explanation || '') + ' ' + line
-      } else if (!current.question) {
-        current.question = line
+      } else {
+        current.question = (current.question || '') + ' ' + line
       }
     }
   }
@@ -150,12 +170,14 @@ export function parseQuestions(text: string): Question[] {
 }
 
 export function buildFormatPrompt(text: string): string {
-  return `你是一个答题整理助手。请把以下题目整理成统一格式，并给出正确答案和详细解释。
+  return `你是一个答题整理助手。请把以下题目整理成统一格式，并给出正确答案和详细解析。
 要求：
-- 如果内容有章节划分（如"第一章"、"第二章"或"第1节"、"第2节"等），请按章节分组，每章前用 "=== 第X章 ===" 作为分隔
+- 阅读全文，确认是否有"第一章"、"第二章"、"第1节"等明确的章节标记
+- 只有当原文明确包含章节标记时，才按章节分组，用 "=== 第X章 ===" 作为分隔
+- 如果原文没有任何章节标记，绝对不要添加任何章节标题，直接输出题目列表
+- 原文中每道题可能以 "- "（短横+空格）开头而不是数字，这种情况下请按顺序依次编号为 1, 2, 3...
 - 保留题号和选项（A. B. C. D.）
 - 每道题格式：
-  === 第X章 ===
   [题号]
   题目：xxx
   A. xxx
@@ -164,8 +186,8 @@ export function buildFormatPrompt(text: string): string {
   D. xxx
   答案：X
   解释：xxx
-- 如果没有章节，直接输出题目列表，不加分隔
-- 如果原题没有答案和解释，请根据知识推断出正确答案并给出解释
+- 如果原题没有答案和解释，请根据知识推断出正确答案并给出详细解析
+- 解析必须详细、通俗易懂，说明为什么选这个答案、其他选项为什么错、相关知识点
 - 不要额外文字
 
 题目内容：
@@ -195,6 +217,7 @@ export function buildFillPrompt(questions: Question[]): string {
   D. xxx
   答案：X
   解释：xxx
+- 解析必须详细、通俗易懂，说明为什么选这个答案、其他选项为什么错、相关知识点，用日常语言解释清楚，让初学者也能看懂
 - 不要额外文字
 
 题目内容：

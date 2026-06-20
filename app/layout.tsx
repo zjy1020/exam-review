@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from 'next'
-import { JetBrains_Mono } from 'next/font/google'
+import { JetBrains_Mono, Playfair_Display } from 'next/font/google'
 import { GeistPixelGrid } from 'geist/font/pixel'
-import { ThemeProvider } from '@/components/theme-provider'
-
 import './globals.css'
 
 const jetbrainsMono = JetBrains_Mono({
@@ -10,8 +8,13 @@ const jetbrainsMono = JetBrains_Mono({
   variable: '--font-mono',
 })
 
+const playfairDisplay = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-serif',
+})
+
 export const metadata: Metadata = {
-  title: '期末复习 | 继业大大',
+  title: '期末复习 | zjy520',
   description: '期末复习刷题工具 — 导入题目，开始刷题，错题本巩固。',
   keywords: [
     '期末复习',
@@ -21,9 +24,9 @@ export const metadata: Metadata = {
     '教育工具',
     '复习系统',
   ],
-  authors: [{ name: '继业大大', url: 'https://github.com/likeLBY' }],
-  creator: '继业大大',
-  publisher: '继业大大',
+  authors: [{ name: 'zjy520', url: 'https://github.com/zjy1020' }],
+  creator: 'zjy520',
+  publisher: 'zjy520',
 }
 
 export const viewport: Viewport = {
@@ -39,11 +42,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="zh-CN" className={`${jetbrainsMono.variable} ${GeistPixelGrid.variable}`} suppressHydrationWarning>
+    <html lang="zh-CN" className={`${jetbrainsMono.variable} ${playfairDisplay.variable} ${GeistPixelGrid.variable} dark`} suppressHydrationWarning>
       <body className="font-mono antialiased">
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
-          {children}
-        </ThemeProvider>
+        <script dangerouslySetInnerHTML={{
+          __html: `(function(){try{var t=localStorage.getItem('quiz-theme');if(t==='light'){document.documentElement.classList.remove('dark')}else{document.documentElement.classList.add('dark')}}catch(e){}})();`
+        }} />
+        {children}
       </body>
     </html>
   )
