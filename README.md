@@ -1,35 +1,72 @@
-# v0-design-brutalist-ai-saa-s
+# 期末复习 — 刷题工具
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v0.app).
+一个简约风格的刷题 Web 应用，支持多科目管理、多种题型、AI 辅助导入。
 
-## Built with v0
+## 功能
 
-This repository is linked to a [v0](https://v0.app) project. You can continue developing by visiting the link below -- start new chats to make changes, and v0 will push commits directly to this repo. Every merge to `main` will automatically deploy.
+- **科目管理** — 创建/删除科目，每个科目独立题库
+- **题目导入**
+  - 粘贴文本或拖入 .md/.txt 文件
+  - 自动识别章节（`=== 第X章 ===`）和题号
+  - 支持选择题、判断题、填空题
+  - AI 格式化（复制到 DeepSeek/豆包粘贴，返回统一格式）
+  - AI 补全缺失答案和解析
+- **答题模式**
+  - 顺序答题 / 打乱顺序
+  - 按章节筛选 / 按题型筛选（主攻选择/判断/填空）
+  - 专注模式（隐藏侧边栏和顶栏）
+  - 答题大纲（按章节和题型分组，点击跳转）
+  - 键盘快捷键（A-D 选择，Enter 确认/下一题）
+  - 错题本（自动记录，可单题移出或清空）
+- **深色/浅色主题切换**
+- **数据持久化** — 基于 localStorage，刷新不丢失
 
-[Continue working on v0 →](https://v0.app/chat/projects/prj_8TpuWUx50ueEUkhNLWoZQ7AylS69)
+## 技术栈
 
-## Getting Started
+- [Next.js](https://nextjs.org) 16 (App Router)
+- React 19 + TypeScript
+- Tailwind CSS 4 + shadcn/ui
+- Framer Motion（动画）
+- Lucide React（图标）
 
-First, run the development server:
+## 开始使用
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+打开 [http://localhost:3000](http://localhost:3000) 即可使用。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 构建
 
-## Learn More
+```bash
+pnpm build
+```
 
-To learn more, take a look at the following resources:
+## 使用流程
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [v0 Documentation](https://v0.app/docs) - learn about v0 and how to use it.
+1. 左侧新建科目
+2. 粘贴或拖入题目文本，点击"导入题目"
+3. 如有格式问题，可用 AI 格式化后再导入
+4. 点击"开始答题"进入答题模式
+5. 答题过程中错题自动记录到错题本
+6. 可在筛选面板选择特定章节或题型重点练习
 
-<a href="https://v0.app/chat/api/kiro/clone/rajdesai17/v0-design-brutalist-ai-saa-s" alt="Open in Kiro"><img src="https://pdgvvgmkdvyeydso.public.blob.vercel-storage.com/open%20in%20kiro.svg?sanitize=true" /></a>
+## 题目格式
+
+支持以下格式自动解析：
+
+```
+=== 第1章 ===
+[1]
+题目：xxxx
+A. xxx
+B. xxx
+C. xxx
+D. xxx
+答案：A
+解释：xxx
+```
+
+也可在导入后使用"AI 格式化"功能自动整理。
