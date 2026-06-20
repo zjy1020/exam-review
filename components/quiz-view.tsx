@@ -57,6 +57,12 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     setSelectedTypes([])
   }, [questions])
 
+  // Reset shuffle when filters change (recompute from filtered set)
+  useEffect(() => {
+    setShuffledQuestions(null)
+    setQuizMode("sequential")
+  }, [selectedChapters, selectedTypes])
+
   // Reset state when questions change (e.g. subject switch)
   useEffect(() => {
     setCurrentIndex(0)

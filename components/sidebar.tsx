@@ -178,6 +178,66 @@ export function Sidebar({
               )}
             </div>
           )}
+
+          {/* Export / Import */}
+          {!collapsed && (
+            <div className="px-3 py-3 border-t border-foreground/10 flex gap-2">
+              <button
+                onClick={() => {
+                  const data: Record<string, unknown> = {}
+                  for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i)
+                    if (key && key.startsWith("quiz-")) {
+                      const val = localStorage.getItem(key) || ""
+                      try { data[key] = JSON.parse(val) } catch { data[key] = val }
+                    }
+                  }
+                  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" })
+                  const url = URL.createObjectURL(blob)
+                  const a = document.createElement("a")
+                  a.href = url
+                  a.download = `exam-review-backup-${Date.now()}.json`
+                  a.click()
+                  URL.revokeObjectURL(url)
+                }}
+                className="flex-1 flex items-center justify-center gap-1 border border-foreground/20 px-2 py-2 text-[10px] font-mono text-muted-foreground hover:text-foreground hover:bg-foreground/5 transition-colors"
+              >
+                导出数据
+              </button>
+              <label className="flex-1 flex items-center justify-center gap-1 border border-foreground/20 px-2 py-2 text-[10px] font-mono text-muted-foreground hover:text-foreground hover:bg-foreground/5 transition-colors cursor-pointer">
+                导入数据
+                <input
+                  type="file"
+                  accept=".json"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (!file) return
+                    const reader = new FileReader()
+                    reader.onload = (ev) => {
+                      try {
+                        const data = JSON.parse(ev.target?.result as string)
+                        let count = 0
+                        for (const [key, val] of Object.entries(data)) {
+                          if (typeof val === "string") {
+                            localStorage.setItem(key, val)
+                            count++
+                          }
+                        }
+                        if (confirm(`已导入 ${count} 项数据，是否刷新页面？`)) {
+                          window.location.reload()
+                        }
+                      } catch {
+                        alert("文件格式错误")
+                      }
+                    }
+                    reader.readAsText(file)
+                    e.target.value = ""
+                  }}
+                />
+              </label>
+            </div>
+          )}
         </div>
       </motion.aside>
     </>
