@@ -260,6 +260,9 @@ export function ImportPanel({ onImport, questionCount, wrongCount, onOpenWrongBo
           <p className="text-[10px] font-mono text-muted-foreground text-center mt-2">
             粘贴到 AI 对话框，AI 会返回整理好的统一格式题目
           </p>
+          <p className="text-[9px] font-mono text-accent text-center mt-1">
+            推荐 DeepSeek，豆包可能出现输出截断
+          </p>
         </DialogContent>
       </Dialog>
 
@@ -293,6 +296,9 @@ export function ImportPanel({ onImport, questionCount, wrongCount, onOpenWrongBo
           </div>
           <p className="text-[10px] font-mono text-muted-foreground text-center mt-2">
             AI 会补全答案和解析，把返回结果粘贴到上方重新导入即可
+          </p>
+          <p className="text-[9px] font-mono text-accent text-center mt-1">
+            推荐 DeepSeek，豆包可能出现输出截断
           </p>
         </DialogContent>
       </Dialog>
