@@ -47,6 +47,8 @@ interface QuizProgress {
   selectedChapters: string[]
   selectedTypes: string[]
   isFinished: boolean
+  optionShuffled: boolean
+  shuffledOptionMap: Record<string, number[]>
 }
 
 function getProgressKey(subjectId: string) {
@@ -143,6 +145,8 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
   const [multiSelected, setMultiSelected] = useState<string[]>([])
   const [showOutline, setShowOutline] = useState(false)
   const [quizMode, setQuizMode] = useState<"sequential" | "shuffled">("sequential")
+  const [optionShuffled, setOptionShuffled] = useState(false)
+  const [shuffledOptionMap, setShuffledOptionMap] = useState<Record<string, number[]>>({})
   const [shuffledQuestions, setShuffledQuestions] = useState<Question[] | null>(null)
   const [selectedChapters, setSelectedChapters] = useState<string[]>([])
   const [selectedTypes, setSelectedTypes] = useState<("choice" | "truefalse" | "input" | "essay" | "multiple")[]>([])
@@ -185,6 +189,8 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     setQuizMode("sequential")
     setSelectedChapters([])
     setSelectedTypes([])
+    setOptionShuffled(false)
+    setShuffledOptionMap({})
   }, [questions])
 
   // Reset filters when re-entering quiz from import (filterKey changes)
@@ -257,10 +263,13 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
       setSubmittedIds(new Set(saved.submittedIds))
       setQuizMode(saved.quizMode)
       if (saved.shuffledQuestions) setShuffledQuestions(saved.shuffledQuestions)
+      // Restore option shuffling
+      if (typeof saved.optionShuffled === "boolean") setOptionShuffled(saved.optionShuffled)
+      if (saved.shuffledOptionMap) setShuffledOptionMap(saved.shuffledOptionMap)
       // Set filters + index + finished last, suppressing the filter-change reset
       returningFromEmptyRef.current = true
       setSelectedChapters(saved.selectedChapters)
-      setSelectedTypes(saved.selectedTypes)
+      setSelectedTypes(saved.selectedTypes as ("choice" | "truefalse" | "input" | "essay" | "multiple")[])
       setCurrentIndex(saved.currentIndex)
       if (saved.isFinished) setIsFinished(true)
     }
@@ -281,9 +290,11 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
       selectedChapters,
       selectedTypes,
       isFinished,
+      optionShuffled,
+      shuffledOptionMap,
     }
     saveProgress(subjectId, progress)
-  }, [subjectId, currentIndex, answers, submittedIds, quizMode, shuffledQuestions, selectedChapters, selectedTypes, isFinished])
+  }, [subjectId, currentIndex, answers, submittedIds, quizMode, shuffledQuestions, selectedChapters, selectedTypes, isFinished, optionShuffled, shuffledOptionMap])
 
   // Initialize multiSelected when switching to an answered multi question
   useEffect(() => {
@@ -329,6 +340,48 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     setCurrentIndex(0)
     resetInputs()
   }
+
+  const shuffleOptionsOnly = () => {
+    if (optionShuffled) {
+      setOptionShuffled(false)
+      setShuffledOptionMap({})
+      return
+    }
+    const map: Record<string, number[]> = {}
+    const target = quizMode === "shuffled" && shuffledQuestions ? shuffledQuestions : filteredQuestions
+    for (const q of target) {
+      const indices = q.options.map((_, i) => i)
+      // Only shuffle if more than 2 options (skip true/false)
+      if (indices.length > 2) {
+        for (let i = indices.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [indices[i], indices[j]] = [indices[j], indices[i]]
+        }
+      }
+      map[q.id] = indices
+    }
+    setShuffledOptionMap(map)
+    setOptionShuffled(true)
+  }
+
+  const getDisplayOptions = (q: Question): { letter: string; origIndex: number; text: string; displayText: string }[] => {
+    const stripPrefix = (t: string) => t.replace(/^[A-Da-d][.、）)\s．]\s*/, '')
+    if (optionShuffled && shuffledOptionMap[q.id]) {
+      return shuffledOptionMap[q.id].map((origIndex, displayPos) => ({
+        letter: String.fromCharCode(65 + displayPos),
+        origIndex,
+        text: q.options[origIndex],
+        displayText: stripPrefix(q.options[origIndex]),
+      }))
+    }
+    return q.options.map((text, i) => ({
+      letter: String.fromCharCode(65 + i),
+      origIndex: i,
+      text,
+      displayText: stripPrefix(text),
+    }))
+  }
+
   const qType = current ? getQuestionType(current) : "choice"
   const selectedAnswer = answers[current?.id || ""] || ""
   const isSubmitted = submittedIds.has(current?.id || "")
@@ -461,9 +514,17 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
 
       if (!isSubmitted && qType === "choice" && ["a", "A", "b", "B", "c", "C", "d", "D"].includes(key)) {
         const idx = key.toUpperCase().charCodeAt(0) - 65
-        if (current.options[idx]) {
-          e.preventDefault()
-          handleSelect(current.options[idx])
+        if (optionShuffled && shuffledOptionMap[current.id]) {
+          const origIdx = shuffledOptionMap[current.id][idx]
+          if (current.options[origIdx]) {
+            e.preventDefault()
+            handleSelect(current.options[origIdx])
+          }
+        } else {
+          if (current.options[idx]) {
+            e.preventDefault()
+            handleSelect(current.options[idx])
+          }
         }
       }
 
@@ -895,6 +956,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
               </Button>
             )}
             {mode !== "wrong-book" && mode !== "review" && (
+              <>
               <Button
                 variant="ghost"
                 size="sm"
@@ -906,6 +968,18 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                   {quizMode === "shuffled" ? "打乱中" : "打乱顺序"}
                 </span>
               </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={shuffleOptionsOnly}
+                className="text-xs font-mono gap-1"
+                title={optionShuffled ? "恢复选项顺序" : "打乱选项（解析仍引用原始选项如 A/B/C/D）"}
+              >
+                <span className={optionShuffled ? "text-accent" : ""}>
+                  {optionShuffled ? "选项打乱中" : "打乱选项"}
+                </span>
+              </Button>
+              </>
             )}
             {onToggleFocus && (
               <Button
@@ -985,6 +1059,9 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={quizMode === "shuffled" ? setSequential : shuffleQuestions} className="text-xs font-mono gap-2 cursor-pointer">
                       {quizMode === "shuffled" ? "顺序答题" : "打乱顺序"}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={shuffleOptionsOnly} className="text-xs font-mono gap-2 cursor-pointer">
+                      {optionShuffled ? "恢复选项顺序" : "打乱选项"}
                     </DropdownMenuItem>
                   </>
                 )}
@@ -1095,42 +1172,50 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           )}
 
           {/* Answer input area */}
+          {optionShuffled && (qType === "choice" || qType === "multiple") && (
+            <div className="mb-3 px-3 py-2 border border-accent/20 bg-accent/5 rounded-lg">
+              <span className="text-[9px] font-mono text-accent">选项已打乱，解析仍引用原始 A/B/C/D</span>
+            </div>
+          )}
           {qType === "choice" && (
             <div className="space-y-2">
-              {current.options.map((opt, i) => {
-                const isSelected = selectedAnswer === opt
-                const isAnswer = isSubmitted && opt === current.answer
-                const isWrong = isSubmitted && isSelected && opt !== current.answer
-
-                return (
-                  <button
-                    key={i}
-                    onClick={() => handleSelect(opt)}
-                    disabled={isSubmitted}
-                    className={`w-full text-left px-3 py-3 text-xs font-mono leading-relaxed transition-all rounded-lg border ${
-                      isSubmitted
-                        ? isAnswer
-                          ? "border-accent/60 bg-accent/10 text-foreground"
-                          : isWrong
-                          ? "border-destructive/60 bg-destructive/10 text-foreground"
-                          : "border-transparent text-muted-foreground"
-                        : isSelected
-                        ? "border-accent/40 bg-accent/8 text-foreground"
-                        : "border-transparent text-muted-foreground hover:border-border/60 hover:bg-accent/5 hover:text-foreground"
-                    }`}
-                  >
-                    <span className="flex items-center gap-2">
-                      {isSubmitted && isAnswer && (
-                        <CheckCircle2 size={12} className="shrink-0 text-accent" />
-                      )}
-                      {isSubmitted && isWrong && (
-                        <XCircle size={12} className="shrink-0 text-destructive" />
-                      )}
-                      {opt}
-                    </span>
-                  </button>
-                )
-              })}
+              {(() => {
+                const displayOpts = getDisplayOptions(current)
+                return displayOpts.map(({ letter, origIndex, text, displayText }) => {
+                  const isSelected = selectedAnswer === text
+                  const isAnswer = isSubmitted && text === current.answer
+                  const isWrong = isSubmitted && isSelected && text !== current.answer
+                  return (
+                    <button
+                      key={origIndex}
+                      onClick={() => handleSelect(text)}
+                      disabled={isSubmitted}
+                      className={`w-full text-left px-3 py-3 text-xs font-mono leading-relaxed transition-all rounded-lg border ${
+                        isSubmitted
+                          ? isAnswer
+                            ? "border-accent/60 bg-accent/10 text-foreground"
+                            : isWrong
+                            ? "border-destructive/60 bg-destructive/10 text-foreground"
+                            : "border-transparent text-muted-foreground"
+                          : isSelected
+                          ? "border-accent/40 bg-accent/8 text-foreground"
+                          : "border-transparent text-muted-foreground hover:border-border/60 hover:bg-accent/5 hover:text-foreground"
+                      }`}
+                    >
+                      <span className="flex items-center gap-2">
+                        {isSubmitted && isAnswer && (
+                          <CheckCircle2 size={12} className="shrink-0 text-accent" />
+                        )}
+                        {isSubmitted && isWrong && (
+                          <XCircle size={12} className="shrink-0 text-destructive" />
+                        )}
+                        <span className="text-[10px] font-mono text-muted-foreground w-4 shrink-0">{letter}.</span>
+                        {displayText}
+                      </span>
+                    </button>
+                  )
+                })
+              })()}
             </div>
           )}
 
@@ -1139,48 +1224,50 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
               <div className="text-[10px] font-mono text-muted-foreground mb-1">
                 {multiSelected.length} 个已选（可多选）
               </div>
-              {current.options.map((opt, i) => {
-                const letter = String.fromCharCode(65 + i)
-                const isSelected = multiSelected.includes(letter)
-                const isCorrect = isSubmitted && normalizeMultiLetters(current.answer).includes(letter)
-                const isWrong = isSubmitted && isSelected && !normalizeMultiLetters(current.answer).includes(letter)
-
-                return (
-                  <button
-                    key={i}
-                    onClick={() => handleMultiToggle(letter)}
-                    disabled={isSubmitted}
-                    className={`w-full text-left px-3 py-3 text-xs font-mono leading-relaxed transition-all rounded-lg border ${
-                      isSubmitted
-                        ? isCorrect
-                          ? "border-accent/60 bg-accent/10 text-foreground"
-                          : isWrong
-                          ? "border-destructive/60 bg-destructive/10 text-foreground"
-                          : "border-transparent text-muted-foreground"
-                        : isSelected
-                        ? "border-accent/40 bg-accent/8 text-foreground"
-                        : "border-transparent text-muted-foreground hover:border-border/60 hover:bg-accent/5 hover:text-foreground"
-                    }`}
-                  >
-                    <span className="flex items-center gap-2">
-                      <span className={`w-4 h-4 rounded border flex items-center justify-center text-[9px] font-mono transition-colors ${
+              {(() => {
+                const displayOpts = getDisplayOptions(current)
+                return displayOpts.map(({ letter: _dispLetter, origIndex, text }) => {
+                  const origLetter = String.fromCharCode(65 + origIndex)
+                  const isSelected = multiSelected.includes(origLetter)
+                  const isCorrect = isSubmitted && normalizeMultiLetters(current.answer).includes(origLetter)
+                  const isWrong = isSubmitted && isSelected && !normalizeMultiLetters(current.answer).includes(origLetter)
+                  return (
+                    <button
+                      key={origIndex}
+                      onClick={() => handleMultiToggle(origLetter)}
+                      disabled={isSubmitted}
+                      className={`w-full text-left px-3 py-3 text-xs font-mono leading-relaxed transition-all rounded-lg border ${
                         isSubmitted
                           ? isCorrect
-                            ? "border-accent bg-accent/20 text-accent"
+                            ? "border-accent/60 bg-accent/10 text-foreground"
                             : isWrong
-                            ? "border-destructive bg-destructive/20 text-destructive"
-                            : "border-border/40"
+                            ? "border-destructive/60 bg-destructive/10 text-foreground"
+                            : "border-transparent text-muted-foreground"
                           : isSelected
-                          ? "border-accent bg-accent/20 text-accent"
-                          : "border-border/40"
-                      }`}>
-                        {isSelected || (isSubmitted && isCorrect) ? "✓" : ""}
+                          ? "border-accent/40 bg-accent/8 text-foreground"
+                          : "border-transparent text-muted-foreground hover:border-border/60 hover:bg-accent/5 hover:text-foreground"
+                      }`}
+                    >
+                      <span className="flex items-center gap-2">
+                        <span className={`w-4 h-4 rounded border flex items-center justify-center text-[9px] font-mono transition-colors ${
+                          isSubmitted
+                            ? isCorrect
+                              ? "border-accent bg-accent/20 text-accent"
+                              : isWrong
+                              ? "border-destructive bg-destructive/20 text-destructive"
+                              : "border-border/40"
+                            : isSelected
+                            ? "border-accent bg-accent/20 text-accent"
+                            : "border-border/40"
+                        }`}>
+                          {isSelected || (isSubmitted && isCorrect) ? "✓" : ""}
+                        </span>
+                        {text}
                       </span>
-                      {opt}
-                    </span>
-                  </button>
-                )
-              })}
+                    </button>
+                  )
+                })
+              })()}
             </div>
           )}
 
