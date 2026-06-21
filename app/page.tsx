@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { motion } from "framer-motion"
 import { ImportPanel } from "@/components/import-panel"
 import { QuizView } from "@/components/quiz-view"
 import { Sidebar } from "@/components/sidebar"
@@ -33,7 +32,8 @@ export default function Page() {
   const [questions, setQuestions] = useState<Question[]>([])
   const [wrongIds, setWrongIds] = useState<string[]>([])
   const [view, setView] = useState<View>("import")
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [coverDismissed, setCoverDismissed] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true)
   const [importCount, setImportCount] = useState(0)
   const [hasEnteredQuiz, setHasEnteredQuiz] = useState(false)
   const [focusMode, setFocusMode] = useState(false)
@@ -206,8 +206,8 @@ export default function Page() {
 
   return (
     <div className="relative">
-      {/* Cover - fixed, fades on scroll */}
-      <CoverPage />
+      {/* Cover - click to dismiss */}
+      <CoverPage onDismiss={() => setCoverDismissed(true)} />
 
       {/* Wallpaper background for app section */}
       <div className="fixed inset-0 z-0">
@@ -220,17 +220,8 @@ export default function Page() {
         <div className="absolute inset-0 bg-background/70" style={{ backdropFilter: "blur(var(--cover-blur, 4px))" }} />
       </div>
 
-      {/* Spacer to push app below viewport */}
-      <div className="relative z-10 h-screen" />
-
       {/* Main App */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10"
-      >
+      <div className="relative z-10">
         {/* Gradient bridge from cover to app */}
         <div className="absolute top-0 left-0 right-0 h-48 -translate-y-1/2 bg-gradient-to-b from-transparent to-[hsl(var(--background))] pointer-events-none z-0" />
 
@@ -325,7 +316,7 @@ export default function Page() {
           </main>
         </div>
       </div>
-      </motion.div>
+      </div>
     </div>
   )
 }

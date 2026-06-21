@@ -665,7 +665,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                     key={i}
                     onClick={() => handleSelect(opt)}
                     disabled={isSubmitted}
-                    className={`w-full text-left px-3 py-2.5 text-xs font-mono leading-relaxed transition-all rounded-lg border ${
+                    className={`w-full text-left px-3 py-3 text-xs font-mono leading-relaxed transition-all rounded-lg border ${
                       isSubmitted
                         ? isAnswer
                           ? "border-accent/60 bg-accent/10 text-foreground"
@@ -708,7 +708,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                     key={i}
                     onClick={() => handleMultiToggle(letter)}
                     disabled={isSubmitted}
-                    className={`w-full text-left px-3 py-2.5 text-xs font-mono leading-relaxed transition-all rounded-lg border ${
+                    className={`w-full text-left px-3 py-3 text-xs font-mono leading-relaxed transition-all rounded-lg border ${
                       isSubmitted
                         ? isCorrect
                           ? "border-accent/60 bg-accent/10 text-foreground"

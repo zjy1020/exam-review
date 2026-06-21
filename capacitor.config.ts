@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: '期末复习',
   webDir: 'out',
   server: {
-    androidScheme: 'https',
+    androidScheme: 'http',
   },
   android: {
     allowMixedContent: true,
