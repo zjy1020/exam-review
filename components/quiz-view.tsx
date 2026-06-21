@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronLeft, ChevronRight, RotateCcw, BookX, CheckCircle2, XCircle, ArrowLeft, ListTree, Filter, MoreHorizontal } from "lucide-react"
 import type { Question } from "@/lib/types"
@@ -33,9 +33,42 @@ interface QuizViewProps {
   focusMode?: boolean
   onToggleFocus?: () => void
   filterKey?: number
+  subjectId?: string
 }
 
-type QuizMode = "normal" | "wrong-book"
+type QuizMode = "normal" | "wrong-book" | "review"
+
+interface QuizProgress {
+  currentIndex: number
+  answers: Record<string, string>
+  submittedIds: string[]
+  quizMode: "sequential" | "shuffled"
+  shuffledQuestions: Question[] | null
+  selectedChapters: string[]
+  selectedTypes: string[]
+  isFinished: boolean
+}
+
+function getProgressKey(subjectId: string) {
+  return `quiz-progress-${subjectId}`
+}
+
+function saveProgress(subjectId: string, state: QuizProgress) {
+  try {
+    localStorage.setItem(getProgressKey(subjectId), JSON.stringify(state))
+  } catch { /* quota exceeded, silently ignore */ }
+}
+
+function loadProgress(subjectId: string): QuizProgress | null {
+  try {
+    const raw = localStorage.getItem(getProgressKey(subjectId))
+    return raw ? JSON.parse(raw) : null
+  } catch { return null }
+}
+
+function clearProgress(subjectId: string) {
+  try { localStorage.removeItem(getProgressKey(subjectId)) } catch { /* ignore */ }
+}
 
 function isTrueFalse(q: Question) {
   // Check by options: "A. 对" / "B. 错"
@@ -100,7 +133,7 @@ function getQuestionType(q: Question): "choice" | "truefalse" | "input" | "essay
   return "input"
 }
 
-export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRemoveWrong, wrongIds, initialMode, focusMode, onToggleFocus, filterKey }: QuizViewProps) {
+export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRemoveWrong, wrongIds, initialMode, focusMode, onToggleFocus, filterKey, subjectId }: QuizViewProps) {
   const [mode, setMode] = useState<QuizMode>(initialMode || "normal")
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
@@ -116,6 +149,35 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
   const [showFilter, setShowFilter] = useState(false)
   const savedFilterIndexRef = useRef<number | null>(null)
   const returningFromEmptyRef = useRef(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const restoredRef = useRef<string | null>(null)
+  const isRestoringRef = useRef(false)
+
+  // Block horizontal edge swipes that trigger Android WebView back/forward
+  const touchStartXRef = useRef<number | null>(null)
+  const handleTouchStart = useCallback((e: TouchEvent) => {
+    touchStartXRef.current = e.touches[0].clientX
+  }, [])
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    if (touchStartXRef.current === null) return
+    const dx = e.touches[0].clientX - touchStartXRef.current
+    // If swiping right from left edge (within 40px) or swiping left from right edge
+    if (dx > 0 && touchStartXRef.current < 40) {
+      e.preventDefault()
+    } else if (dx < 0 && touchStartXRef.current > window.innerWidth - 40) {
+      e.preventDefault()
+    }
+  }, [])
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    el.addEventListener('touchstart', handleTouchStart, { passive: true })
+    el.addEventListener('touchmove', handleTouchMove, { passive: false })
+    return () => {
+      el.removeEventListener('touchstart', handleTouchStart)
+      el.removeEventListener('touchmove', handleTouchMove)
+    }
+  }, [handleTouchStart, handleTouchMove])
 
   // Reset shuffle when questions change
   useEffect(() => {
@@ -131,15 +193,15 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     setSelectedTypes([])
   }, [filterKey])
 
-  // Reset shuffle + position when filters change
+  // Reset shuffle + position when filters change (skip during restore)
   useEffect(() => {
-    setShuffledQuestions(null)
-    setQuizMode("sequential")
     if (returningFromEmptyRef.current) {
       returningFromEmptyRef.current = false
-    } else {
-      setCurrentIndex(0)
+      return
     }
+    setShuffledQuestions(null)
+    setQuizMode("sequential")
+    setCurrentIndex(0)
   }, [selectedChapters, selectedTypes])
 
   // Reset state when questions change (e.g. subject switch)
@@ -174,6 +236,46 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
 
   const current = displayQuestions[currentIndex]
 
+  // Restore progress from localStorage on mount / subject switch
+  useEffect(() => {
+    if (!subjectId || questions.length === 0 || mode === "review") return
+    if (restoredRef.current === subjectId) return
+
+    isRestoringRef.current = true
+    const saved = loadProgress(subjectId)
+    if (saved) {
+      setAnswers(saved.answers)
+      setSubmittedIds(new Set(saved.submittedIds))
+      setQuizMode(saved.quizMode)
+      if (saved.shuffledQuestions) setShuffledQuestions(saved.shuffledQuestions)
+      // Set filters + index + finished last, suppressing the filter-change reset
+      returningFromEmptyRef.current = true
+      setSelectedChapters(saved.selectedChapters)
+      setSelectedTypes(saved.selectedTypes)
+      setCurrentIndex(saved.currentIndex)
+      if (saved.isFinished) setIsFinished(true)
+    }
+    restoredRef.current = subjectId
+    // Reset restoring flag after save effect has had a chance to check it
+    requestAnimationFrame(() => { isRestoringRef.current = false })
+  }, [subjectId, questions])
+
+  // Save progress to localStorage on every relevant state change
+  useEffect(() => {
+    if (!subjectId || questions.length === 0 || mode === "review" || isRestoringRef.current) return
+    const progress: QuizProgress = {
+      currentIndex,
+      answers,
+      submittedIds: Array.from(submittedIds),
+      quizMode,
+      shuffledQuestions,
+      selectedChapters,
+      selectedTypes,
+      isFinished,
+    }
+    saveProgress(subjectId, progress)
+  }, [subjectId, currentIndex, answers, submittedIds, quizMode, shuffledQuestions, selectedChapters, selectedTypes, isFinished])
+
   // Initialize multiSelected when switching to an answered multi question
   useEffect(() => {
     if (current && getQuestionType(current) === "multiple" && submittedIds.has(current.id)) {
@@ -183,6 +285,18 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
       setMultiSelected([])
     }
   }, [currentIndex])
+
+  // Prevent Android WebView swipe-back gesture
+  useEffect(() => {
+    // Push a history state so popstate can be intercepted
+    window.history.pushState(null, '', window.location.href)
+    const handler = () => {
+      // Re-push to stay on page (blocks Android swipe-back)
+      window.history.pushState(null, '', window.location.href)
+    }
+    window.addEventListener('popstate', handler)
+    return () => window.removeEventListener('popstate', handler)
+  }, [])
 
   const resetInputs = () => {
     setTextInput("")
@@ -300,11 +414,21 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     setSubmittedIds(new Set())
     setIsFinished(false)
     resetInputs()
+    if (subjectId) clearProgress(subjectId)
   }
 
   const switchMode = (m: QuizMode) => {
     setMode(m)
     setCurrentIndex(0)
+    resetInputs()
+  }
+  const toggleReview = () => {
+    if (mode === "review") {
+      setMode("normal")
+    } else {
+      setMode("review")
+      setCurrentIndex(0)
+    }
     resetInputs()
   }
 
@@ -467,8 +591,250 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     )
   }
 
+  // 背题模式 — scrollable review of all questions with answers and explanations
+  if (mode === "review") {
+    const reviewQuestions = displayQuestions.length > 0 ? displayQuestions : activeQuestions
+    return (
+      <div ref={containerRef} className={`w-full max-w-4xl mx-auto px-4 h-full flex flex-col min-h-0 ${focusMode ? "pt-[env(safe-area-inset-top)]" : ""}`}>
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4 shrink-0">
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-mono text-accent font-bold tracking-wider uppercase">背题模式</span>
+            <span className="text-xs font-mono text-muted-foreground">{reviewQuestions.length} 题</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowFilter(true)}
+              className="text-xs font-mono gap-1"
+              title="筛选章节和题型"
+            >
+              <Filter size={14} strokeWidth={1.5} />
+              <span className="hidden sm:inline">筛选</span>
+              {(selectedChapters.length > 0 || selectedTypes.length > 0) && (
+                <span className="text-accent font-bold">
+                  ({selectedChapters.length || "全"}/{selectedTypes.length || "全"})
+                </span>
+              )}
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => { setQuizMode(quizMode === "shuffled" ? "sequential" : "shuffled"); if (quizMode === "shuffled") setSequential(); else shuffleQuestions() }}
+              className="text-xs font-mono gap-1"
+            >
+              {quizMode === "shuffled" ? "顺序" : "打乱"}
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => { setMode("normal"); setCurrentIndex(0); resetInputs() }}
+              className="text-xs font-mono"
+            >
+              答题
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => { setMode("normal"); onReset() }}
+              className="text-xs font-mono"
+            >
+              退出
+            </Button>
+          </div>
+        </div>
+
+        {/* Scrollable question list */}
+        <div className="flex-1 overflow-y-auto min-h-0 space-y-4 pb-6 scrollbar-thin">
+          {reviewQuestions.map((q, qi) => {
+            const qt = getQuestionType(q)
+            const optLetter = (i: number) => String.fromCharCode(65 + i)
+            // Resolve answer for string answers like "A. xxx" → extract text
+            const resolveAnswer = (ans: string): string => {
+              const optMatch = q.options.find(o =>
+                o.toUpperCase().startsWith(ans.toUpperCase().replace(/[.。\s]/g, '') + '.') ||
+                o.toUpperCase().startsWith(ans.toUpperCase().replace(/[.。\s]/g, '') + '、')
+              )
+              return optMatch || ans
+            }
+            return (
+              <Card key={q.id} className="border-border/40 shadow-sm bg-card/80 backdrop-blur-xl">
+                <CardContent className="p-5 lg:p-6">
+                  {/* Chapter + type */}
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      {q.chapter && (
+                        <span className="text-xs font-mono text-accent uppercase">{q.chapter}</span>
+                      )}
+                      <Badge variant="outline" className="text-[9px] font-mono tracking-wider border-accent/30 bg-accent/5 text-accent">
+                        {qt === "choice" ? "选择题" : qt === "multiple" ? "多选题" : qt === "truefalse" ? "判断题" : qt === "essay" ? "简答题" : "填空题"}
+                      </Badge>
+                    </div>
+                  </div>
+
+                  {/* Question text */}
+                  <h3 className="text-sm font-mono text-foreground leading-relaxed mb-4">
+                    <span className="text-accent font-bold mr-2">{q.number}.</span>
+                    {q.question}
+                  </h3>
+
+                  {/* Options */}
+                  {q.options.length > 0 && (
+                    <div className="space-y-2 mb-4">
+                      {q.options.map((opt, i) => {
+                        const letter = optLetter(i)
+                        const isCorrect = qt === "multiple"
+                          ? normalizeMultiLetters(q.answer).includes(letter)
+                          : opt === (() => {
+                              if (/^[A-Da-d][.、）)\s．]/.test(q.answer)) return q.answer
+                              if (q.answer && q.answer.length === 1 && /^[A-Da-d]$/.test(q.answer)) {
+                                return q.options.find(o => o.toUpperCase().startsWith(q.answer!.toUpperCase() + '.')) || q.answer
+                              }
+                              return q.answer || ''
+                            })()
+                        return (
+                          <div
+                            key={i}
+                            className={`px-3 py-2.5 text-xs font-mono leading-relaxed rounded-lg border ${
+                              isCorrect
+                                ? "border-accent/60 bg-accent/10 text-foreground"
+                                : "border-transparent text-muted-foreground"
+                            }`}
+                          >
+                            <span className="flex items-center gap-2">
+                              {isCorrect && <CheckCircle2 size={12} className="shrink-0 text-accent" />}
+                              {opt}
+                            </span>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
+
+                  {/* Answer */}
+                  {q.answer && (
+                    <div className="mb-3 px-3 py-2 text-xs font-mono border border-accent/30 bg-accent/[0.07] rounded-lg">
+                      <span className="text-accent font-bold">答案：</span>
+                      <span className="text-foreground">{qt === "multiple" ? normalizeMultiLetters(q.answer) : q.answer}</span>
+                    </div>
+                  )}
+
+                  {/* Explanation */}
+                  {q.explanation && (
+                    <div className="px-3 py-2.5 border border-border/40 bg-background/50 rounded-lg">
+                      <span className="text-[10px] font-mono text-accent font-bold tracking-wider uppercase block mb-1">
+                        解析
+                      </span>
+                      <p className="text-xs font-mono text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                        {q.explanation}
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )
+          })}
+        </div>
+
+        {/* Filter dialog */}
+        <Dialog open={showFilter} onOpenChange={(open) => { setShowFilter(open); if (open) savedFilterIndexRef.current = null }}>
+          <DialogContent className="glass-dialog max-w-sm max-h-[80vh] overflow-y-auto rounded-xl">
+            <DialogTitle className="text-xs font-mono tracking-wider uppercase text-foreground">
+              筛选设置
+            </DialogTitle>
+
+            {/* Type filters */}
+            <div className="mt-3">
+              <div className="text-xs font-mono text-muted-foreground mb-2">按题型</div>
+              <div className="flex gap-2">
+                {(["choice", "multiple", "truefalse", "input", "essay"] as const).map((t) => {
+                  const label = t === "choice" ? "选择题" : t === "multiple" ? "多选题" : t === "truefalse" ? "判断题" : t === "essay" ? "简答题" : "填空题"
+                  const active = selectedTypes.includes(t)
+                  return (
+                    <button
+                      key={t}
+                      onClick={() => {
+                        if (savedFilterIndexRef.current === null) savedFilterIndexRef.current = 0
+                        setSelectedTypes((prev) =>
+                          active ? prev.filter((x) => x !== t) : [...prev, t]
+                        )
+                      }}
+                      className={`flex-1 px-2 py-1.5 text-xs font-mono border transition-colors rounded-md ${
+                        active
+                          ? "border-accent bg-accent/10 text-accent"
+                          : "border-border/60 text-muted-foreground hover:text-foreground hover:border-accent/30"
+                      }`}
+                    >
+                      {active ? "✓ " : ""}{label}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Chapter filters */}
+            <div className="mt-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-mono text-muted-foreground">按章节</span>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      if (savedFilterIndexRef.current === null) savedFilterIndexRef.current = 0
+                      setSelectedChapters(allChapters)
+                    }}
+                    className="text-[9px] font-mono text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    全选
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (savedFilterIndexRef.current === null) savedFilterIndexRef.current = 0
+                      setSelectedChapters([])
+                    }}
+                    className="text-[9px] font-mono text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    取消
+                  </button>
+                </div>
+              </div>
+              <div className="space-y-1 max-h-[250px] overflow-y-auto">
+                {allChapters.map((ch) => {
+                  const active = selectedChapters.includes(ch)
+                  return (
+                    <button
+                      key={ch}
+                      onClick={() => {
+                        if (savedFilterIndexRef.current === null) savedFilterIndexRef.current = 0
+                        setSelectedChapters((prev) =>
+                          active ? prev.filter((x) => x !== ch) : [...prev, ch]
+                        )
+                      }}
+                      className={`w-full text-left px-2 py-1 text-xs font-mono border transition-colors rounded-md ${
+                        active
+                          ? "border-accent bg-accent/10 text-accent"
+                          : "border-transparent text-muted-foreground hover:text-foreground hover:border-border/60"
+                      }`}
+                    >
+                      {active ? "✓ " : "  "}{ch}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Info */}
+            <div className="mt-3 text-xs font-mono text-muted-foreground">
+              {filteredQuestions.length} 题（共 {activeQuestions.length} 题）
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+    )
+  }
+
   return (
-    <div className={`w-full max-w-4xl mx-auto px-4 h-full flex flex-col min-h-0 overscroll-x-none touch-pan-y ${focusMode ? "pt-[env(safe-area-inset-top)]" : ""}`}>
+    <div ref={containerRef} className={`w-full max-w-4xl mx-auto px-4 h-full flex flex-col min-h-0 overscroll-x-none touch-pan-y ${focusMode ? "pt-[env(safe-area-inset-top)]" : ""}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4 shrink-0">
         <div className="flex items-center gap-3">
@@ -502,7 +868,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
 
           {/* Desktop: all buttons visible */}
           <div className="hidden lg:flex items-center gap-1">
-            {mode !== "wrong-book" && (
+            {mode !== "wrong-book" && mode !== "review" && (
               <Button
                 variant="ghost"
                 size="sm"
@@ -519,7 +885,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                 )}
               </Button>
             )}
-            {mode !== "wrong-book" && (
+            {mode !== "wrong-book" && mode !== "review" && (
               <Button
                 variant="ghost"
                 size="sm"
@@ -543,9 +909,30 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                 {focusMode ? "退出专注" : "专注答题"}
               </Button>
             )}
+            {mode !== "wrong-book" && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleReview}
+                className="text-xs font-mono gap-1"
+                title="背题模式"
+              >
+                {mode === "review" ? "退出背题" : "背题模式"}
+              </Button>
+            )}
           </div>
 
-          {/* Always visible: outline / restart / exit */}
+          {/* Mobile: 背题 / outline / restart / exit */}
+          {mode !== "wrong-book" && (
+            <Button
+              variant={mode === "review" ? "default" : "ghost"}
+              size="sm"
+              onClick={toggleReview}
+              className="lg:hidden text-xs font-mono gap-1"
+            >
+              {mode === "review" ? "退出背题" : "背题模式"}
+            </Button>
+          )}
           <Button
             variant="ghost"
             size="sm"
@@ -580,7 +967,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                   <MoreHorizontal size={14} strokeWidth={1.5} />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="glass-dialog min-w-[140px] rounded-xl border-border/40">
+              <DropdownMenuContent align="end" className="glass-dialog min-w-[160px] rounded-xl border-border/40">
                 {mode !== "wrong-book" && (
                   <>
                     <DropdownMenuItem onClick={() => setShowFilter(true)} className="text-xs font-mono gap-2 cursor-pointer">
@@ -595,6 +982,11 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                 {onToggleFocus && (
                   <DropdownMenuItem onClick={onToggleFocus} className="text-xs font-mono gap-2 cursor-pointer">
                     {focusMode ? "退出专注" : "专注答题"}
+                  </DropdownMenuItem>
+                )}
+                {mode !== "wrong-book" && (
+                  <DropdownMenuItem onClick={toggleReview} className="text-xs font-mono gap-2 cursor-pointer">
+                    {mode === "review" ? "退出背题" : "背题模式"}
                   </DropdownMenuItem>
                 )}
               </DropdownMenuContent>

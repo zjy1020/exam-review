@@ -311,6 +311,7 @@ export default function Page() {
                 focusMode={focusMode}
                 onToggleFocus={() => setFocusMode((f) => !f)}
                 filterKey={filterKey}
+                subjectId={activeSubjectId || undefined}
               />
             </div>
           </main>
