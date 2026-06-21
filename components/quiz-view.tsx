@@ -213,6 +213,15 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     resetInputs()
   }, [questions])
 
+  // Auto-exit wrong-book mode when wrongIds becomes empty
+  useEffect(() => {
+    if (mode === "wrong-book" && wrongIds.length === 0) {
+      setMode("normal")
+      setCurrentIndex(0)
+      resetInputs()
+    }
+  }, [wrongIds])
+
   const activeQuestions = mode === "wrong-book"
     ? questions.filter((q) => wrongIds.includes(q.id))
     : questions
