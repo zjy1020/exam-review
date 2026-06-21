@@ -462,7 +462,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 h-full flex flex-col min-h-0">
+    <div className={`w-full max-w-4xl mx-auto px-4 h-full flex flex-col min-h-0 overscroll-x-none touch-pan-y ${focusMode ? "pt-[env(safe-area-inset-top)]" : ""}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4 shrink-0">
         <div className="flex items-center gap-3">
@@ -997,7 +997,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
 
       {/* Outline dialog */}
       <Dialog open={showOutline} onOpenChange={setShowOutline}>
-        <DialogContent className="glass-dialog max-w-md max-h-[70vh] overflow-y-auto rounded-xl">
+        <DialogContent className="glass-dialog w-[calc(100vw-2rem)] sm:max-w-md max-h-[70vh] overflow-y-auto rounded-xl">
           <DialogTitle className="text-xs font-mono tracking-wider uppercase text-foreground">
             答题大纲 — 点击跳转
           </DialogTitle>
