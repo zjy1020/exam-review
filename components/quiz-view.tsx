@@ -1284,10 +1284,10 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
 
                 <Button
                   size="lg"
-                  onClick={currentIndex < displayQuestions.length - 1 ? goNext : handleFinish}
+                  onClick={currentIndex < displayQuestions.length - 1 ? goNext : (selectedChapters.length > 0 || selectedTypes.length > 0 ? () => { setSelectedChapters([]); setSelectedTypes([]) } : handleFinish)}
                   className="w-full text-xs font-mono tracking-wider uppercase"
                 >
-                  {currentIndex < displayQuestions.length - 1 ? "下一题" : "查看结果"}
+                  {currentIndex < displayQuestions.length - 1 ? "下一题" : (selectedChapters.length > 0 || selectedTypes.length > 0 ? "筛选题已答完，查看全部" : "查看结果")}
                 </Button>
               </div>
             )}
