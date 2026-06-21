@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ChevronLeft, ChevronRight, RotateCcw, BookX, CheckCircle2, XCircle, ArrowLeft, ListTree, Filter } from "lucide-react"
+import { ChevronLeft, ChevronRight, RotateCcw, BookX, CheckCircle2, XCircle, ArrowLeft, ListTree, Filter, MoreHorizontal } from "lucide-react"
 import type { Question } from "@/lib/types"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -15,6 +15,12 @@ import {
   DialogContent,
   DialogTitle,
 } from "@/components/ui/dialog"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 interface QuizViewProps {
   questions: Question[]
@@ -493,47 +499,53 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
               清空错题本
             </Button>
           )}
-          {mode !== "wrong-book" && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowFilter(true)}
-              className="text-xs font-mono gap-1"
-              title="筛选章节和题型"
-            >
-              <Filter size={14} strokeWidth={1.5} />
-              筛选
-              {(selectedChapters.length > 0 || selectedTypes.length > 0) && (
-                <span className="text-accent font-bold">
-                  ({selectedChapters.length || "全"}/{selectedTypes.length || "全"})
+
+          {/* Desktop: all buttons visible */}
+          <div className="hidden lg:flex items-center gap-1">
+            {mode !== "wrong-book" && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowFilter(true)}
+                className="text-xs font-mono gap-1"
+                title="筛选章节和题型"
+              >
+                <Filter size={14} strokeWidth={1.5} />
+                筛选
+                {(selectedChapters.length > 0 || selectedTypes.length > 0) && (
+                  <span className="text-accent font-bold">
+                    ({selectedChapters.length || "全"}/{selectedTypes.length || "全"})
+                  </span>
+                )}
+              </Button>
+            )}
+            {mode !== "wrong-book" && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={quizMode === "shuffled" ? setSequential : shuffleQuestions}
+                className="text-xs font-mono gap-1"
+                title={quizMode === "shuffled" ? "顺序答题" : "打乱顺序"}
+              >
+                <span className={quizMode === "shuffled" ? "text-accent" : ""}>
+                  {quizMode === "shuffled" ? "打乱中" : "打乱顺序"}
                 </span>
-              )}
-            </Button>
-          )}
-          {mode !== "wrong-book" && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={quizMode === "shuffled" ? setSequential : shuffleQuestions}
-              className="text-xs font-mono gap-1"
-              title={quizMode === "shuffled" ? "顺序答题" : "打乱顺序"}
-            >
-              <span className={quizMode === "shuffled" ? "text-accent" : ""}>
-                {quizMode === "shuffled" ? "打乱中" : "打乱顺序"}
-              </span>
-            </Button>
-          )}
-          {onToggleFocus && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onToggleFocus}
-              className="text-xs font-mono"
-              title={focusMode ? "退出专注模式" : "专注答题模式"}
-            >
-              {focusMode ? "退出专注" : "专注答题"}
-            </Button>
-          )}
+              </Button>
+            )}
+            {onToggleFocus && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onToggleFocus}
+                className="text-xs font-mono"
+                title={focusMode ? "退出专注模式" : "专注答题模式"}
+              >
+                {focusMode ? "退出专注" : "专注答题"}
+              </Button>
+            )}
+          </div>
+
+          {/* Always visible: outline / restart / exit */}
           <Button
             variant="ghost"
             size="sm"
@@ -541,7 +553,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
             className="text-xs font-mono gap-1"
           >
             <ListTree size={14} strokeWidth={1.5} />
-            大纲
+            <span className="hidden sm:inline">大纲</span>
           </Button>
           <Button
             variant="ghost"
@@ -559,6 +571,35 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           >
             退出
           </Button>
+
+          {/* Mobile more dropdown */}
+          <div className="lg:hidden">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="text-xs font-mono">
+                  <MoreHorizontal size={14} strokeWidth={1.5} />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="glass-dialog min-w-[140px] rounded-xl border-border/40">
+                {mode !== "wrong-book" && (
+                  <>
+                    <DropdownMenuItem onClick={() => setShowFilter(true)} className="text-xs font-mono gap-2 cursor-pointer">
+                      <Filter size={12} strokeWidth={1.5} />
+                      筛选
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={quizMode === "shuffled" ? setSequential : shuffleQuestions} className="text-xs font-mono gap-2 cursor-pointer">
+                      {quizMode === "shuffled" ? "顺序答题" : "打乱顺序"}
+                    </DropdownMenuItem>
+                  </>
+                )}
+                {onToggleFocus && (
+                  <DropdownMenuItem onClick={onToggleFocus} className="text-xs font-mono gap-2 cursor-pointer">
+                    {focusMode ? "退出专注" : "专注答题"}
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </div>
 
