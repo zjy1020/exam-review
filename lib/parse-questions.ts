@@ -125,7 +125,19 @@ export function parseQuestions(text: string): Question[] {
     const numMatch = line.match(/^(?:\[?(\d+)\]?[.、）)\s．]|第(\d+)题[.、：:\s]?)/)
     const aiNumMatch = line.match(/^\[(\d+)\]/)
     const tiHaoMatch = line.match(/^\[题号\]\s*(\d+)/)
-    const hasNumber = numMatch || aiNumMatch || tiHaoMatch
+    const bareNumMatch = line.match(/^(\d{1,3})$/)
+    const hasNumber = numMatch || aiNumMatch || tiHaoMatch || bareNumMatch
+
+    if (bareNumMatch) {
+      flush()
+      questionNumber = parseInt(bareNumMatch[1])
+      current = { options: [], number: questionNumber }
+      if (pendingType) { current.type = pendingType; pendingType = undefined }
+      inOptions = false
+      inExplanation = false
+      inAnswer = false
+      continue
+    }
 
     if (hasNumber) {
       flush()
@@ -256,8 +268,9 @@ export function buildFormatPrompt(text: string): string {
 要求：
 - 【重要】纯文本输出，不要使用任何 markdown 格式（不要代码块、不要反引号）
 - 【重要】选项中的 $ @ % # 等符号直接保留原样，不要加反引号或转义，每个选项必须在同一行（如 B. $ 不要拆成 B. 和 $）
-- 阅读全文，确认是否有"第一章"、"第二章"、"第1节"等明确的章节标记
-- 只有当原文明确包含章节标记时，才按章节分组，用 "=== 第X章 ===" 作为分隔
+- 阅读全文，确认是否有"第一章"、"第二章"、"第1节"等明确包含"第X章""第X节"字样的章节标记
+- 注意：「一、单选题」「二、多选题」等是题型分类标题，不是章节标记，不要转换成 "=== 第X章 ==="
+- 只有当原文明确包含"第X章""第X节"字样时，才按章节分组，用 "=== 第X章 ===" 作为分隔
 - 【重要】第一道题前面也要加上章节标记，不要省略第一章的标记
 - 如果原文没有任何章节标记，绝对不要添加任何章节标题，直接输出题目列表
 - 原文中每道题可能以 "- "（短横+空格）开头而不是数字，这种情况下请按顺序依次编号为 1, 2, 3...
