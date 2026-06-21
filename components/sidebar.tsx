@@ -10,7 +10,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet"
 
 // 修改为你自己的生日（MMDD 格式），比如 3 月 14 日 → "0314"
-const AUTHOR_BIRTHDAY = "1102"
+const AUTHOR_BIRTHDAY = "1020"
 
 interface SidebarProps {
   subjects: Subject[]
