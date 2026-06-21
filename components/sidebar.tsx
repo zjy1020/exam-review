@@ -263,6 +263,9 @@ export function Sidebar({
                   if (typeof val === "string") {
                     localStorage.setItem(key, val)
                     count++
+                  } else if (typeof val === "object" && val !== null) {
+                    localStorage.setItem(key, JSON.stringify(val))
+                    count++
                   }
                 }
                 if (confirm(`已导入 ${count} 项数据，是否刷新页面？`)) {
