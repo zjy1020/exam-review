@@ -37,6 +37,7 @@ export default function Page() {
   const [importCount, setImportCount] = useState(0)
   const [hasEnteredQuiz, setHasEnteredQuiz] = useState(false)
   const [focusMode, setFocusMode] = useState(false)
+  const [filterKey, setFilterKey] = useState(0)
 
   // Reset quiz-entered flag on re-import
   useEffect(() => {
@@ -47,6 +48,7 @@ export default function Page() {
   useEffect(() => {
     if (view === "quiz") {
       setHasEnteredQuiz(true)
+      setFilterKey((k) => k + 1)
     }
   }, [view])
 
@@ -316,6 +318,7 @@ export default function Page() {
                 initialMode={view === "wrong-book" ? "wrong-book" : "normal"}
                 focusMode={focusMode}
                 onToggleFocus={() => setFocusMode((f) => !f)}
+                filterKey={filterKey}
               />
             </div>
           </main>

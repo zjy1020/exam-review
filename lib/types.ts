@@ -6,6 +6,7 @@ export interface Question {
   answer: string
   explanation: string
   chapter?: string
+  type?: "choice" | "truefalse" | "input" | "essay" | "multiple"
 }
 
 export interface Subject {

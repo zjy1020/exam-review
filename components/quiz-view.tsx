@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ChevronLeft, ChevronRight, RotateCcw, BookX, CheckCircle2, XCircle, ArrowLeft, ListTree, Filter, FileText } from "lucide-react"
+import { ChevronLeft, ChevronRight, RotateCcw, BookX, CheckCircle2, XCircle, ArrowLeft, ListTree, Filter } from "lucide-react"
 import type { Question } from "@/lib/types"
 import {
   Dialog,
@@ -20,14 +20,24 @@ interface QuizViewProps {
   initialMode?: "normal" | "wrong-book"
   focusMode?: boolean
   onToggleFocus?: () => void
+  filterKey?: number
 }
 
 type QuizMode = "normal" | "wrong-book"
 
 function isTrueFalse(q: Question) {
-  if (!q.answer) return false
-  const ans = q.answer.replace(/[.。\s]/g, "")
-  return ans === "对" || ans === "错"
+  // Check by options: "A. 对" / "B. 错"
+  if (q.options.length === 2) {
+    const opts = q.options.map(o => o.replace(/^[A-Da-d][.、）)\s．]\s*/, '').trim())
+    if (opts.every(o => o === "对" || o === "错" || o === "正确" || o === "错误")) return true
+  }
+  // Check by answer content
+  if (q.answer) {
+    let ans = q.answer.replace(/[.。\s]/g, "")
+    ans = ans.replace(/^[A-Da-d]/, '') // "B错" → "错"
+    if (ans === "对" || ans === "错") return true
+  }
+  return false
 }
 
 // Normalize answer for fuzzy matching
@@ -57,25 +67,43 @@ function matchAnswer(userAnswer: string | undefined, correctAnswer: string | und
   return false
 }
 
-function getQuestionType(q: Question): "choice" | "truefalse" | "input" {
-  if (q.options.length > 0) return "choice"
+function getQuestionType(q: Question): "choice" | "truefalse" | "input" | "essay" | "multiple" {
+  if (q.type === "choice" || q.type === "truefalse" || q.type === "input" || q.type === "essay" || q.type === "multiple") return q.type
   if (isTrueFalse(q)) return "truefalse"
+  if (q.options.length > 0) {
+    // Auto-detect multi-choice: answer has 2+ distinct letters
+    if (q.answer) {
+      // If answer was resolved to option text like "C. xxx", it's single-choice
+      if (/^[A-Da-d][.、）)\s．]/.test(q.answer)) return "choice"
+      const letters = q.answer.replace(/[^A-Da-d]/g, '').replace(/[.。\s]/g, '')
+      const unique = new Set(letters.toUpperCase())
+      if (unique.size >= 2) return "multiple"
+    }
+    return "choice"
+  }
+  if (q.answer) {
+    if (q.answer.length > 12) return "essay"
+    if (/[，；、]/.test(q.answer)) return "essay"
+  }
   return "input"
 }
 
-export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRemoveWrong, wrongIds, initialMode, focusMode, onToggleFocus }: QuizViewProps) {
+export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRemoveWrong, wrongIds, initialMode, focusMode, onToggleFocus, filterKey }: QuizViewProps) {
   const [mode, setMode] = useState<QuizMode>(initialMode || "normal")
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [submittedIds, setSubmittedIds] = useState<Set<string>>(new Set())
   const [isFinished, setIsFinished] = useState(false)
   const [textInput, setTextInput] = useState("")
+  const [multiSelected, setMultiSelected] = useState<string[]>([])
   const [showOutline, setShowOutline] = useState(false)
   const [quizMode, setQuizMode] = useState<"sequential" | "shuffled">("sequential")
   const [shuffledQuestions, setShuffledQuestions] = useState<Question[] | null>(null)
   const [selectedChapters, setSelectedChapters] = useState<string[]>([])
-  const [selectedTypes, setSelectedTypes] = useState<("choice" | "truefalse" | "input")[]>([])
+  const [selectedTypes, setSelectedTypes] = useState<("choice" | "truefalse" | "input" | "essay" | "multiple")[]>([])
   const [showFilter, setShowFilter] = useState(false)
+  const savedFilterIndexRef = useRef<number | null>(null)
+  const returningFromEmptyRef = useRef(false)
 
   // Reset shuffle when questions change
   useEffect(() => {
@@ -85,11 +113,21 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     setSelectedTypes([])
   }, [questions])
 
+  // Reset filters when re-entering quiz from import (filterKey changes)
+  useEffect(() => {
+    setSelectedChapters([])
+    setSelectedTypes([])
+  }, [filterKey])
+
   // Reset shuffle + position when filters change
   useEffect(() => {
     setShuffledQuestions(null)
     setQuizMode("sequential")
-    setCurrentIndex(0)
+    if (returningFromEmptyRef.current) {
+      returningFromEmptyRef.current = false
+    } else {
+      setCurrentIndex(0)
+    }
   }, [selectedChapters, selectedTypes])
 
   // Reset state when questions change (e.g. subject switch)
@@ -98,7 +136,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     setAnswers({})
     setSubmittedIds(new Set())
     setIsFinished(false)
-    setTextInput("")
+    resetInputs()
   }, [questions])
 
   const activeQuestions = mode === "wrong-book"
@@ -124,6 +162,21 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
 
   const current = displayQuestions[currentIndex]
 
+  // Initialize multiSelected when switching to an answered multi question
+  useEffect(() => {
+    if (current && getQuestionType(current) === "multiple" && submittedIds.has(current.id)) {
+      const saved = answers[current.id] || ""
+      setMultiSelected(saved ? saved.split('') : [])
+    } else {
+      setMultiSelected([])
+    }
+  }, [currentIndex])
+
+  const resetInputs = () => {
+    setTextInput("")
+    setMultiSelected([])
+  }
+
   const shuffleQuestions = () => {
     const arr = [...filteredQuestions]
     for (let i = arr.length - 1; i > 0; i--) {
@@ -133,13 +186,13 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     setShuffledQuestions(arr)
     setQuizMode("shuffled")
     setCurrentIndex(0)
-    setTextInput("")
+    resetInputs()
   }
 
   const setSequential = () => {
     setQuizMode("sequential")
     setCurrentIndex(0)
-    setTextInput("")
+    resetInputs()
   }
   const qType = current ? getQuestionType(current) : "choice"
   const selectedAnswer = answers[current?.id || ""] || ""
@@ -156,6 +209,33 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
   const handleSelect = (opt: string) => {
     if (isSubmitted) return
     setAnswers((prev) => ({ ...prev, [current.id]: opt }))
+  }
+
+  const handleMultiToggle = (opt: string) => {
+    if (isSubmitted) return
+    setMultiSelected((prev) =>
+      prev.includes(opt) ? prev.filter((x) => x !== opt) : [...prev, opt]
+    )
+  }
+
+  function normalizeMultiLetters(answer: string): string {
+    const letters = answer.replace(/[^A-Da-d]/g, '').toUpperCase().split('').sort()
+    return [...new Set(letters)].join('')
+  }
+
+  const handleMultiSubmit = () => {
+    if (multiSelected.length === 0 || !current) return
+    const sorted = normalizeMultiLetters(multiSelected.join(','))
+    setAnswers((prev) => ({ ...prev, [current.id]: sorted }))
+    const newSubmitted = new Set(submittedIds)
+    newSubmitted.add(current.id)
+    setSubmittedIds(newSubmitted)
+    const correct = normalizeMultiLetters(current.answer || '')
+    if (sorted !== correct) {
+      if (!wrongIds.includes(current.id)) {
+        onUpdateWrong([...wrongIds, current.id])
+      }
+    }
   }
 
   const handleTextSubmit = () => {
@@ -187,14 +267,14 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
   const goNext = () => {
     if (currentIndex < displayQuestions.length - 1) {
       setCurrentIndex((i) => i + 1)
-      setTextInput("")
+      resetInputs()
     }
   }
 
   const goPrev = () => {
     if (currentIndex > 0) {
       setCurrentIndex((i) => i - 1)
-      setTextInput("")
+      resetInputs()
     }
   }
 
@@ -207,18 +287,18 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     setAnswers({})
     setSubmittedIds(new Set())
     setIsFinished(false)
-    setTextInput("")
+    resetInputs()
   }
 
   const switchMode = (m: QuizMode) => {
     setMode(m)
     setCurrentIndex(0)
-    setTextInput("")
+    resetInputs()
   }
 
   const unanswered = displayQuestions.filter((q) => !submittedIds.has(q.id)).length
   const totalCorrect = displayQuestions.filter(
-    (q) => submittedIds.has(q.id) && matchAnswer(answers[q.id], q.answer)
+    (q) => submittedIds.has(q.id) && (getQuestionType(q) === "multiple" ? normalizeMultiLetters(answers[q.id] || '') === normalizeMultiLetters(q.answer || '') : matchAnswer(answers[q.id], q.answer))
   ).length
 
   // Adjust currentIndex when list shrinks (e.g. removing from wrong book)
@@ -243,9 +323,12 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
       }
 
       if (key === "Enter") {
-        if (qType === "input" && !isSubmitted && textInput.trim()) {
+        if ((qType === "input" || qType === "essay") && !isSubmitted && textInput.trim()) {
           e.preventDefault()
           handleTextSubmit()
+        } else if (qType === "multiple" && !isSubmitted && multiSelected.length > 0) {
+          e.preventDefault()
+          handleMultiSubmit()
         } else if (!isSubmitted && selectedAnswer) {
           e.preventDefault()
           handleSubmit()
@@ -347,10 +430,22 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           {mode === "wrong-book" ? "错题本为空" : "暂无题目"}
         </p>
         <button
-          onClick={onReset}
+          onClick={() => {
+            if (mode === "wrong-book" || questions.length === 0) {
+              onReset()
+            } else {
+              returningFromEmptyRef.current = true
+              setSelectedChapters([])
+              setSelectedTypes([])
+              if (savedFilterIndexRef.current !== null) {
+                setCurrentIndex(savedFilterIndexRef.current)
+                savedFilterIndexRef.current = null
+              }
+            }
+          }}
           className="mt-4 bg-foreground text-background px-4 py-2 text-xs font-mono"
         >
-          返回首页
+          返回
         </button>
       </div>
     )
@@ -462,7 +557,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           <span className="ml-2">| 未答 {unanswered} 题</span>
         </div>
         <span className="text-xs font-mono uppercase tracking-wider border border-accent/20 bg-accent/5 px-2.5 py-0.5 text-accent rounded-full">
-          {qType === "choice" ? "选择题" : qType === "truefalse" ? "判断题" : "填空题"}
+          {qType === "choice" ? "选择题" : qType === "multiple" ? "多选题" : qType === "truefalse" ? "判断题" : qType === "essay" ? "简答题" : "填空题"}
         </span>
       </div>
 
@@ -505,30 +600,32 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           {/* Result badge */}
           {isSubmitted && (
             <div className={`mb-4 rounded-lg overflow-hidden border ${
-              matchAnswer(selectedAnswer, current.answer)
-                ? "border-accent/60"
-                : "border-destructive/60"
+              (() => {
+                if (qType === "multiple") return normalizeMultiLetters(selectedAnswer) === normalizeMultiLetters(current.answer) ? "border-accent/60" : "border-destructive/60"
+                return matchAnswer(selectedAnswer, current.answer) ? "border-accent/60" : "border-destructive/60"
+              })()
             }`}>
               <div className={`px-4 py-3 text-sm font-mono font-bold tracking-wider uppercase flex items-center gap-2 ${
-                matchAnswer(selectedAnswer, current.answer)
-                  ? "bg-accent/10 text-accent"
-                  : "bg-destructive/10 text-destructive"
+                (() => {
+                  if (qType === "multiple") return normalizeMultiLetters(selectedAnswer) === normalizeMultiLetters(current.answer) ? "bg-accent/10 text-accent" : "bg-destructive/10 text-destructive"
+                  return matchAnswer(selectedAnswer, current.answer) ? "bg-accent/10 text-accent" : "bg-destructive/10 text-destructive"
+                })()
               }`}>
-                {matchAnswer(selectedAnswer, current.answer) ? (
+                {(qType === "multiple" ? normalizeMultiLetters(selectedAnswer) === normalizeMultiLetters(current.answer) : matchAnswer(selectedAnswer, current.answer)) ? (
                   <><CheckCircle2 size={16} className="shrink-0" /> 正确</>
                 ) : (
                   <><XCircle size={16} className="shrink-0" /> 错误</>
                 )}
               </div>
-              {selectedAnswer !== current.answer && (
+              {selectedAnswer !== current.answer && (qType !== "multiple" ? true : normalizeMultiLetters(selectedAnswer) !== normalizeMultiLetters(current.answer)) && (
                 <div className="px-4 py-3 space-y-1.5 bg-background/50">
                   <div className="text-xs font-mono">
                     <span className="text-muted-foreground">你的答案：</span>
-                    <span className="text-destructive font-bold">{selectedAnswer}</span>
+                    <span className="text-destructive font-bold">{qType === "multiple" ? selectedAnswer : selectedAnswer}</span>
                   </div>
                   <div className="text-xs font-mono">
                     <span className="text-muted-foreground">正确答案：</span>
-                    <span className="text-accent font-bold">{current.answer}</span>
+                    <span className="text-accent font-bold">{qType === "multiple" ? normalizeMultiLetters(current.answer) : current.answer}</span>
                   </div>
                 </div>
               )}
@@ -567,6 +664,56 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                       {isSubmitted && isWrong && (
                         <XCircle size={12} className="shrink-0 text-destructive" />
                       )}
+                      {opt}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          )}
+
+          {qType === "multiple" && (
+            <div className="space-y-2">
+              <div className="text-[10px] font-mono text-muted-foreground mb-1">
+                {multiSelected.length} 个已选（可多选）
+              </div>
+              {current.options.map((opt, i) => {
+                const letter = String.fromCharCode(65 + i)
+                const isSelected = multiSelected.includes(letter)
+                const isCorrect = isSubmitted && normalizeMultiLetters(current.answer).includes(letter)
+                const isWrong = isSubmitted && isSelected && !normalizeMultiLetters(current.answer).includes(letter)
+
+                return (
+                  <button
+                    key={i}
+                    onClick={() => handleMultiToggle(letter)}
+                    disabled={isSubmitted}
+                    className={`w-full text-left px-3 py-2.5 text-xs font-mono leading-relaxed transition-all rounded-lg border ${
+                      isSubmitted
+                        ? isCorrect
+                          ? "border-accent/60 bg-accent/10 text-foreground"
+                          : isWrong
+                          ? "border-destructive/60 bg-destructive/10 text-foreground"
+                          : "border-transparent text-muted-foreground"
+                        : isSelected
+                        ? "border-accent/40 bg-accent/8 text-foreground"
+                        : "border-transparent text-muted-foreground hover:border-border/60 hover:bg-accent/5 hover:text-foreground"
+                    }`}
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className={`w-4 h-4 rounded border flex items-center justify-center text-[9px] font-mono transition-colors ${
+                        isSubmitted
+                          ? isCorrect
+                            ? "border-accent bg-accent/20 text-accent"
+                            : isWrong
+                            ? "border-destructive bg-destructive/20 text-destructive"
+                            : "border-border/40"
+                          : isSelected
+                          ? "border-accent bg-accent/20 text-accent"
+                          : "border-border/40"
+                      }`}>
+                        {isSelected || (isSubmitted && isCorrect) ? "✓" : ""}
+                      </span>
                       {opt}
                     </span>
                   </button>
@@ -614,23 +761,31 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
             </div>
           )}
 
-          {qType === "input" && (
+          {(qType === "input" || qType === "essay") && (
             <div className="space-y-3">
               {!isSubmitted ? (
-                <input
-                  type="text"
-                  value={textInput}
-                  onChange={(e) => setTextInput(e.target.value)}
-                  placeholder="在此输入答案..."
-                  className="w-full border border-border/60 bg-foreground/5 px-3 py-2.5 text-xs font-mono text-foreground placeholder:text-muted-foreground/50 outline-none focus:border-accent/50 transition-colors rounded-lg"
-                  autoFocus
-                />
+                qType === "essay" ? (
+                  <textarea
+                    value={textInput}
+                    onChange={(e) => setTextInput(e.target.value)}
+                    placeholder="在此输入答案..."
+                    rows={5}
+                    className="w-full border border-border/60 bg-foreground/5 px-3 py-2.5 text-xs font-mono text-foreground placeholder:text-muted-foreground/50 outline-none focus:border-accent/50 transition-colors rounded-lg resize-none"
+                    autoFocus
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    value={textInput}
+                    onChange={(e) => setTextInput(e.target.value)}
+                    placeholder="在此输入答案..."
+                    className="w-full border border-border/60 bg-foreground/5 px-3 py-2.5 text-xs font-mono text-foreground placeholder:text-muted-foreground/50 outline-none focus:border-accent/50 transition-colors rounded-lg"
+                    autoFocus
+                  />
+                )
               ) : (
                 <div className="px-3 py-2.5 text-xs font-mono text-muted-foreground border border-border/40 rounded-lg">
-                  <span className="flex items-center gap-2">
-                    <FileText size={12} strokeWidth={1.5} />
-                    你的回答：{selectedAnswer}
-                  </span>
+                  你的答案：{selectedAnswer}
                 </div>
               )}
             </div>
@@ -640,8 +795,8 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           <div className="mt-5">
             {!isSubmitted ? (
               <button
-                onClick={qType === "input" ? handleTextSubmit : handleSubmit}
-                disabled={qType === "input" ? !textInput.trim() : !selectedAnswer}
+                onClick={qType === "input" || qType === "essay" ? handleTextSubmit : qType === "multiple" ? handleMultiSubmit : handleSubmit}
+                disabled={qType === "input" || qType === "essay" ? !textInput.trim() : qType === "multiple" ? multiSelected.length === 0 : !selectedAnswer}
                 className="w-full bg-accent text-accent-foreground py-2.5 text-xs font-mono tracking-wider uppercase hover:opacity-90 transition-opacity disabled:opacity-30 rounded-lg"
               >
                 确认答案
@@ -717,7 +872,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
       </div>
 
       {/* Filter dialog */}
-      <Dialog open={showFilter} onOpenChange={setShowFilter}>
+      <Dialog open={showFilter} onOpenChange={(open) => { setShowFilter(open); if (open) savedFilterIndexRef.current = null }}>
         <DialogContent className="glass-dialog max-w-sm max-h-[80vh] overflow-y-auto rounded-xl">
           <DialogTitle className="text-xs font-mono tracking-wider uppercase text-foreground">
             筛选设置
@@ -727,17 +882,18 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           <div className="mt-3">
             <div className="text-xs font-mono text-muted-foreground mb-2">按题型</div>
             <div className="flex gap-2">
-              {(["choice", "truefalse", "input"] as const).map((t) => {
-                const label = t === "choice" ? "选择题" : t === "truefalse" ? "判断题" : "填空题"
+              {(["choice", "multiple", "truefalse", "input", "essay"] as const).map((t) => {
+                const label = t === "choice" ? "选择题" : t === "multiple" ? "多选题" : t === "truefalse" ? "判断题" : t === "essay" ? "简答题" : "填空题"
                 const active = selectedTypes.includes(t)
                 return (
                   <button
                     key={t}
-                    onClick={() =>
+                    onClick={() => {
+                      if (savedFilterIndexRef.current === null) savedFilterIndexRef.current = currentIndex
                       setSelectedTypes((prev) =>
                         active ? prev.filter((x) => x !== t) : [...prev, t]
                       )
-                    }
+                    }}
                     className={`flex-1 px-2 py-1.5 text-xs font-mono border transition-colors rounded-md ${
                       active
                         ? "border-accent bg-accent/10 text-accent"
@@ -757,13 +913,19 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
               <span className="text-xs font-mono text-muted-foreground">按章节</span>
               <div className="flex gap-2">
                 <button
-                  onClick={() => setSelectedChapters(allChapters)}
+                  onClick={() => {
+                    if (savedFilterIndexRef.current === null) savedFilterIndexRef.current = currentIndex
+                    setSelectedChapters(allChapters)
+                  }}
                   className="text-[9px] font-mono text-muted-foreground hover:text-foreground transition-colors"
                 >
                   全选
                 </button>
                 <button
-                  onClick={() => setSelectedChapters([])}
+                  onClick={() => {
+                    if (savedFilterIndexRef.current === null) savedFilterIndexRef.current = currentIndex
+                    setSelectedChapters([])
+                  }}
                   className="text-[9px] font-mono text-muted-foreground hover:text-foreground transition-colors"
                 >
                   取消
@@ -776,11 +938,12 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                 return (
                   <button
                     key={ch}
-                    onClick={() =>
+                    onClick={() => {
+                      if (savedFilterIndexRef.current === null) savedFilterIndexRef.current = currentIndex
                       setSelectedChapters((prev) =>
                         active ? prev.filter((x) => x !== ch) : [...prev, ch]
                       )
-                    }
+                    }}
                     className={`w-full text-left px-2 py-1 text-xs font-mono border transition-colors rounded-md ${
                       active
                         ? "border-accent bg-accent/10 text-accent"
@@ -813,7 +976,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
               const typeGroups: { label: string; key: string; qs: Question[] }[] = []
               for (const q of chQuestions) {
                 const t = getQuestionType(q)
-                const label = t === "choice" ? "选择题" : t === "truefalse" ? "判断题" : "填空题"
+                const label = t === "choice" ? "选择题" : t === "multiple" ? "多选题" : t === "truefalse" ? "判断题" : t === "essay" ? "简答题" : "填空题"
                 const last = typeGroups[typeGroups.length - 1]
                 if (last && last.key === t) {
                   last.qs.push(q)
@@ -837,7 +1000,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                         {g.qs.map((q) => {
                           const qIndex = displayQuestions.indexOf(q)
                           const answered = submittedIds.has(q.id)
-                          const correct = matchAnswer(answers[q.id], q.answer)
+                          const correct = answered && (getQuestionType(q) === "multiple" ? normalizeMultiLetters(answers[q.id] || '') === normalizeMultiLetters(q.answer || '') : matchAnswer(answers[q.id], q.answer))
                           return (
                             <button
                               key={q.id}
@@ -852,6 +1015,9 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                                   : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground"
                               }`}
                             >
+                              <span className={`shrink-0 w-1.5 h-1.5 rounded-full ${
+                                !answered ? "bg-muted-foreground/30" : correct ? "bg-accent" : "bg-destructive"
+                              }`} />
                               <span className="shrink-0 w-5 text-center font-bold">{q.number}</span>
                               <span className="truncate flex-1">{q.question}</span>
                               <span className={`shrink-0 px-1 py-0.5 text-[8px] uppercase tracking-wider border ${
