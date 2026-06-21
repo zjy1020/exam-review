@@ -21,14 +21,11 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Build web app
-        run: pnpm build
+      - name: Install dependencies & build web
+        run: |
+          npm install -g pnpm
+          pnpm install
+          pnpm build
 
       - name: Sync Capacitor
         run: npx cap sync
