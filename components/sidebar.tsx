@@ -2,12 +2,15 @@
 
 import { useState, useRef } from "react"
 import { motion } from "framer-motion"
-import { BookOpen, Plus, Trash2, ChevronLeft, Pencil, FileText, BookX } from "lucide-react"
+import { BookOpen, Plus, Trash2, ChevronLeft, Pencil, FileText, BookX, KeyRound } from "lucide-react"
 import type { Subject } from "@/lib/types"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet"
+
+// 修改为你自己的生日（MMDD 格式），比如 3 月 14 日 → "0314"
+const AUTHOR_BIRTHDAY = "1102"
 
 interface SidebarProps {
   subjects: Subject[]
@@ -213,51 +216,91 @@ export function Sidebar({
       </div>
 
       {/* Export / Import */}
-      <div className="px-3 py-3 border-t border-foreground/10 flex gap-2">
+      <div className="px-3 py-3 border-t border-foreground/10 space-y-2">
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const data: Record<string, unknown> = {}
+              for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i)
+                if (key && key.startsWith("quiz-")) {
+                  const val = localStorage.getItem(key) || ""
+                  try { data[key] = JSON.parse(val) } catch { data[key] = val }
+                }
+              }
+              const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" })
+              const url = URL.createObjectURL(blob)
+              const a = document.createElement("a")
+              a.href = url
+              a.download = `exam-review-backup-${Date.now()}.json`
+              a.click()
+              URL.revokeObjectURL(url)
+            }}
+            className="flex-1 gap-1 text-xs font-mono"
+          >
+            导出数据
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => sidebarImportRef.current?.click()}
+            className="flex-1 gap-1 text-xs font-mono"
+          >
+            导入数据
+          </Button>
+          <input
+            ref={sidebarImportRef}
+            type="file"
+            accept=".json"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0]
+              if (!file) return
+              const reader = new FileReader()
+              reader.onload = (ev) => {
+                try {
+                  const data = JSON.parse(ev.target?.result as string)
+                  let count = 0
+                  for (const [key, val] of Object.entries(data)) {
+                    if (typeof val === "string") {
+                      localStorage.setItem(key, val)
+                      count++
+                    } else if (typeof val === "object" && val !== null) {
+                      localStorage.setItem(key, JSON.stringify(val))
+                      count++
+                    }
+                  }
+                  if (confirm(`已导入 ${count} 项数据，是否刷新页面？`)) {
+                    window.location.reload()
+                  }
+                } catch {
+                  alert("文件格式错误")
+                }
+              }
+              reader.readAsText(file)
+              e.target.value = ""
+            }}
+          />
+        </div>
+
+        {/* 一键导入 */}
         <Button
           variant="outline"
           size="sm"
           onClick={() => {
-            const data: Record<string, unknown> = {}
-            for (let i = 0; i < localStorage.length; i++) {
-              const key = localStorage.key(i)
-              if (key && key.startsWith("quiz-")) {
-                const val = localStorage.getItem(key) || ""
-                try { data[key] = JSON.parse(val) } catch { data[key] = val }
-              }
+            const input = prompt("🔑 请输入作者生日（MMDD）")
+            if (!input || input.trim() !== AUTHOR_BIRTHDAY) {
+              alert("密码错误")
+              return
             }
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" })
-            const url = URL.createObjectURL(blob)
-            const a = document.createElement("a")
-            a.href = url
-            a.download = `exam-review-backup-${Date.now()}.json`
-            a.click()
-            URL.revokeObjectURL(url)
-          }}
-          className="flex-1 gap-1 text-xs font-mono"
-        >
-          导出数据
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => sidebarImportRef.current?.click()}
-          className="flex-1 gap-1 text-xs font-mono"
-        >
-          导入数据
-        </Button>
-        <input
-          ref={sidebarImportRef}
-          type="file"
-          accept=".json"
-          className="hidden"
-          onChange={(e) => {
-            const file = e.target.files?.[0]
-            if (!file) return
-            const reader = new FileReader()
-            reader.onload = (ev) => {
-              try {
-                const data = JSON.parse(ev.target?.result as string)
+            fetch("/backup.json")
+              .then((r) => {
+                if (!r.ok) throw new Error("找不到备份文件")
+                return r.json()
+              })
+              .then((data) => {
                 let count = 0
                 for (const [key, val] of Object.entries(data)) {
                   if (typeof val === "string") {
@@ -268,17 +311,17 @@ export function Sidebar({
                     count++
                   }
                 }
-                if (confirm(`已导入 ${count} 项数据，是否刷新页面？`)) {
+                if (confirm(`🎉 已恢复 ${count} 项数据，是否刷新页面？`)) {
                   window.location.reload()
                 }
-              } catch {
-                alert("文件格式错误")
-              }
-            }
-            reader.readAsText(file)
-            e.target.value = ""
+              })
+              .catch(() => alert("备份文件读取失败"))
           }}
-        />
+          className="w-full gap-2 text-xs font-mono border-accent/30 text-accent hover:bg-accent/10"
+        >
+          <KeyRound size={12} strokeWidth={1.5} />
+          一键导入
+        </Button>
       </div>
     </div>
   )
