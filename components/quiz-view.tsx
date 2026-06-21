@@ -1276,7 +1276,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                     <span className="text-xs font-mono text-accent font-bold tracking-wider uppercase block mb-1.5">
                       详细解析
                     </span>
-                    <p className="text-sm font-mono text-foreground leading-relaxed whitespace-pre-wrap">
+                    <p className="text-sm font-mono text-foreground leading-relaxed">
                       {current.explanation}
                     </p>
                   </motion.div>
@@ -1284,7 +1284,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
 
                 <Button
                   size="lg"
-                  onClick={goNext}
+                  onClick={currentIndex < displayQuestions.length - 1 ? goNext : handleFinish}
                   className="w-full text-xs font-mono tracking-wider uppercase"
                 >
                   {currentIndex < displayQuestions.length - 1 ? "下一题" : "查看结果"}
@@ -1324,13 +1324,23 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
         )}
 
         {currentIndex === displayQuestions.length - 1 && isSubmitted ? (
-          <Button
-            size="sm"
-            onClick={handleFinish}
-            className="text-xs font-mono"
-          >
-            完成答题
-          </Button>
+          selectedChapters.length > 0 || selectedTypes.length > 0 ? (
+            <Button
+              size="sm"
+              onClick={() => { setSelectedChapters([]); setSelectedTypes([]) }}
+              className="text-xs font-mono"
+            >
+              筛选题已答完，查看全部
+            </Button>
+          ) : (
+            <Button
+              size="sm"
+              onClick={handleFinish}
+              className="text-xs font-mono"
+            >
+              完成答题
+            </Button>
+          )
         ) : currentIndex < displayQuestions.length - 1 ? (
           <Button
             variant="outline"
