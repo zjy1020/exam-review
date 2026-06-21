@@ -7,7 +7,7 @@ import type { Subject } from "@/lib/types"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Sheet, SheetContent } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet"
 
 interface SidebarProps {
   subjects: Subject[]
@@ -286,6 +286,7 @@ export function Sidebar({
       <div className="lg:hidden">
         <Sheet open={!collapsed} onOpenChange={(open) => { if (!open) onToggle() }}>
           <SheetContent side="left" className="w-[240px] p-0">
+            <SheetTitle className="sr-only">科目列表</SheetTitle>
             {sidebarContent}
           </SheetContent>
         </Sheet>
