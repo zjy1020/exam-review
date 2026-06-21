@@ -24,7 +24,6 @@ jobs:
       - name: Install dependencies & build web
         run: |
           npm install -g pnpm
-          pnpm config set onlyBuiltDependencies "sharp" --location=project
           pnpm install
           pnpm build
 
