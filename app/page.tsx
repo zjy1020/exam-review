@@ -302,6 +302,7 @@ export default function Page() {
                 wrongCount={wrongIds.length}
                 onOpenWrongBook={handleOpenWrongBook}
                 questions={questions}
+                subjectName={activeSubjectId ? subjects.find((s) => s.id === activeSubjectId)?.name : ""}
               />
             </div>
 

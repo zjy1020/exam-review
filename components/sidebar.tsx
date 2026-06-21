@@ -1,9 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { BookOpen, Plus, Trash2, ChevronLeft, Pencil, FileText, BookX } from "lucide-react"
 import type { Subject } from "@/lib/types"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface SidebarProps {
   subjects: Subject[]
@@ -34,6 +37,7 @@ export function Sidebar({
   const [newName, setNewName] = useState("")
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editName, setEditName] = useState("")
+  const sidebarImportRef = useRef<HTMLInputElement>(null)
 
   const handleCreate = () => {
     if (newName.trim()) {
@@ -85,19 +89,21 @@ export function Sidebar({
                 <span className="text-xs font-mono tracking-[0.15em] uppercase font-bold text-foreground">
                   科目列表
                 </span>
-                <button
+                <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={onToggle}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-muted-foreground hover:text-foreground"
                 >
                   <ChevronLeft size={14} strokeWidth={1.5} />
-                </button>
+                </Button>
               </>
             )}
           </div>
 
           {/* Subject list */}
           {!collapsed && (
-            <div className="flex-1 overflow-y-auto py-2">
+            <ScrollArea className="flex-1 py-2">
               {subjects.length === 0 && (
                 <div className="px-4 py-6 text-center">
                   <p className="text-xs font-mono text-muted-foreground">
@@ -112,7 +118,7 @@ export function Sidebar({
                 <div key={s.id} className="px-2">
                   {editingId === s.id ? (
                     <div className="flex gap-1 px-1 py-1">
-                      <input
+                      <Input
                         type="text"
                         value={editName}
                         onChange={(e) => setEditName(e.target.value)}
@@ -121,14 +127,15 @@ export function Sidebar({
                           if (e.key === "Escape") setEditingId(null)
                         }}
                         autoFocus
-                        className="flex-1 border border-accent/50 bg-foreground/5 px-2 py-1 text-xs font-mono text-foreground outline-none rounded-md"
+                        className="h-7 text-xs font-mono border-accent/50"
                       />
-                      <button
+                      <Button
                         onClick={handleRename}
-                        className="bg-accent text-accent-foreground px-2 py-1 text-xs font-mono rounded-md hover:opacity-90 transition-opacity"
+                        size="sm"
+                        className="text-xs font-mono h-7"
                       >
                         确定
-                      </button>
+                      </Button>
                     </div>
                   ) : (
                     <button
@@ -166,7 +173,7 @@ export function Sidebar({
                   )}
                 </div>
               ))}
-            </div>
+            </ScrollArea>
           )}
 
           {/* Stats */}
@@ -196,7 +203,7 @@ export function Sidebar({
             <div className="px-3 py-3 border-t border-foreground/10">
               {showNewInput ? (
                 <div className="flex gap-1">
-                  <input
+                  <Input
                     type="text"
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
@@ -206,23 +213,26 @@ export function Sidebar({
                     }}
                     placeholder="科目名称"
                     autoFocus
-                    className="flex-1 border border-border/60 bg-foreground/5 px-2 py-1.5 text-xs font-mono text-foreground placeholder:text-muted-foreground/50 outline-none focus:border-accent/50 transition-colors rounded-md"
+                    className="h-8 text-xs font-mono"
                   />
-                  <button
+                  <Button
                     onClick={handleCreate}
-                    className="bg-accent text-accent-foreground px-3 py-1.5 text-xs font-mono border border-accent/60 rounded-md hover:opacity-90 transition-opacity"
+                    size="sm"
+                    className="text-xs font-mono h-8"
                   >
                     确定
-                  </button>
+                  </Button>
                 </div>
               ) : (
-                <button
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => setShowNewInput(true)}
-                  className="w-full flex items-center justify-center gap-1.5 border border-dashed border-border/60 px-3 py-2 text-xs font-mono text-muted-foreground hover:text-foreground hover:border-accent/40 hover:bg-accent/5 transition-all rounded-md"
+                  className="w-full gap-1.5 border-dashed text-xs font-mono"
                 >
                   <Plus size={12} strokeWidth={1.5} />
                   新建科目
-                </button>
+                </Button>
               )}
             </div>
           )}
@@ -230,7 +240,9 @@ export function Sidebar({
           {/* Export / Import */}
           {!collapsed && (
             <div className="px-3 py-3 border-t border-foreground/10 flex gap-2">
-              <button
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => {
                   const data: Record<string, unknown> = {}
                   for (let i = 0; i < localStorage.length; i++) {
@@ -248,42 +260,48 @@ export function Sidebar({
                   a.click()
                   URL.revokeObjectURL(url)
                 }}
-                className="flex-1 flex items-center justify-center gap-1 border border-border/60 px-2 py-2 text-xs font-mono text-muted-foreground hover:text-foreground hover:bg-accent/5 hover:border-accent/30 transition-all rounded-md"
+                className="flex-1 gap-1 text-xs font-mono"
               >
                 导出数据
-              </button>
-              <label className="flex-1 flex items-center justify-center gap-1 border border-border/60 px-2 py-2 text-xs font-mono text-muted-foreground hover:text-foreground hover:bg-accent/5 hover:border-accent/30 transition-all cursor-pointer rounded-md">
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => sidebarImportRef.current?.click()}
+                className="flex-1 gap-1 text-xs font-mono"
+              >
                 导入数据
-                <input
-                  type="file"
-                  accept=".json"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0]
-                    if (!file) return
-                    const reader = new FileReader()
-                    reader.onload = (ev) => {
-                      try {
-                        const data = JSON.parse(ev.target?.result as string)
-                        let count = 0
-                        for (const [key, val] of Object.entries(data)) {
-                          if (typeof val === "string") {
-                            localStorage.setItem(key, val)
-                            count++
-                          }
+              </Button>
+              <input
+                ref={sidebarImportRef}
+                type="file"
+                accept=".json"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (!file) return
+                  const reader = new FileReader()
+                  reader.onload = (ev) => {
+                    try {
+                      const data = JSON.parse(ev.target?.result as string)
+                      let count = 0
+                      for (const [key, val] of Object.entries(data)) {
+                        if (typeof val === "string") {
+                          localStorage.setItem(key, val)
+                          count++
                         }
-                        if (confirm(`已导入 ${count} 项数据，是否刷新页面？`)) {
-                          window.location.reload()
-                        }
-                      } catch {
-                        alert("文件格式错误")
                       }
+                      if (confirm(`已导入 ${count} 项数据，是否刷新页面？`)) {
+                        window.location.reload()
+                      }
+                    } catch {
+                      alert("文件格式错误")
                     }
-                    reader.readAsText(file)
-                    e.target.value = ""
-                  }}
-                />
-              </label>
+                  }
+                  reader.readAsText(file)
+                  e.target.value = ""
+                }}
+              />
             </div>
           )}
         </div>

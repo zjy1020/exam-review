@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback } from "react"
 import { motion } from "framer-motion"
-import { Upload, Wand2, FileText, ExternalLink, Check, Sparkles, Trash2 } from "lucide-react"
+import { Upload, Wand2, FileText, ExternalLink, Check, Sparkles, Trash2, Download, FileUp } from "lucide-react"
 import { buildFormatPrompt, buildFillPrompt, parseQuestions } from "@/lib/parse-questions"
 import type { Question } from "@/lib/types"
 import {
@@ -10,6 +10,9 @@ import {
   DialogContent,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Textarea } from "@/components/ui/textarea"
 import * as mammoth from "mammoth"
 
 interface ImportPanelProps {
@@ -19,6 +22,7 @@ interface ImportPanelProps {
   wrongCount: number
   onOpenWrongBook: () => void
   questions: Question[]
+  subjectName?: string
 }
 
 
@@ -35,13 +39,14 @@ function docxHtmlToText(html: string): string {
   return text.replace(/\n{3,}/g, '\n\n').trim()
 }
 
-export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOpenWrongBook, questions }: ImportPanelProps) {
+export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOpenWrongBook, questions, subjectName }: ImportPanelProps) {
   const [text, setText] = useState("")
   const [fileName, setFileName] = useState("")
   const [showAiDialog, setShowAiDialog] = useState(false)
   const [showFillDialog, setShowFillDialog] = useState(false)
   const [isDragOver, setIsDragOver] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
+  const importFileRef = useRef<HTMLInputElement>(null)
 
   const readFile = async (file: File) => {
     setFileName(file.name)
@@ -142,6 +147,58 @@ export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOp
     }
   }
 
+  const handleExport = () => {
+    if (questions.length === 0) return
+    const data = {
+      format: "exam-review-questions",
+      version: 1,
+      subject: subjectName || "未命名题库",
+      exportedAt: new Date().toISOString(),
+      questions,
+    }
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `${subjectName || "未命名题库"}-${Date.now()}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const handleImportFromFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target?.result as string)
+        let qs: Question[] = []
+
+        if (data.format === "exam-review-questions") {
+          qs = data.questions || []
+        } else if (data.questions) {
+          qs = data.questions
+        } else {
+          alert("无法识别的文件格式")
+          return
+        }
+
+        if (qs.length === 0) {
+          alert("文件中没有题目")
+          return
+        }
+
+        if (confirm(`从「${data.subject || "文件"}」导入 ${qs.length} 题到当前科目？`)) {
+          onImport(qs)
+        }
+      } catch {
+        alert("文件解析失败，请确认是正确格式的 JSON 文件")
+      }
+    }
+    reader.readAsText(file)
+    e.target.value = ""
+  }
+
   const incompleteCount = questions.filter(q => !q.answer && !q.explanation).length
 
   return (
@@ -186,39 +243,42 @@ export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOp
       </p>
 
       {/* Text area */}
-      <textarea
+      <Textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="在此粘贴题目内容..."
-        className="w-full min-h-[300px] glass p-6 text-sm font-mono text-foreground placeholder:text-muted-foreground/50 resize-y outline-none focus:border-accent/50 transition-all rounded-xl"
+        className="w-full min-h-[300px] glass bg-transparent text-sm font-mono placeholder:text-muted-foreground/50 resize-y focus-visible:border-accent/50 focus-visible:ring-0 rounded-xl p-6"
       />
 
       {/* Action buttons */}
       <div className="flex flex-col sm:flex-row gap-3 mt-4">
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={() => {
-            if (!text.trim()) return
-            setShowAiDialog(true)
-          }}
-          disabled={!text.trim()}
-          className="flex-1 flex items-center justify-center gap-3 border border-border/60 bg-background/60 backdrop-blur-sm px-6 py-4 text-sm font-mono tracking-wider uppercase text-foreground hover:bg-accent/10 hover:border-accent/30 transition-all disabled:opacity-30 rounded-xl"
-        >
-          <Wand2 size={18} strokeWidth={1.5} />
-          用 AI 格式化
-        </motion.button>
+        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="flex-1">
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={() => {
+              if (!text.trim()) return
+              setShowAiDialog(true)
+            }}
+            disabled={!text.trim()}
+            className="w-full gap-3 text-sm font-mono tracking-wider uppercase h-auto py-4"
+          >
+            <Wand2 size={18} strokeWidth={1.5} />
+            用 AI 格式化
+          </Button>
+        </motion.div>
 
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={handleImport}
-          disabled={!text.trim()}
-          className="flex-1 flex items-center justify-center gap-3 bg-accent text-accent-foreground px-6 py-4 text-sm font-mono tracking-wider uppercase hover:opacity-90 transition-opacity disabled:opacity-30 rounded-xl"
-        >
-          <FileText size={14} strokeWidth={1.5} />
-          导入题目
-        </motion.button>
+        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="flex-1">
+          <Button
+            size="lg"
+            onClick={handleImport}
+            disabled={!text.trim()}
+            className="w-full gap-3 text-sm font-mono tracking-wider uppercase h-auto py-4"
+          >
+            <FileText size={14} strokeWidth={1.5} />
+            导入题目
+          </Button>
+        </motion.div>
       </div>
 
       {/* AI Fill button - for questions missing answers/explanations */}
@@ -228,13 +288,15 @@ export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOp
           animate={{ opacity: 1, y: 0 }}
           className="mt-3"
         >
-          <button
+          <Button
+            variant="outline"
+            size="lg"
             onClick={() => setShowFillDialog(true)}
-            className="w-full flex items-center justify-center gap-3 border border-accent/30 bg-accent/5 px-6 py-4 text-sm font-mono text-accent hover:bg-accent/10 transition-all rounded-xl"
+            className="w-full gap-3 text-sm font-mono h-auto py-4 border-accent/30 bg-accent/5 hover:bg-accent/10 text-accent"
           >
             <Sparkles size={18} strokeWidth={1.5} />
             AI 补全缺失答案和解析（{incompleteCount} 题）
-          </button>
+          </Button>
         </motion.div>
       )}
 
@@ -245,42 +307,93 @@ export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOp
           animate={{ opacity: 1, y: 0 }}
           className="mt-3"
         >
-          <button
+          <Button
+            variant="outline"
+            size="lg"
             onClick={onOpenWrongBook}
-            className="w-full flex items-center justify-between p-5 border border-accent/30 bg-accent/5 hover:bg-accent/10 transition-all rounded-xl"
+            className="w-full flex items-center justify-between h-auto py-5 px-5 border-accent/30 bg-accent/5 hover:bg-accent/10 text-accent"
           >
-            <span className="text-sm font-mono text-accent">错题本</span>
-            <span className="text-sm font-mono text-accent font-bold">{wrongCount} 题待巩固</span>
-          </button>
+            <span className="text-sm font-mono">错题本</span>
+            <span className="text-sm font-mono font-bold">{wrongCount} 题待巩固</span>
+          </Button>
         </motion.div>
       )}
 
-      {/* Question count indicator */}
+      {/* Export / Import (always visible) */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mt-3"
+      >
+        <Card className="border-border/40 shadow-sm bg-card/80 backdrop-blur-xl">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-xs font-mono text-muted-foreground">题库文件</span>
+              <div className="flex items-center gap-1">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleExport}
+                  disabled={questions.length === 0}
+                  className="gap-1 text-[10px] font-mono"
+                >
+                  <Download size={10} strokeWidth={1.5} />
+                  导出
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => importFileRef.current?.click()}
+                  className="gap-1 text-[10px] font-mono"
+                >
+                  <FileUp size={10} strokeWidth={1.5} />
+                  导入
+                </Button>
+                <input
+                  ref={importFileRef}
+                  type="file"
+                  accept=".json"
+                  className="hidden"
+                  onChange={handleImportFromFile}
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Question count + clear */}
       {questionCount > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-3 p-5 glass-card rounded-xl"
+          className="mt-3"
         >
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-mono text-muted-foreground">
-              已导入题库
-            </span>
-            <div className="flex items-center gap-3">
-              <span className="text-lg font-mono font-bold text-foreground">
-                {questionCount} 题
-              </span>
-              <button
-                onClick={() => {
-                  if (confirm("确认清空当前科目的所有题目？")) onClear()
-                }}
-                className="flex items-center gap-1 px-2.5 py-1 text-[10px] font-mono text-muted-foreground hover:text-destructive border border-border/60 hover:border-destructive/50 transition-all rounded-md"
-              >
-                <Trash2 size={10} strokeWidth={1.5} />
-                清空
-              </button>
-            </div>
-          </div>
+          <Card className="border-border/40 shadow-sm bg-card/80 backdrop-blur-xl">
+            <CardContent className="p-5">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-mono text-muted-foreground">
+                  已导入题库
+                </span>
+                <div className="flex items-center gap-3">
+                  <span className="text-lg font-mono font-bold text-foreground">
+                    {questionCount} 题
+                  </span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      if (confirm("确认清空当前科目的所有题目？")) onClear()
+                    }}
+                    className="gap-1 text-[10px] font-mono text-muted-foreground hover:text-destructive"
+                  >
+                    <Trash2 size={10} strokeWidth={1.5} />
+                    清空
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </motion.div>
       )}
 
@@ -297,20 +410,24 @@ export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOp
             </span>
           </div>
           <div className="flex flex-col gap-2">
-            <button
+            <Button
+              variant="outline"
+              size="lg"
               onClick={() => handleFormatAI("deepseek")}
-              className="flex items-center justify-center gap-3 border border-border/60 bg-foreground/5 px-6 py-4 text-sm font-mono text-foreground hover:bg-accent/10 hover:border-accent/30 transition-all rounded-lg"
+              className="w-full gap-3 text-sm font-mono h-auto py-4"
             >
               <ExternalLink size={18} strokeWidth={1.5} />
               打开 DeepSeek 并粘贴
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
               onClick={() => handleFormatAI("doubao")}
-              className="flex items-center justify-center gap-3 border border-border/60 bg-foreground/5 px-6 py-4 text-sm font-mono text-foreground hover:bg-accent/10 hover:border-accent/30 transition-all rounded-lg"
+              className="w-full gap-3 text-sm font-mono h-auto py-4"
             >
               <ExternalLink size={18} strokeWidth={1.5} />
               打开 豆包 并粘贴
-            </button>
+            </Button>
           </div>
           <p className="text-[10px] font-mono text-muted-foreground text-center mt-2">
             粘贴到 AI 对话框，AI 会返回整理好的题目，复制后回来直接粘贴到上方即可
@@ -334,20 +451,24 @@ export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOp
             </span>
           </div>
           <div className="flex flex-col gap-2">
-            <button
+            <Button
+              variant="outline"
+              size="lg"
               onClick={() => handleFillAI("deepseek")}
-              className="flex items-center justify-center gap-3 border border-border/60 bg-foreground/5 px-6 py-4 text-sm font-mono text-foreground hover:bg-accent/10 hover:border-accent/30 transition-all rounded-lg"
+              className="w-full gap-3 text-sm font-mono h-auto py-4"
             >
               <ExternalLink size={18} strokeWidth={1.5} />
               打开 DeepSeek 并粘贴
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
               onClick={() => handleFillAI("doubao")}
-              className="flex items-center justify-center gap-3 border border-border/60 bg-foreground/5 px-6 py-4 text-sm font-mono text-foreground hover:bg-accent/10 hover:border-accent/30 transition-all rounded-lg"
+              className="w-full gap-3 text-sm font-mono h-auto py-4"
             >
               <ExternalLink size={18} strokeWidth={1.5} />
               打开 豆包 并粘贴
-            </button>
+            </Button>
           </div>
           <p className="text-[10px] font-mono text-muted-foreground text-center mt-2">
             AI 会补全答案和解析，把返回结果粘贴到上方重新导入即可

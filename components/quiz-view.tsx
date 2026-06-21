@@ -4,6 +4,12 @@ import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronLeft, ChevronRight, RotateCcw, BookX, CheckCircle2, XCircle, ArrowLeft, ListTree, Filter } from "lucide-react"
 import type { Question } from "@/lib/types"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Dialog,
   DialogContent,
@@ -391,32 +397,36 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           </div>
 
           {mode !== "wrong-book" && wrongIds.length > 0 && (
-            <button
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => {
                 setIsFinished(false)
                 switchMode("wrong-book")
               }}
-              className="inline-flex items-center gap-2 border border-border/60 px-4 py-2 text-xs font-mono text-foreground hover:bg-accent/5 transition-all mb-4 rounded-lg"
+              className="gap-2 text-xs font-mono mb-4 mx-auto"
             >
               <BookX size={14} strokeWidth={1.5} />
               查看错题本 ({wrongIds.length})
-            </button>
+            </Button>
           )}
 
           <div className="flex justify-center gap-3">
-            <button
+            <Button
+              variant="outline"
+              size="sm"
               onClick={handleRestart}
-              className="flex items-center gap-2 border border-border/60 px-4 py-2 text-xs font-mono text-foreground hover:bg-accent/5 transition-all rounded-lg"
+              className="gap-2 text-xs font-mono"
             >
               <RotateCcw size={14} strokeWidth={1.5} />
               重新答题
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={onReset}
-              className="bg-foreground text-background px-4 py-2 text-xs font-mono hover:opacity-90 transition-opacity rounded-lg"
+              className="gap-2 text-xs font-mono"
             >
               返回首页
-            </button>
+            </Button>
           </div>
         </div>
       </motion.div>
@@ -429,7 +439,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
         <p className="text-xs font-mono text-muted-foreground">
           {mode === "wrong-book" ? "错题本为空" : "暂无题目"}
         </p>
-        <button
+        <Button
           onClick={() => {
             if (mode === "wrong-book" || questions.length === 0) {
               onReset()
@@ -443,10 +453,10 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
               }
             }
           }}
-          className="mt-4 bg-foreground text-background px-4 py-2 text-xs font-mono"
+          className="mt-4 text-xs font-mono"
         >
           返回
-        </button>
+        </Button>
       </div>
     )
   }
@@ -457,10 +467,10 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
       <div className="flex items-center justify-between mb-4 shrink-0">
         <div className="flex items-center gap-3">
           {mode === "wrong-book" ? (
-            <button onClick={() => switchMode("normal")} className="flex items-center gap-1 text-xs font-mono text-accent hover:underline">
+            <Button variant="link" size="sm" onClick={() => switchMode("normal")} className="gap-1 text-xs font-mono text-accent p-0 h-auto">
               <ArrowLeft size={14} strokeWidth={1.5} />
               返回答题
-            </button>
+            </Button>
           ) : (
             <span className="text-xs font-mono text-muted-foreground">答题</span>
           )}
@@ -468,23 +478,27 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
             <span className="text-xs font-mono text-muted-foreground">错题本</span>
           )}
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1">
           {mode === "wrong-book" && (
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => {
                 if (confirm("清空错题本？")) {
                   onClearWrong()
                 }
               }}
-              className="text-xs font-mono text-muted-foreground hover:text-destructive transition-colors"
+              className="text-xs font-mono text-muted-foreground hover:text-destructive"
             >
               清空错题本
-            </button>
+            </Button>
           )}
           {mode !== "wrong-book" && (
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => setShowFilter(true)}
-              className="text-xs font-mono text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+              className="text-xs font-mono gap-1"
               title="筛选章节和题型"
             >
               <Filter size={14} strokeWidth={1.5} />
@@ -494,60 +508,63 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                   ({selectedChapters.length || "全"}/{selectedTypes.length || "全"})
                 </span>
               )}
-            </button>
+            </Button>
           )}
           {mode !== "wrong-book" && (
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={quizMode === "shuffled" ? setSequential : shuffleQuestions}
-              className="text-xs font-mono transition-colors flex items-center gap-1"
+              className="text-xs font-mono gap-1"
               title={quizMode === "shuffled" ? "顺序答题" : "打乱顺序"}
             >
-              <span className={quizMode === "shuffled" ? "text-accent" : "text-muted-foreground hover:text-foreground"}>
+              <span className={quizMode === "shuffled" ? "text-accent" : ""}>
                 {quizMode === "shuffled" ? "打乱中" : "打乱顺序"}
               </span>
-            </button>
+            </Button>
           )}
           {onToggleFocus && (
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={onToggleFocus}
-              className="text-xs font-mono text-muted-foreground hover:text-foreground transition-colors"
+              className="text-xs font-mono"
               title={focusMode ? "退出专注模式" : "专注答题模式"}
             >
               {focusMode ? "退出专注" : "专注答题"}
-            </button>
+            </Button>
           )}
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => setShowOutline(true)}
-            className="text-xs font-mono text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+            className="text-xs font-mono gap-1"
           >
             <ListTree size={14} strokeWidth={1.5} />
             大纲
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={handleRestart}
-            className="text-xs font-mono text-muted-foreground hover:text-foreground transition-colors"
+            className="text-xs font-mono"
           >
             重新开始
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={onReset}
-            className="text-xs font-mono text-muted-foreground hover:text-foreground transition-colors"
+            className="text-xs font-mono"
           >
             退出
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Progress bar */}
-      <div className="w-full h-1.5 bg-muted/50 rounded-full mb-6 shrink-0 overflow-hidden">
-        <motion.div
-          className="h-full bg-accent rounded-full"
-          initial={{ width: 0 }}
-          animate={{
-            width: `${((currentIndex + 1) / displayQuestions.length) * 100}%`,
-          }}
-          transition={{ duration: 0.3 }}
-        />
+      <div className="mb-6 shrink-0">
+        <Progress value={((currentIndex + 1) / displayQuestions.length) * 100} className="h-1.5 bg-muted/50" />
       </div>
 
       {/* Question counter & type badge */}
@@ -556,13 +573,13 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           {currentIndex + 1} / {displayQuestions.length}
           <span className="ml-2">| 未答 {unanswered} 题</span>
         </div>
-        <span className="text-xs font-mono uppercase tracking-wider border border-accent/20 bg-accent/5 px-2.5 py-0.5 text-accent rounded-full">
+        <Badge variant="outline" className="text-xs font-mono tracking-wider border-accent/30 bg-accent/5 text-accent hover:bg-accent/10">
           {qType === "choice" ? "选择题" : qType === "multiple" ? "多选题" : qType === "truefalse" ? "判断题" : qType === "essay" ? "简答题" : "填空题"}
-        </span>
+        </Badge>
       </div>
 
       {/* Question card */}
-      <div className="flex-1 overflow-y-auto min-h-0" style={{ scrollbarGutter: "stable" }}>
+      <div className="flex-1 overflow-y-auto min-h-0 scrollbar-thin" style={{ scrollbarGutter: "stable" }}>
       <AnimatePresence mode="wait">
         <motion.div
           key={current.id}
@@ -570,8 +587,9 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.2 }}
-          className="glass-card p-5 lg:p-6 mb-4 rounded-xl"
         >
+          <Card className="mb-4 border-border/40 shadow-sm bg-card/80 backdrop-blur-xl">
+          <CardContent className="p-5 lg:p-6">
           {/* Chapter badge row */}
           <div className="flex items-center justify-between mb-2">
             {current.chapter ? (
@@ -582,12 +600,14 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
               <div />
             )}
             {mode === "wrong-book" && onRemoveWrong && (
-              <button
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => onRemoveWrong(current.id)}
-                className="text-xs font-mono text-muted-foreground hover:text-destructive transition-colors"
+                className="text-xs font-mono text-muted-foreground hover:text-destructive"
               >
                 ✕ 移出错题本
-              </button>
+              </Button>
             )}
           </div>
 
@@ -765,21 +785,21 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
             <div className="space-y-3">
               {!isSubmitted ? (
                 qType === "essay" ? (
-                  <textarea
+                  <Textarea
                     value={textInput}
                     onChange={(e) => setTextInput(e.target.value)}
                     placeholder="在此输入答案..."
                     rows={5}
-                    className="w-full border border-border/60 bg-foreground/5 px-3 py-2.5 text-xs font-mono text-foreground placeholder:text-muted-foreground/50 outline-none focus:border-accent/50 transition-colors rounded-lg resize-none"
+                    className="min-h-[120px] text-xs font-mono resize-none"
                     autoFocus
                   />
                 ) : (
-                  <input
+                  <Input
                     type="text"
                     value={textInput}
                     onChange={(e) => setTextInput(e.target.value)}
                     placeholder="在此输入答案..."
-                    className="w-full border border-border/60 bg-foreground/5 px-3 py-2.5 text-xs font-mono text-foreground placeholder:text-muted-foreground/50 outline-none focus:border-accent/50 transition-colors rounded-lg"
+                    className="text-xs font-mono"
                     autoFocus
                   />
                 )
@@ -794,13 +814,14 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           {/* Submit / Next button */}
           <div className="mt-5">
             {!isSubmitted ? (
-              <button
+              <Button
+                size="lg"
                 onClick={qType === "input" || qType === "essay" ? handleTextSubmit : qType === "multiple" ? handleMultiSubmit : handleSubmit}
                 disabled={qType === "input" || qType === "essay" ? !textInput.trim() : qType === "multiple" ? multiSelected.length === 0 : !selectedAnswer}
-                className="w-full bg-accent text-accent-foreground py-2.5 text-xs font-mono tracking-wider uppercase hover:opacity-90 transition-opacity disabled:opacity-30 rounded-lg"
+                className="w-full text-xs font-mono tracking-wider uppercase"
               >
                 确认答案
-              </button>
+              </Button>
             ) : (
               <div className="space-y-3">
                 {/* Explanation */}
@@ -819,55 +840,65 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                   </motion.div>
                 )}
 
-                <button
+                <Button
+                  size="lg"
                   onClick={goNext}
-                  className="w-full bg-accent text-accent-foreground py-2.5 text-xs font-mono tracking-wider uppercase hover:opacity-90 transition-opacity rounded-lg"
+                  className="w-full text-xs font-mono tracking-wider uppercase"
                 >
                   {currentIndex < displayQuestions.length - 1 ? "下一题" : "查看结果"}
-                </button>
+                </Button>
               </div>
             )}
           </div>
+          </CardContent>
+          </Card>
         </motion.div>
       </AnimatePresence>
       </div>
 
       {/* Bottom navigation */}
       <div className="flex items-center justify-between shrink-0 pb-4">
-        <button
+        <Button
+          variant="outline"
+          size="sm"
           onClick={goPrev}
           disabled={currentIndex === 0}
-          className="flex items-center gap-1 px-4 py-2 text-xs font-mono border border-border/60 text-muted-foreground hover:text-foreground hover:border-accent/30 hover:bg-accent/5 transition-all rounded-lg disabled:opacity-30"
+          className="text-xs font-mono gap-1"
         >
           <ChevronLeft size={14} strokeWidth={1.5} />
           上一题
-        </button>
+        </Button>
 
         {wrongIds.length > 0 && mode === "normal" && (
-          <button
+          <Button
+            variant="link"
+            size="sm"
             onClick={() => switchMode("wrong-book")}
-            className="flex items-center gap-1 text-xs font-mono text-accent hover:underline"
+            className="text-xs font-mono gap-1 text-accent"
           >
             <BookX size={14} strokeWidth={1.5} />
             错题本 ({wrongIds.length})
-          </button>
+          </Button>
         )}
 
         {currentIndex === displayQuestions.length - 1 && isSubmitted ? (
-          <button
+          <Button
+            size="sm"
             onClick={handleFinish}
-            className="bg-accent text-accent-foreground px-4 py-2 text-xs font-mono hover:opacity-90 transition-opacity rounded-lg"
+            className="text-xs font-mono"
           >
             完成答题
-          </button>
+          </Button>
         ) : currentIndex < displayQuestions.length - 1 ? (
-          <button
+          <Button
+            variant="outline"
+            size="sm"
             onClick={goNext}
-            className="flex items-center gap-1 px-4 py-2 text-xs font-mono border border-border/60 text-muted-foreground hover:text-foreground hover:border-accent/30 hover:bg-accent/5 transition-all rounded-lg"
+            className="text-xs font-mono gap-1"
           >
             下一题
             <ChevronRight size={14} strokeWidth={1.5} />
-          </button>
+          </Button>
         ) : null}
       </div>
 
