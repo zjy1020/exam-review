@@ -24,15 +24,6 @@ export function QuizStreak({ streak, maxStreak, focusMode }: QuizStreakProps) {
   if (streak < 2) return null
   const tier = getTier(streak)
 
-  if (focusMode) {
-    return (
-      <div className="fixed top-3 right-3 z-50 flex items-center gap-1 bg-background/60 backdrop-blur-sm px-2 py-1 rounded-full border border-border/30">
-        <span className="text-xs">{tier.icon}</span>
-        <span className="text-[10px] font-mono font-bold text-muted-foreground">x{streak}</span>
-      </div>
-    )
-  }
-
   return (
     <motion.div
       key={streak}

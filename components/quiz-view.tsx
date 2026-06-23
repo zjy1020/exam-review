@@ -460,7 +460,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     const correct = normalizeMultiLetters(current.answer || '')
     const isCorrect = sorted === correct
     onAnswer(isCorrect)
-    if (isCorrect) { playCorrect(); setCorrectGlow(true); setTimeout(() => setCorrectGlow(false), 600) }
+    if (isCorrect) { playCorrect(); setCorrectGlow(true); setTimeout(() => setCorrectGlow(false), 600); setCelebrationKey(k => k + 1); setCelebrationType("confetti") }
     else { playWrong(); setWrongShake(true); setTimeout(() => setWrongShake(false), 300) }
     setLastCorrect(isCorrect)
     if (!isCorrect) {
@@ -478,7 +478,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     setSubmittedIds(newSubmitted)
     const isCorrect = matchAnswer(textInput.trim(), current.answer)
     onAnswer(isCorrect)
-    if (isCorrect) { playCorrect(); setCorrectGlow(true); setTimeout(() => setCorrectGlow(false), 600) }
+    if (isCorrect) { playCorrect(); setCorrectGlow(true); setTimeout(() => setCorrectGlow(false), 600); setCelebrationKey(k => k + 1); setCelebrationType("confetti") }
     else { playWrong(); setWrongShake(true); setTimeout(() => setWrongShake(false), 300) }
     setLastCorrect(isCorrect)
     if (!isCorrect) {
@@ -496,7 +496,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
 
     const isCorrect = matchAnswer(selectedAnswer, current.answer)
     onAnswer(isCorrect)
-    if (isCorrect) { playCorrect(); setCorrectGlow(true); setTimeout(() => setCorrectGlow(false), 600) }
+    if (isCorrect) { playCorrect(); setCorrectGlow(true); setTimeout(() => setCorrectGlow(false), 600); setCelebrationKey(k => k + 1); setCelebrationType("confetti") }
     else { playWrong(); setWrongShake(true); setTimeout(() => setWrongShake(false), 300) }
     setLastCorrect(isCorrect)
     if (!isCorrect) {
@@ -507,6 +507,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
   }
 
   const goNext = () => {
+    setLastCorrect(null)
     if (currentIndex < displayQuestions.length - 1) {
       setCurrentIndex((i) => i + 1)
       resetInputs()
@@ -514,6 +515,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
   }
 
   const goPrev = () => {
+    setLastCorrect(null)
     if (currentIndex > 0) {
       setCurrentIndex((i) => i - 1)
       resetInputs()
@@ -1085,7 +1087,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
             </Button>
           )}
 
-          {/* Unified toolbar: sound + timer always visible, rest in dropdown */}
+          {/* Unified toolbar */}
           <div className="flex items-center gap-1">
             <QuizSoundToggle muted={muted} onToggle={toggleMute} />
             <QuizTimer
@@ -1095,7 +1097,24 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
               isSubmitted={isSubmitted}
               key_={currentIndex + timerResetKey * 10000}
             />
-            <DropdownMenu>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleRestart}
+              className="text-xs font-mono gap-1 text-muted-foreground hover:text-foreground"
+              title="重新开始"
+            >
+              <RotateCcw size={14} strokeWidth={1.5} />
+              <span className="hidden sm:inline">重新开始</span>
+            </Button>
+            <button
+              onClick={onReset}
+              className="text-xs font-mono text-muted-foreground hover:text-destructive transition-colors"
+            >
+              退出
+            </button>
+            <div className="ml-auto">
+              <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="text-xs font-mono">
                   <MoreHorizontal size={14} strokeWidth={1.5} />
@@ -1139,15 +1158,9 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                   <ListTree size={12} strokeWidth={1.5} />
                   大纲
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleRestart} className="text-xs font-mono gap-2 cursor-pointer">
-                  <RotateCcw size={12} strokeWidth={1.5} />
-                  重新开始
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={onReset} className="text-xs font-mono gap-2 cursor-pointer">
-                  退出
-                </DropdownMenuItem>
               </DropdownMenuContent>
-            </DropdownMenu>
+              </DropdownMenu>
+            </div>
           </div>
         </div>
       </div>
