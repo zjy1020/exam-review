@@ -21,6 +21,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { PieChart as RechartsPieChart, Pie } from "recharts"
+import { ACHIEVEMENTS } from "@/lib/achievements"
+import { QuizStreak } from "@/components/quiz-streak"
+import { QuizEncouragement } from "@/components/quiz-encouragement"
+import { QuizSoundToggle } from "@/components/quiz-sound-toggle"
+import { QuizParticles } from "@/components/quiz-particles"
+import { QuizTimer } from "@/components/quiz-timer"
+import { QuizCelebration } from "@/components/quiz-celebration"
+import { useStreak } from "@/hooks/use-streak"
+import { useSound } from "@/hooks/use-sound"
+import { useAchievements } from "@/hooks/use-achievements"
 
 interface QuizViewProps {
   questions: Question[]
@@ -163,6 +174,17 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
   const restoredRef = useRef<string | null>(null)
   const isRestoringRef = useRef(false)
 
+  // Engagement hooks
+  const { streak, onAnswer, resetStreak, hasMilestoneTriggered } = useStreak()
+  const { playCorrect, playWrong, muted, toggleMute } = useSound()
+  const { newUnlocks, checkAchievements, clearNewUnlocks, unlockedDetails } = useAchievements()
+  const [timerEnabled, setTimerEnabled] = useState(false)
+  const [celebrationKey, setCelebrationKey] = useState(0)
+  const [celebrationType, setCelebrationType] = useState<"milestone" | "confetti" | "complete">("milestone")
+  const [lastCorrect, setLastCorrect] = useState<boolean | null>(null)
+  const [correctGlow, setCorrectGlow] = useState(false)
+  const [wrongShake, setWrongShake] = useState(false)
+
   // Block horizontal edge swipes that trigger Android WebView back/forward
   const touchStartXRef = useRef<number | null>(null)
   const handleTouchStart = useCallback((e: TouchEvent) => {
@@ -256,6 +278,16 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
   const displayQuestions = quizMode === "shuffled" && shuffledQuestions ? shuffledQuestions : filteredQuestions
 
   const current = displayQuestions[currentIndex]
+
+  // Milestone tracking
+  useEffect(() => {
+    if (displayQuestions.length === 0 || isFinished) return
+    const pct = Math.round((submittedIds.size / displayQuestions.length) * 100)
+    if ([25, 50, 75, 100].includes(pct) && !hasMilestoneTriggered(pct)) {
+      setCelebrationKey((k) => k + 1)
+      setCelebrationType(pct === 100 ? "confetti" : "milestone")
+    }
+  }, [submittedIds.size, displayQuestions.length, isFinished])
 
   // Restore progress from localStorage on mount / subject switch
   useEffect(() => {
@@ -425,7 +457,12 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     newSubmitted.add(current.id)
     setSubmittedIds(newSubmitted)
     const correct = normalizeMultiLetters(current.answer || '')
-    if (sorted !== correct) {
+    const isCorrect = sorted === correct
+    onAnswer(isCorrect)
+    if (isCorrect) { playCorrect(); setCorrectGlow(true); setTimeout(() => setCorrectGlow(false), 600) }
+    else { playWrong(); setWrongShake(true); setTimeout(() => setWrongShake(false), 300) }
+    setLastCorrect(isCorrect)
+    if (!isCorrect) {
       if (!wrongIds.includes(current.id)) {
         onUpdateWrong([...wrongIds, current.id])
       }
@@ -438,7 +475,12 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     const newSubmitted = new Set(submittedIds)
     newSubmitted.add(current.id)
     setSubmittedIds(newSubmitted)
-    if (!matchAnswer(textInput.trim(), current.answer)) {
+    const isCorrect = matchAnswer(textInput.trim(), current.answer)
+    onAnswer(isCorrect)
+    if (isCorrect) { playCorrect(); setCorrectGlow(true); setTimeout(() => setCorrectGlow(false), 600) }
+    else { playWrong(); setWrongShake(true); setTimeout(() => setWrongShake(false), 300) }
+    setLastCorrect(isCorrect)
+    if (!isCorrect) {
       if (!wrongIds.includes(current.id)) {
         onUpdateWrong([...wrongIds, current.id])
       }
@@ -451,7 +493,12 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     newSubmitted.add(current.id)
     setSubmittedIds(newSubmitted)
 
-    if (!matchAnswer(selectedAnswer, current.answer)) {
+    const isCorrect = matchAnswer(selectedAnswer, current.answer)
+    onAnswer(isCorrect)
+    if (isCorrect) { playCorrect(); setCorrectGlow(true); setTimeout(() => setCorrectGlow(false), 600) }
+    else { playWrong(); setWrongShake(true); setTimeout(() => setWrongShake(false), 300) }
+    setLastCorrect(isCorrect)
+    if (!isCorrect) {
       if (!wrongIds.includes(current.id)) {
         onUpdateWrong([...wrongIds, current.id])
       }
@@ -474,6 +521,16 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
 
   const handleFinish = () => {
     setIsFinished(true)
+    setCelebrationKey((k) => k + 1)
+    setCelebrationType("complete")
+    checkAchievements({
+      totalCorrect,
+      maxStreak: streak.max,
+      subjectCompleted: true,
+      wrongBookCleared: wrongIds.length === 0,
+      fastAnswerCount: 0,
+      totalAnswered: submittedIds.size,
+    })
   }
 
   const handleRestart = () => {
@@ -482,6 +539,8 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     setSubmittedIds(new Set())
     setIsFinished(false)
     resetInputs()
+    resetStreak()
+    clearNewUnlocks()
     if (subjectId) clearProgress(subjectId)
   }
 
@@ -490,6 +549,17 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     setCurrentIndex(0)
     resetInputs()
   }
+
+  const handleTimerTimeUp = useCallback(() => {
+    if (!current || submittedIds.has(current.id)) return
+    if (qType === "input" || qType === "essay") {
+      if (textInput.trim()) handleTextSubmit()
+    } else if (qType === "multiple") {
+      if (multiSelected.length > 0) handleMultiSubmit()
+    } else if (selectedAnswer) {
+      handleSubmit()
+    }
+  }, [current, qType, selectedAnswer, textInput, multiSelected, submittedIds])
   const toggleReview = () => {
     if (mode === "review") {
       setMode("normal")
@@ -560,56 +630,128 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
 
   // Result screen
   if (isFinished) {
+    const rate = displayQuestions.length > 0
+      ? Math.round((totalCorrect / displayQuestions.length) * 100)
+      : 0
+    const maxStreak = streak.max
+    const verdict = rate === 100 ? "满分！你是天才吗？"
+      : rate >= 80 ? "优秀！掌握得很好"
+      : rate >= 60 ? "还不错，再巩固一下"
+      : "继续加油，多练几次"
+
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-2xl mx-auto px-4 text-center"
+        className="w-full max-w-2xl mx-auto px-4"
       >
-        <div className="glass-card p-8 lg:p-12 rounded-xl">
-          <h2 className="font-pixel text-2xl sm:text-3xl text-foreground mb-6">
+        <div className="glass-card p-6 lg:p-10 rounded-xl text-center">
+          <h2 className="font-pixel text-xl sm:text-2xl text-foreground mb-2">
             {mode === "wrong-book" ? "错题本答题完成" : "答题完成"}
           </h2>
+          <p className="text-xs font-mono text-muted-foreground mb-6">{verdict}</p>
 
-          <div className="flex justify-center gap-8 mb-8">
-            <div>
-              <div className="text-4xl font-mono font-bold text-foreground">
-                {totalCorrect}
-              </div>
-              <div className="text-xs font-mono text-muted-foreground mt-1">
-                正确
-              </div>
-            </div>
-            <div className="w-px bg-foreground/20" />
-            <div>
-              <div className="text-4xl font-mono font-bold text-foreground">
-                {displayQuestions.length - totalCorrect}
-              </div>
-              <div className="text-xs font-mono text-muted-foreground mt-1">
-                错误
-              </div>
-            </div>
-            <div className="w-px bg-foreground/20" />
-            <div>
-              <div className="text-4xl font-mono font-bold text-accent">
-                {displayQuestions.length > 0
-                  ? Math.round((totalCorrect / displayQuestions.length) * 100)
-                  : 0}%
-              </div>
-              <div className="text-xs font-mono text-muted-foreground mt-1">
-                正确率
+          <div className="flex justify-center mb-6">
+            <div className="relative w-28 h-28">
+              <RechartsPieChart width={112} height={112}>
+                <Pie
+                  data={[
+                    { name: "正确", value: totalCorrect, fill: "hsl(var(--accent))" },
+                    { name: "错误", value: displayQuestions.length - totalCorrect, fill: "hsl(var(--muted))" },
+                  ]}
+                  cx={56} cy={56} innerRadius={38} outerRadius={50}
+                  startAngle={90} endAngle={-270}
+                  dataKey="value"
+                  isAnimationActive={false}
+                />
+              </RechartsPieChart>
+              <div className="absolute inset-0 flex items-center justify-center flex-col">
+                <span className="text-lg font-mono font-bold text-foreground">{rate}%</span>
+                <span className="text-[8px] font-mono text-muted-foreground">正确率</span>
               </div>
             </div>
           </div>
+
+          <div className="flex justify-center gap-6 mb-6 text-xs font-mono">
+            <div>
+              <span className="text-foreground font-bold">{totalCorrect}</span>
+              <span className="text-muted-foreground ml-1">正确</span>
+            </div>
+            <div className="w-px bg-border/40" />
+            <div>
+              <span className="text-foreground font-bold">{displayQuestions.length - totalCorrect}</span>
+              <span className="text-muted-foreground ml-1">错误</span>
+            </div>
+            <div className="w-px bg-border/40" />
+            <div>
+              <span className="text-accent font-bold">{maxStreak}</span>
+              <span className="text-muted-foreground ml-1">最高连击</span>
+            </div>
+          </div>
+
+          {Array.from(chaptersMap.entries()).length > 1 && (
+            <div className="mb-6 text-left">
+              <div className="text-[10px] font-mono text-muted-foreground mb-2">章节正确率</div>
+              {Array.from(chaptersMap.entries()).map(([ch, chQs]) => {
+                const chCorrect = chQs.filter((q) => {
+                  if (!submittedIds.has(q.id)) return false
+                  const t = getQuestionType(q)
+                  if (t === "multiple") return normalizeMultiLetters(answers[q.id] || '') === normalizeMultiLetters(q.answer || '')
+                  return matchAnswer(answers[q.id], q.answer)
+                }).length
+                const answered = chQs.filter((q) => submittedIds.has(q.id)).length
+                if (answered === 0) return null
+                const chRate = Math.round((chCorrect / answered) * 100)
+                return (
+                  <div key={ch} className="flex items-center gap-2 mb-1">
+                    <span className="text-[10px] font-mono w-16 truncate text-muted-foreground">{ch}</span>
+                    <div className="flex-1 h-1.5 bg-muted/30 rounded-full overflow-hidden">
+                      <div className="h-full bg-accent rounded-full transition-all duration-500" style={{ width: `${chRate}%` }} />
+                    </div>
+                    <span className="text-[10px] font-mono text-muted-foreground w-8 text-right">{chRate}%</span>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+
+          {newUnlocks.length > 0 && (
+            <div className="mb-6">
+              <div className="text-[10px] font-mono text-accent mb-2">新成就解锁！</div>
+              <div className="flex justify-center gap-3 flex-wrap">
+                {newUnlocks.map((id) => {
+                  const a = ACHIEVEMENTS.find((a) => a.id === id)
+                  if (!a) return null
+                  return (
+                    <div key={id} className="flex items-center gap-1 px-2 py-1 bg-accent/10 rounded-md border border-accent/20">
+                      <span>{a.icon}</span>
+                      <span className="text-[10px] font-mono text-accent font-bold">{a.name}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
+          {unlockedDetails.length > 0 && (
+            <div className="mb-6 text-left">
+              <div className="text-[10px] font-mono text-muted-foreground mb-2">已获得成就</div>
+              <div className="flex gap-2 flex-wrap justify-center">
+                {unlockedDetails.map((a) => (
+                  <div key={a.id} className="flex items-center gap-1 px-2 py-0.5 bg-muted/20 rounded-md">
+                    <span className="text-xs">{a.icon}</span>
+                    <span className="text-[9px] font-mono text-muted-foreground">{a.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {mode !== "wrong-book" && wrongIds.length > 0 && (
             <Button
               variant="outline"
               size="sm"
-              onClick={() => {
-                setIsFinished(false)
-                switchMode("wrong-book")
-              }}
+              onClick={() => { setIsFinished(false); switchMode("wrong-book") }}
               className="gap-2 text-xs font-mono mb-4 mx-auto"
             >
               <BookX size={14} strokeWidth={1.5} />
@@ -618,21 +760,10 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           )}
 
           <div className="flex justify-center gap-3">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRestart}
-              className="gap-2 text-xs font-mono"
-            >
-              <RotateCcw size={14} strokeWidth={1.5} />
-              重新答题
+            <Button variant="outline" size="sm" onClick={handleRestart} className="gap-2 text-xs font-mono">
+              <RotateCcw size={14} strokeWidth={1.5} />重新答题
             </Button>
-            <Button
-              onClick={onReset}
-              className="gap-2 text-xs font-mono"
-            >
-              返回首页
-            </Button>
+            <Button onClick={onReset} className="gap-2 text-xs font-mono">返回首页</Button>
           </div>
         </div>
       </motion.div>
@@ -911,6 +1042,8 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
 
   return (
     <div ref={containerRef} className={`w-full max-w-4xl mx-auto px-4 h-full flex flex-col min-h-0 overscroll-x-none touch-pan-y ${focusMode ? "pt-[env(safe-area-inset-top)]" : ""}`}>
+      {focusMode && <QuizParticles />}
+      <QuizCelebration triggered={celebrationKey > 0} type={celebrationType} />
       {/* Header */}
       <div className="flex items-center justify-between mb-4 shrink-0">
         <div className="flex items-center gap-3">
@@ -987,6 +1120,14 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
               </Button>
               </>
             )}
+            <QuizSoundToggle muted={muted} onToggle={toggleMute} />
+            <QuizTimer
+              enabled={timerEnabled}
+              onToggle={() => setTimerEnabled(!timerEnabled)}
+              onTimeUp={handleTimerTimeUp}
+              isSubmitted={isSubmitted}
+              key_={currentIndex}
+            />
             {onToggleFocus && (
               <Button
                 variant="ghost"
@@ -1094,13 +1235,18 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
 
       {/* Question counter & type badge */}
       <div className="flex items-center justify-between mb-4 shrink-0">
-        <div className="text-xs font-mono text-muted-foreground">
-          {currentIndex + 1} / {displayQuestions.length}
-          <span className="ml-2">| 未答 {unanswered} 题</span>
+        <div className="flex items-center gap-3">
+          <div className="text-xs font-mono text-muted-foreground">
+            {currentIndex + 1} / {displayQuestions.length}
+            <span className="ml-2">| 未答 {unanswered} 题</span>
+          </div>
+          <QuizStreak streak={streak.current} maxStreak={streak.max} focusMode={focusMode} />
         </div>
-        <Badge variant="outline" className="text-xs font-mono tracking-wider border-accent/30 bg-accent/5 text-accent hover:bg-accent/10">
-          {qType === "choice" ? "选择题" : qType === "multiple" ? "多选题" : qType === "truefalse" ? "判断题" : qType === "essay" ? "简答题" : "填空题"}
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="text-xs font-mono tracking-wider border-accent/30 bg-accent/5 text-accent hover:bg-accent/10">
+            {qType === "choice" ? "选择题" : qType === "multiple" ? "多选题" : qType === "truefalse" ? "判断题" : qType === "essay" ? "简答题" : "填空题"}
+          </Badge>
+        </div>
       </div>
 
       {/* Question card */}
@@ -1113,7 +1259,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.2 }}
         >
-          <Card className="mb-4 border-border/40 shadow-sm bg-card/80 backdrop-blur-xl">
+          <Card className={`mb-4 border-border/40 shadow-sm bg-card/80 backdrop-blur-xl ${correctGlow ? "animate-correct-glow" : ""} ${wrongShake ? "animate-wrong-shake" : ""}`}>
           <CardContent className="p-5 lg:p-6">
           {/* Chapter badge row */}
           <div className="flex items-center justify-between mb-2">
@@ -1176,6 +1322,11 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
               )}
             </div>
           )}
+
+          {/* Encouragement */}
+          <div className="mb-3">
+            <QuizEncouragement streak={streak.current} lastCorrect={lastCorrect} />
+          </div>
 
           {/* Answer input area */}
           {optionShuffled && (qType === "choice" || qType === "multiple") && (

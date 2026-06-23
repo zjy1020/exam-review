@@ -39,7 +39,7 @@ export function QuizCelebration({ triggered, type }: QuizCelebrationProps) {
               initial={{ y: -20, x: `${p.x}vw`, opacity: 1, rotate: 0 }}
               animate={{ y: "100vh", opacity: 0, rotate: 720 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 1.5 + p.delay, ease: "ease-in" }}
+              transition={{ duration: 1.5 + p.delay, ease: "easeIn" }}
               className="absolute top-0 w-1.5 h-1.5 rounded-full"
               style={{ backgroundColor: p.color, left: `${p.x}%` }}
             />
