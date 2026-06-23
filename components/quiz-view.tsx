@@ -92,10 +92,11 @@ function matchAnswer(userAnswer: string | undefined, correctAnswer: string | und
   if (!userAnswer || !correctAnswer) return false
   const normalize = (s: string) => {
     let r = s.trim()
+    r = r.toLowerCase()
     r = r.replace(/[（(].*?[）)]/g, '').trim()         // "多态（或Polymorphism）" → "多态"
-    r = r.replace(/^[A-Da-d][.、．）)\s]\s*/, '')     // "A. 多态" → "多态"
-    if (r === '对' || r === '正确') return 'TRUE'
-    if (r === '错' || r === '错误') return 'FALSE'
+    r = r.replace(/^[a-d][.、．）)\s]\s*/, '')         // "A. 多态" → "多态"
+    if (r === '对' || r === '正确') return 'true'
+    if (r === '错' || r === '错误') return 'false'
     r = r.replace(/[.。\s]+$/, '').trim()
     return r
   }
@@ -108,8 +109,13 @@ function matchAnswer(userAnswer: string | undefined, correctAnswer: string | und
   // Check alternatives inside parentheses: "模块（或单元）" → "单元", "JDK（动态代理，或CGLIB）" → "动态代理"|"CGLIB"
   const inside = correctAnswer.match(/[（(]\s*或?\s*([^）)]*?)\s*[）)]/)
   if (inside) {
-    const alts = inside[1].split(/、|，|\s*或\s*/).map((s) => s.trim()).filter(Boolean)
+    const alts = inside[1].split(/、|，|\s*或\s*|\s*\/\s*/).map((s) => s.trim()).filter(Boolean)
     if (alts.some((alt) => normalize(userAnswer) === normalize(alt))) return true
+  }
+  // Check slash-separated alternatives: "多态/Polymorphism" → "多态" or "Polymorphism"
+  if (b.includes('/') || b.includes('／')) {
+    const slashAlts = b.split(/\s*[/／]\s*/).map((s) => s.trim().replace(/[.。\s]+$/, '')).filter(Boolean)
+    if (slashAlts.length > 1 && slashAlts.some((alt) => a === alt)) return true
   }
   return false
 }
