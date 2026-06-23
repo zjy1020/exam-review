@@ -49,7 +49,11 @@ export function QuizTimer({ enabled, onToggle, onTimeUp, isSubmitted, key_ }: Qu
         <span className="hidden sm:inline text-[10px]">计时</span>
       </Button>
       {enabled && !isSubmitted && (
-        <span className={`text-xs font-mono font-bold tabular-nums ${urgent ? "text-destructive animate-pulse" : "text-muted-foreground"}`}>
+        <span className={`inline-flex items-center justify-center min-w-[32px] px-1.5 py-0.5 rounded-md text-xs font-mono font-bold tabular-nums ${
+          urgent
+            ? "bg-destructive/20 text-destructive animate-pulse"
+            : "bg-accent/20 text-accent"
+        }`}>
           {timeLeft}s
         </span>
       )}

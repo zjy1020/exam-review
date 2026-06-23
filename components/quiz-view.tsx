@@ -19,6 +19,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { PieChart as RechartsPieChart, Pie } from "recharts"
@@ -541,6 +542,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     resetInputs()
     resetStreak()
     clearNewUnlocks()
+    setTimerResetKey((k) => k + 1)
     if (subjectId) clearProgress(subjectId)
   }
 
@@ -550,16 +552,24 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     resetInputs()
   }
 
+  const [timerResetKey, setTimerResetKey] = useState(0)
   const handleTimerTimeUp = useCallback(() => {
-    if (!current || submittedIds.has(current.id)) return
-    if (qType === "input" || qType === "essay") {
-      if (textInput.trim()) handleTextSubmit()
-    } else if (qType === "multiple") {
-      if (multiSelected.length > 0) handleMultiSubmit()
-    } else if (selectedAnswer) {
-      handleSubmit()
+    if (!current) return
+    if (!submittedIds.has(current.id)) {
+      if (qType === "input" || qType === "essay") {
+        if (textInput.trim()) handleTextSubmit()
+      } else if (qType === "multiple") {
+        if (multiSelected.length > 0) handleMultiSubmit()
+      } else if (selectedAnswer) {
+        handleSubmit()
+      }
     }
-  }, [current, qType, selectedAnswer, textInput, multiSelected, submittedIds])
+    if (currentIndex < displayQuestions.length - 1) {
+      goNext()
+    } else {
+      handleFinish()
+    }
+  }, [current, qType, selectedAnswer, textInput, multiSelected, submittedIds, currentIndex, displayQuestions.length])
   const toggleReview = () => {
     if (mode === "review") {
       setMode("normal")
@@ -1075,122 +1085,16 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
             </Button>
           )}
 
-          {/* Desktop: all buttons visible */}
-          <div className="hidden lg:flex items-center gap-1">
-            {mode !== "wrong-book" && mode !== "review" && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowFilter(true)}
-                className="text-xs font-mono gap-1"
-                title="筛选章节和题型"
-              >
-                <Filter size={14} strokeWidth={1.5} />
-                筛选
-                {(selectedChapters.length > 0 || selectedTypes.length > 0) && (
-                  <span className="text-accent font-bold">
-                    ({selectedChapters.length || "全"}/{selectedTypes.length || "全"})
-                  </span>
-                )}
-              </Button>
-            )}
-            {mode !== "wrong-book" && mode !== "review" && (
-              <>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={quizMode === "shuffled" ? setSequential : shuffleQuestions}
-                className="text-xs font-mono gap-1"
-                title={quizMode === "shuffled" ? "顺序答题" : "打乱顺序"}
-              >
-                <span className={quizMode === "shuffled" ? "text-accent" : ""}>
-                  {quizMode === "shuffled" ? "打乱中" : "打乱顺序"}
-                </span>
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={shuffleOptionsOnly}
-                className="text-xs font-mono gap-1"
-                title={optionShuffled ? "恢复选项顺序" : "打乱选项（解析仍引用原始选项如 A/B/C/D）"}
-              >
-                <span className={optionShuffled ? "text-accent" : ""}>
-                  {optionShuffled ? "选项打乱中" : "打乱选项"}
-                </span>
-              </Button>
-              </>
-            )}
+          {/* Unified toolbar: sound + timer always visible, rest in dropdown */}
+          <div className="flex items-center gap-1">
             <QuizSoundToggle muted={muted} onToggle={toggleMute} />
             <QuizTimer
               enabled={timerEnabled}
               onToggle={() => setTimerEnabled(!timerEnabled)}
               onTimeUp={handleTimerTimeUp}
               isSubmitted={isSubmitted}
-              key_={currentIndex}
+              key_={currentIndex + timerResetKey * 10000}
             />
-            {onToggleFocus && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onToggleFocus}
-                className="text-xs font-mono"
-                title={focusMode ? "退出专注模式" : "专注答题模式"}
-              >
-                {focusMode ? "退出专注" : "专注答题"}
-              </Button>
-            )}
-            {mode !== "wrong-book" && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={toggleReview}
-                className="text-xs font-mono gap-1"
-                title="背题模式"
-              >
-                {mode === "review" ? "退出背题" : "背题模式"}
-              </Button>
-            )}
-          </div>
-
-          {/* Mobile: 背题 / outline / restart / exit */}
-          {mode !== "wrong-book" && (
-            <Button
-              variant={mode === "review" ? "default" : "ghost"}
-              size="sm"
-              onClick={toggleReview}
-              className="lg:hidden text-xs font-mono gap-1"
-            >
-              {mode === "review" ? "退出背题" : "背题模式"}
-            </Button>
-          )}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setShowOutline(true)}
-            className="text-xs font-mono gap-1"
-          >
-            <ListTree size={14} strokeWidth={1.5} />
-            <span className="hidden sm:inline">大纲</span>
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleRestart}
-            className="text-xs font-mono"
-          >
-            重新开始
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onReset}
-            className="text-xs font-mono"
-          >
-            退出
-          </Button>
-
-          {/* Mobile more dropdown */}
-          <div className="lg:hidden">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="text-xs font-mono">
@@ -1198,20 +1102,28 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="glass-dialog min-w-[160px] rounded-xl border-border/40">
-                {mode !== "wrong-book" && (
-                  <>
-                    <DropdownMenuItem onClick={() => setShowFilter(true)} className="text-xs font-mono gap-2 cursor-pointer">
-                      <Filter size={12} strokeWidth={1.5} />
-                      筛选
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={quizMode === "shuffled" ? setSequential : shuffleQuestions} className="text-xs font-mono gap-2 cursor-pointer">
-                      {quizMode === "shuffled" ? "顺序答题" : "打乱顺序"}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={shuffleOptionsOnly} className="text-xs font-mono gap-2 cursor-pointer">
-                      {optionShuffled ? "恢复选项顺序" : "打乱选项"}
-                    </DropdownMenuItem>
-                  </>
+                {mode !== "wrong-book" && mode !== "review" && (
+                  <DropdownMenuItem onClick={() => setShowFilter(true)} className="text-xs font-mono gap-2 cursor-pointer">
+                    <Filter size={12} strokeWidth={1.5} />
+                    筛选
+                    {(selectedChapters.length > 0 || selectedTypes.length > 0) && (
+                      <span className="text-accent font-bold ml-auto">
+                        ({selectedChapters.length || "全"}/{selectedTypes.length || "全"})
+                      </span>
+                    )}
+                  </DropdownMenuItem>
                 )}
+                {mode !== "wrong-book" && mode !== "review" && (
+                  <DropdownMenuItem onClick={quizMode === "shuffled" ? setSequential : shuffleQuestions} className="text-xs font-mono gap-2 cursor-pointer">
+                    {quizMode === "shuffled" ? "顺序答题" : "打乱顺序"}
+                  </DropdownMenuItem>
+                )}
+                {mode !== "wrong-book" && mode !== "review" && (
+                  <DropdownMenuItem onClick={shuffleOptionsOnly} className="text-xs font-mono gap-2 cursor-pointer">
+                    {optionShuffled ? "恢复选项顺序" : "打乱选项"}
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuSeparator />
                 {onToggleFocus && (
                   <DropdownMenuItem onClick={onToggleFocus} className="text-xs font-mono gap-2 cursor-pointer">
                     {focusMode ? "退出专注" : "专注答题"}
@@ -1222,6 +1134,18 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                     {mode === "review" ? "退出背题" : "背题模式"}
                   </DropdownMenuItem>
                 )}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => setShowOutline(true)} className="text-xs font-mono gap-2 cursor-pointer">
+                  <ListTree size={12} strokeWidth={1.5} />
+                  大纲
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleRestart} className="text-xs font-mono gap-2 cursor-pointer">
+                  <RotateCcw size={12} strokeWidth={1.5} />
+                  重新开始
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={onReset} className="text-xs font-mono gap-2 cursor-pointer">
+                  退出
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

@@ -331,7 +331,7 @@ export function Sidebar({
       {/* Mobile Sheet */}
       <div className="lg:hidden">
         <Sheet open={!collapsed} onOpenChange={(open) => { if (!open) onToggle() }}>
-          <SheetContent side="left" className="w-[240px] p-0">
+          <SheetContent side="left" className="w-[240px] p-0" hideCloseButton>
             <SheetTitle className="sr-only">科目列表</SheetTitle>
             {sidebarContent}
           </SheetContent>
