@@ -10,6 +10,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet"
 
 // 修改为你自己的生日（MMDD 格式），比如 3 月 14 日 → "0314"
+// 修改为你自己的生日（MMDD 格式），比如 3 月 14 日 → "0314"
 const AUTHOR_BIRTHDAY = "1020"
 
 interface SidebarProps {
@@ -290,9 +291,9 @@ export function Sidebar({
           variant="outline"
           size="sm"
           onClick={() => {
-            const input = prompt("🔑 请输入作者生日（MMDD）")
+            const input = prompt("请输入暗号 1020")
             if (!input || input.trim() !== AUTHOR_BIRTHDAY) {
-              alert("密码错误")
+              if (input) alert("暗号错误")
               return
             }
             fetch("/backup.json")
@@ -311,7 +312,7 @@ export function Sidebar({
                     count++
                   }
                 }
-                if (confirm(`🎉 已恢复 ${count} 项数据，是否刷新页面？`)) {
+                if (confirm(`已恢复 ${count} 项数据，是否刷新页面？`)) {
                   window.location.reload()
                 }
               })
