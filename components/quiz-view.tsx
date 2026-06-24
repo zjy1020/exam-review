@@ -555,6 +555,10 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     setMode(m)
     setCurrentIndex(0)
     resetInputs()
+    if (m === "wrong-book") {
+      setQuizMode("sequential")
+      setShuffledQuestions(null)
+    }
   }
 
   const [timerResetKey, setTimerResetKey] = useState(0)
