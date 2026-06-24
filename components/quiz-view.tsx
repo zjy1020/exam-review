@@ -1267,7 +1267,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                   <><XCircle size={16} className="shrink-0" /> 错误</>
                 )}
               </div>
-              {selectedAnswer !== current.answer && (qType !== "multiple" ? true : normalizeMultiLetters(selectedAnswer) !== normalizeMultiLetters(current.answer)) && (
+              {(qType === "truefalse" ? !matchAnswer(selectedAnswer, current.answer) : selectedAnswer !== current.answer) && (qType !== "multiple" ? true : normalizeMultiLetters(selectedAnswer) !== normalizeMultiLetters(current.answer)) && (
                 <div className="px-4 py-3 space-y-1.5 bg-background/50">
                   <div className="text-xs font-mono">
                     <span className="text-muted-foreground">你的答案：</span>
@@ -1401,8 +1401,8 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
             <div className="flex gap-3">
               {["对", "错"].map((val) => {
                 const isSelected = selectedAnswer === val
-                const isAnswer = isSubmitted && val === current.answer
-                const isWrong = isSubmitted && isSelected && val !== current.answer
+                const isAnswer = isSubmitted && matchAnswer(val, current.answer)
+                const isWrong = isSubmitted && isSelected && !matchAnswer(val, current.answer)
 
                 return (
                   <button
