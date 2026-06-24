@@ -104,9 +104,12 @@ function matchAnswer(userAnswer: string | undefined, correctAnswer: string | und
   if (!userAnswer || !correctAnswer) return false
   const normalize = (s: string) => {
     let r = s.trim()
+    r = r.replace(/^[`'""'´ˋ]|[`'""'´ˋ]$/g, '')
+    r = r.replace(/[Ａ-Ｚａ-ｚ０-９]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
+    r = r.replace(/[＜]/g, '<').replace(/[＞]/g, '>').replace(/[：]/g, ':').replace(/[；]/g, ';')
     r = r.toLowerCase()
-    r = r.replace(/[（(].*?[）)]/g, '').trim()         // "多态（或Polymorphism）" → "多态"
-    r = r.replace(/^[a-d][.、．）)\s]\s*/, '')         // "A. 多态" → "多态"
+    r = r.replace(/[（(].*?[）)]/g, '').trim()
+    r = r.replace(/^[a-d][.、．）)\s]\s*/, '')
     if (r === '对' || r === '正确') return 'true'
     if (r === '错' || r === '错误') return 'false'
     r = r.replace(/[.。\s]+$/, '').trim()
@@ -772,6 +775,14 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           )}
 
           <div className="flex justify-center gap-3">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsFinished(false)}
+              className="gap-2 text-xs font-mono"
+            >
+              <ListTree size={14} strokeWidth={1.5} />查看答题
+            </Button>
             <Button variant="outline" size="sm" onClick={handleRestart} className="gap-2 text-xs font-mono">
               <RotateCcw size={14} strokeWidth={1.5} />重新答题
             </Button>
@@ -1055,7 +1066,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
   return (
     <div ref={containerRef} className={`w-full max-w-4xl mx-auto px-4 h-full flex flex-col min-h-0 overscroll-x-none touch-pan-y ${focusMode ? "pt-[env(safe-area-inset-top)]" : ""}`}>
       {focusMode && <QuizParticles />}
-      <QuizCelebration triggered={celebrationKey > 0} type={celebrationType} />
+      <QuizCelebration key={celebrationKey} triggered={celebrationKey > 0} type={celebrationType} />
       {/* Header */}
       <div className="flex items-center justify-between mb-4 shrink-0">
         <div className="flex items-center gap-3">
@@ -1107,6 +1118,17 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
               <RotateCcw size={14} strokeWidth={1.5} />
               <span className="hidden sm:inline">重新开始</span>
             </Button>
+            {!isFinished && submittedIds.size === displayQuestions.length && displayQuestions.length > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleFinish}
+                className="text-xs font-mono gap-1 text-accent hover:text-accent"
+                title="查看结果"
+              >
+                <span>查看结果</span>
+              </Button>
+            )}
             <button
               onClick={onReset}
               className="text-xs font-mono text-muted-foreground hover:text-destructive transition-colors"
@@ -1266,6 +1288,16 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           </div>
 
           {/* Answer input area */}
+          {isSubmitted && lastCorrect !== null && (
+            <div className={`mb-4 px-4 py-3 rounded-xl font-bold text-sm flex items-center gap-2 ${
+              lastCorrect
+                ? "bg-accent/25 text-accent border border-accent/30"
+                : "bg-destructive/20 text-destructive border border-destructive/30"
+            }`}>
+              <span className="text-lg">{lastCorrect ? "✓" : "✗"}</span>
+              <span>{lastCorrect ? "回答正确！" : "回答错误"}</span>
+            </div>
+          )}
           {optionShuffled && (qType === "choice" || qType === "multiple") && (
             <div className="mb-3 px-3 py-2 border border-accent/20 bg-accent/5 rounded-lg">
               <span className="text-[9px] font-mono text-accent">选项已打乱，解析仍引用原始 A/B/C/D</span>
@@ -1284,26 +1316,26 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                       key={origIndex}
                       onClick={() => handleSelect(text)}
                       disabled={isSubmitted}
-                      className={`w-full text-left px-3 py-3 text-xs font-mono leading-relaxed transition-all rounded-lg border ${
+                      className={`w-full text-left px-4 py-3 text-xs font-mono leading-relaxed transition-all rounded-xl border-l-4 ${
                         isSubmitted
                           ? isAnswer
-                            ? "border-accent/60 bg-accent/10 text-foreground"
+                            ? "border-l-accent border border-accent/40 bg-accent/20 text-foreground font-bold"
                             : isWrong
-                            ? "border-destructive/60 bg-destructive/10 text-foreground"
-                            : "border-transparent text-muted-foreground"
+                            ? "border-l-destructive border border-destructive/40 bg-destructive/20 text-foreground font-bold"
+                            : "border-l-transparent border border-transparent text-muted-foreground"
                           : isSelected
-                          ? "border-accent/40 bg-accent/8 text-foreground"
-                          : "border-transparent text-muted-foreground hover:border-border/60 hover:bg-accent/5 hover:text-foreground"
+                          ? "border-l-accent/60 border border-accent/30 bg-accent/10 text-foreground"
+                          : "border-l-transparent border border-transparent text-muted-foreground hover:border-border/60 hover:bg-accent/5 hover:text-foreground"
                       }`}
                     >
                       <span className="flex items-center gap-2">
                         {isSubmitted && isAnswer && (
-                          <CheckCircle2 size={12} className="shrink-0 text-accent" />
+                          <CheckCircle2 size={16} className="shrink-0 text-accent" />
                         )}
                         {isSubmitted && isWrong && (
-                          <XCircle size={12} className="shrink-0 text-destructive" />
+                          <XCircle size={16} className="shrink-0 text-destructive" />
                         )}
-                        <span className="text-[10px] font-mono text-muted-foreground w-4 shrink-0">{letter}.</span>
+                        <span className="text-xs font-mono text-muted-foreground w-4 shrink-0">{letter}.</span>
                         {displayText}
                       </span>
                     </button>
@@ -1330,16 +1362,16 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                       key={origIndex}
                       onClick={() => handleMultiToggle(origLetter)}
                       disabled={isSubmitted}
-                      className={`w-full text-left px-3 py-3 text-xs font-mono leading-relaxed transition-all rounded-lg border ${
+                      className={`w-full text-left px-4 py-3 text-xs font-mono leading-relaxed transition-all rounded-xl border-l-4 ${
                         isSubmitted
                           ? isCorrect
-                            ? "border-accent/60 bg-accent/10 text-foreground"
+                            ? "border-l-accent border border-accent/40 bg-accent/20 text-foreground font-bold"
                             : isWrong
-                            ? "border-destructive/60 bg-destructive/10 text-foreground"
-                            : "border-transparent text-muted-foreground"
+                            ? "border-l-destructive border border-destructive/40 bg-destructive/20 text-foreground font-bold"
+                            : "border-l-transparent border border-transparent text-muted-foreground"
                           : isSelected
-                          ? "border-accent/40 bg-accent/8 text-foreground"
-                          : "border-transparent text-muted-foreground hover:border-border/60 hover:bg-accent/5 hover:text-foreground"
+                          ? "border-l-accent/60 border border-accent/30 bg-accent/10 text-foreground"
+                          : "border-l-transparent border border-transparent text-muted-foreground hover:border-border/60 hover:bg-accent/5 hover:text-foreground"
                       }`}
                     >
                       <span className="flex items-center gap-2">
@@ -1377,13 +1409,13 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                     key={val}
                     onClick={() => handleSelect(val)}
                     disabled={isSubmitted}
-                    className={`flex-1 px-4 py-3 text-sm font-mono font-bold transition-all rounded-lg border ${
+                    className={`flex-1 px-4 py-4 text-sm font-mono font-bold transition-all rounded-xl border-2 ${
                       isSubmitted
                         ? isAnswer
-                          ? "border-accent/60 bg-accent/10 text-accent"
+                          ? "border-accent bg-accent/20 text-accent"
                           : isWrong
-                          ? "border-destructive/60 bg-destructive/10 text-destructive"
-                          : "border-transparent text-muted-foreground"
+                          ? "border-destructive bg-destructive/20 text-destructive"
+                          : "border-transparent text-muted-foreground bg-foreground/5"
                         : isSelected
                         ? "border-accent/40 bg-accent/8 text-accent"
                         : "border-transparent text-muted-foreground hover:border-border/60 hover:bg-accent/5 hover:text-foreground"
@@ -1391,10 +1423,10 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                   >
                     <span className="flex items-center justify-center gap-2">
                       {isSubmitted && isAnswer && (
-                        <CheckCircle2 size={14} className="text-accent" />
+                        <CheckCircle2 size={16} className="text-accent" />
                       )}
                       {isSubmitted && isWrong && (
-                        <XCircle size={14} className="text-destructive" />
+                        <XCircle size={16} className="text-destructive" />
                       )}
                       {val}
                     </span>
@@ -1675,21 +1707,30 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                               }}
                               className={`w-full text-left px-3 py-2 text-xs font-mono transition-colors flex items-center gap-2 ${
                                 currentIndex === qIndex
-                                  ? "bg-accent/10 text-accent"
-                                  : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground"
+                                  ? "bg-accent/15 text-accent"
+                                  : !answered
+                                  ? "text-muted-foreground hover:bg-foreground/5 hover:text-foreground"
+                                  : correct
+                                  ? "bg-accent/8 text-accent hover:bg-accent/12"
+                                  : "bg-destructive/8 text-destructive hover:bg-destructive/12"
                               }`}
                             >
-                              <span className={`shrink-0 w-1.5 h-1.5 rounded-full ${
-                                !answered ? "bg-muted-foreground/30" : correct ? "bg-accent" : "bg-destructive"
-                              }`} />
-                              <span className="shrink-0 w-5 text-center font-bold">{q.number}</span>
-                              <span className="truncate flex-1">{q.question}</span>
-                              <span className={`shrink-0 px-1 py-0.5 text-[8px] uppercase tracking-wider border ${
+                              <span className={`shrink-0 flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold ${
                                 !answered
-                                  ? "border-muted/30 text-muted-foreground"
+                                  ? "bg-muted-foreground/15 text-muted-foreground"
                                   : correct
-                                  ? "border-accent/40 text-accent"
-                                  : "border-destructive/40 text-destructive"
+                                  ? "bg-accent/20 text-accent"
+                                  : "bg-destructive/20 text-destructive"
+                              }`}>
+                                {!answered ? q.number : correct ? "✓" : "✗"}
+                              </span>
+                              <span className="truncate flex-1">{q.question}</span>
+                              <span className={`shrink-0 px-1.5 py-0.5 text-[9px] font-bold tracking-wider rounded ${
+                                !answered
+                                  ? "bg-muted-foreground/10 text-muted-foreground"
+                                  : correct
+                                  ? "bg-accent/20 text-accent"
+                                  : "bg-destructive/20 text-destructive"
                               }`}>
                                 {!answered ? "未答" : correct ? "正确" : "错误"}
                               </span>

@@ -199,7 +199,7 @@ export function parseQuestions(text: string): Question[] {
     // "答案：" or "正确答案："
     const ansMatch = line.match(/^(?:正确)?答案[：:]\s*(.+)/)
     if (ansMatch && current) {
-      current.answer = ansMatch[1].trim()
+      current.answer = ansMatch[1].trim().replace(/^[`'""'´ˋ]|[`'""'´ˋ]$/g, '')
       inOptions = false
       inExplanation = false
       inAnswer = false
