@@ -1,17 +1,2527 @@
 {
-  "quiz-progress-subj-1782028018297-1": {
-    "currentIndex": 0,
-    "answers": {
-      "q-1-1782028289292-8roy": "C. 程序及其文档"
-    },
-    "submittedIds": [
-      "q-1-1782028289292-8roy"
+  "quiz-subject-data-subj-1782026926147-1": {
+    "questions": [
+      {
+        "id": "q-1-1782288965858-y64i",
+        "number": 1,
+        "question": "在______方面，Spring框架提供了对Spring MVC、Struts2等框架的整合。",
+        "options": [],
+        "answer": "表现层",
+        "explanation": "Spring框架是一个分层架构，其中表现层（Web层）负责处理用户交互和界面展示。Spring MVC和Struts2都是典型的Web层框架，Spring通过提供对它们的整合支持，帮助开发者构建Web应用。因此，此处应填\"表现层\"。",
+        "chapter": "第1章",
+        "type": "input"
+      },
+      {
+        "id": "q-2-1782288965858-7fey",
+        "number": 2,
+        "question": "______是指框架或工具的使用不会对被应用程序的核心逻辑产生侵入性的影响。",
+        "options": [],
+        "answer": "非侵入式",
+        "explanation": "非侵入式是框架设计的一个重要理念。当一个框架是非侵入式的，意味着开发者在使用该框架时，不需要修改应用程序的核心业务代码（如实现特定接口或继承特定类）来适应框架，降低了框架与业务代码的耦合度，使得代码更易于维护和测试。Spring就是典型的非侵入式框架。",
+        "chapter": "第1章",
+        "type": "input"
+      },
+      {
+        "id": "q-3-1782288965858-gm43",
+        "number": 3,
+        "question": "Spring的核心容器主要由______模块、Core模块、Contex模块和SpEL模块组成。",
+        "options": [],
+        "answer": "Beans",
+        "explanation": "Spring的核心容器是Spring框架的基础，它负责管理应用中的对象（Bean）。Beans模块提供了Bean的配置、创建和管理功能，是所有其他Spring模块的基础。Core模块提供核心工具类，Context模块提供应用上下文，SpEL模块提供表达式语言支持。",
+        "chapter": "第1章",
+        "type": "input"
+      },
+      {
+        "id": "q-4-1782288965858-ku09",
+        "number": 4,
+        "question": "Spring的______模块提供了对面向切面编程的支持，允许开发者定义切面来截取应用程序的流程。",
+        "options": [],
+        "answer": "AOP",
+        "explanation": "AOP（Aspect-Oriented Programming，面向切面编程）是Spring框架的关键特性之一。它允许开发者将横切关注点（如日志记录、性能监控、事务管理等）从业务逻辑中分离出来，通过定义\"切面\"来模块化这些功能，并在程序执行的特定\"连接点\"（如方法调用前后）织入增强代码。",
+        "chapter": "第1章",
+        "type": "input"
+      },
+      {
+        "id": "q-5-1782288965858-d66m",
+        "number": 5,
+        "question": "Spring框架的______容器主要包括BeanFactory和ApplicationContext。",
+        "options": [],
+        "answer": "IoC",
+        "explanation": "IoC（Inversion of Control，控制反转）容器是Spring框架的核心，它负责创建、配置和管理应用中的对象（Bean）。BeanFactory是基础的IoC容器，提供了基本的依赖注入功能；ApplicationContext是更高级的容器，提供了更多企业级功能。",
+        "chapter": "第1章",
+        "type": "input"
+      },
+      {
+        "id": "q-6-1782288965858-g2lx",
+        "number": 6,
+        "question": "与EJB相比，Spring框架代码简洁，并且更易于集成到不同的环境中 。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "EJB（Enterprise JavaBeans）是早期的Java EE企业级应用规范，通常需要复杂的配置和部署到专用的应用服务器。Spring框架则设计为轻量级、非侵入式的，代码更加简洁，配置灵活，且可以独立运行在各种环境（如Web容器、独立应用）中，集成度高，因此该说法正确。",
+        "chapter": "第1章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-7-1782288965858-hyh5",
+        "number": 7,
+        "question": "在Spring框架中，Bean是指由Spring容器管理的对象实例 。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "在Spring框架中，\"Bean\"是一个核心概念，它指的是由Spring IoC容器负责实例化、配置和管理的任何Java对象。简单来说，应用程序中那些由Spring容器创建并维护其生命周期的对象，都被称为Spring Bean。",
+        "chapter": "第1章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-8-1782288965858-q616",
+        "number": 8,
+        "question": "Beans模块提供了Spring框架的基本组成部分，包括IoC和AOP功能。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "Beans模块确实提供了Spring框架的基本组成部分，但它主要关注的是Bean的配置、创建和管理，即IoC（控制反转）功能。而AOP（面向切面编程）功能是由独立的Spring AOP模块提供的，并非包含在Beans模块中。",
+        "chapter": "第1章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-9-1782288965858-ej0b",
+        "number": 9,
+        "question": "DI是控制反转的英文缩写。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "DI（Dependency Injection）是\"依赖注入\"的英文缩写，它是实现IoC（Inversion of Control，控制反转）的一种主要方式。控制反转的英文缩写是IoC，而不是DI。",
+        "chapter": "第1章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-10-1782288965858-sxms",
+        "number": 10,
+        "question": "Spring的Context模块构建于Beans模块和Core模块之上 。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "Spring框架的核心模块之间具有层次关系。Context模块（应用上下文）是建立在Beans模块和Core模块基础之上的，它提供了更高级的容器功能，如国际化、事件传播、资源加载等，并集成了Beans和Core的功能，为应用提供一个运行环境。",
+        "chapter": "第1章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-11-1782288965858-cj2z",
+        "number": 11,
+        "question": "下列选项中，包含IoC和DI功能的模块是（ ）。",
+        "options": [
+          "A. Beans",
+          "B. Core",
+          "C. Context",
+          "D. SpEL"
+        ],
+        "answer": "B. Core",
+        "explanation": "",
+        "chapter": "第1章",
+        "type": "choice"
+      },
+      {
+        "id": "q-12-1782288965858-3raz",
+        "number": 12,
+        "question": "下列选项中，关于Spring框架优点的说法不正确的是（ ）。",
+        "options": [
+          "A. 非侵入式设计",
+          "B. 支持声明式事务",
+          "C. 支持AOP编程",
+          "D. 提供了自动配置和嵌入式Web服务器。"
+        ],
+        "answer": "D. 提供了自动配置和嵌入式Web服务器。",
+        "explanation": "A、B、C选项都是Spring框架的优点。非侵入式设计允许轻量级开发，声明式事务简化了事务管理，AOP编程提供了强大的横切关注点分离能力。选项D提到的\"自动配置和嵌入式Web服务器\"是Spring Boot的特性，而不是Spring框架本身的优点。Spring框架本身不提供嵌入式服务器，需要集成其他Web容器。",
+        "chapter": "第1章",
+        "type": "choice"
+      },
+      {
+        "id": "q-13-1782288965858-nnr4",
+        "number": 13,
+        "question": "下列选项中，关于Spring框架的描述，错误的是（ ）。",
+        "options": [
+          "A. Spring是一个提供了一站式服务的框架",
+          "B. Spring是轻量级框架",
+          "C. Spring是开源框架",
+          "D. Spring提高了组件之间的耦合度"
+        ],
+        "answer": "D. Spring提高了组件之间的耦合度",
+        "explanation": "Spring框架的核心目标之一就是降低组件之间的耦合度，通过IoC和DI技术实现松耦合，从而提升代码的可维护性和可测试性。因此，选项D说\"提高了组件之间的耦合度\"是错误的。A、B、C选项都是对Spring框架的正确描述。",
+        "chapter": "第1章",
+        "type": "choice"
+      },
+      {
+        "id": "q-14-1782288965858-4kay",
+        "number": 14,
+        "question": "下列选项中，对于Spring的数据访问及集成模块说法错误的是（）。",
+        "options": [
+          "A. JDBC模块简化了JDBC编程的过程",
+          "B. JMS模块主要用于处理消息传递，包括消息的生产和消费",
+          "C. ORM模块提供了对主流的对象关系映射框架的集成支持",
+          "D. Transactions模块负责事务管理，但是没有提供声明式事务管理的功能"
+        ],
+        "answer": "D. Transactions模块负责事务管理，但是没有提供声明式事务管理的功能",
+        "explanation": "Transactions模块提供了强大的事务管理功能，包括编程式事务管理和声明式事务管理。声明式事务管理允许开发者通过配置或注解的方式定义事务边界，无需编写事务管理代码。因此，选项D说\"没有提供声明式事务管理的功能\"是错误的。A、B、C选项的描述都是正确的。",
+        "chapter": "第1章",
+        "type": "choice"
+      },
+      {
+        "id": "q-15-1782288965858-efab",
+        "number": 15,
+        "question": "下列选项中，对于Spring框架中的IoC和DI描述错误的是（）。",
+        "options": [
+          "A. IoC表示控制反转",
+          "B. IoC旨在构建松耦合的应用程序，降低代码的复杂度",
+          "C. 通常谈及Spring容器时，指的就是Spring框架中的DI容器",
+          "D. DI表示依赖注入，是IoC的一种实现方式。"
+        ],
+        "answer": "C. 通常谈及Spring容器时，指的就是Spring框架中的DI容器",
+        "explanation": "IoC（控制反转）是一种设计思想，目的是为了降低代码耦合度，实现松耦合。DI（依赖注入）是实现IoC的具体方式。在Spring框架中，我们所说的\"Spring容器\"通常指IoC容器（也常被称为DI容器），它负责管理Bean的创建和依赖注入。选项C说\"指的就是DI容器\"，虽然DI容器是IoC容器的核心功能，但通常称为IoC容器更为准确和通用，因此C选项的说法有误。",
+        "chapter": "第1章",
+        "type": "choice"
+      },
+      {
+        "id": "q-1-1782288965858-81ak",
+        "number": 1,
+        "question": "常见的IoC容器有BeanFactory和______。",
+        "options": [],
+        "answer": "ApplicationContext",
+        "explanation": "Spring提供了两种主要的IoC容器接口：BeanFactory和ApplicationContext。BeanFactory是Spring框架最基础的容器接口，采用延迟加载策略。ApplicationContext是BeanFactory的子接口，功能更强大，支持国际化、事件发布、资源加载等特性，是大多数实际应用中选择的容器。",
+        "chapter": "第2章",
+        "type": "input"
+      },
+      {
+        "id": "q-2-1782288965858-kmsi",
+        "number": 2,
+        "question": "`<bean>`标签的______属性用于指定Bean的具体类型。",
+        "options": [],
+        "answer": "class",
+        "explanation": "在Spring的XML配置文件中，`<bean>`标签的class属性用于指定将要创建的Bean的全限定类名（包含包路径的完整类名）。Spring容器会通过反射机制，使用这个类名来实例化对应的对象。",
+        "chapter": "第2章",
+        "type": "input"
+      },
+      {
+        "id": "q-3-1782288965858-09b0",
+        "number": 3,
+        "question": "Spring框架提供了______注解，该注解用于指定Bean的作用域。",
+        "options": [],
+        "answer": "@Scope",
+        "explanation": "@Scope注解用于显式地设置一个Bean的作用域，例如singleton（单例，默认）、prototype（原型）、request、session等。通过在类或配置方法上添加此注解，可以控制Spring容器在何时、以及如何为Bean创建实例。",
+        "chapter": "第2章",
+        "type": "input"
+      },
+      {
+        "id": "q-4-1782288965858-xe1v",
+        "number": 4,
+        "question": "在Spring的XML配置文件中，可以通过`<bean>`标签的______属性指定初始化方法的名称。",
+        "options": [],
+        "answer": "init-method",
+        "explanation": "在Spring的XML配置中，`<bean>`标签的init-method属性允许开发者指定一个自定义的初始化方法。当Spring容器创建并完成Bean的依赖注入后，会自动调用这个方法执行一些初始化逻辑（例如检查资源状态、建立连接等）。",
+        "chapter": "第2章",
+        "type": "input"
+      },
+      {
+        "id": "q-5-1782288965858-554x",
+        "number": 5,
+        "question": "Spring的______注解用于指定要自动装配的对象。",
+        "options": [],
+        "answer": "@Autowired",
+        "explanation": "@Autowired是Spring框架提供的一个核心注解，用于实现依赖的自动注入。当Spring容器扫描到带有此注解的构造器、方法、参数或字段时，它会尝试根据类型从容器中查找匹配的Bean，并将其自动赋值给该成员或参数。",
+        "chapter": "第2章",
+        "type": "input"
+      },
+      {
+        "id": "q-6-1782288965858-anb1",
+        "number": 6,
+        "question": "BeanFactory采用延迟加载的方式创建Bean的实例。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "这是BeanFactory和ApplicationContext的一个重要区别。BeanFactory容器在启动时不会预先实例化所有的单例Bean，而是在代码第一次请求获取某个Bean时才进行实例化和依赖注入。这种延迟加载机制有助于在资源有限的环境中减少启动开销。",
+        "chapter": "第2章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-7-1782288965858-v5g5",
+        "number": 7,
+        "question": "`<constructor-arg>`标签的index属性用于指定构造方法的参数索引，参数索引从0开始依次递增1。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "`<constructor-arg>`标签的index属性用于明确指定该参数在构造方法参数列表中的位置。索引值从0开始，代表第一个参数，1代表第二个，以此类推。这对于重载的构造方法来说，可以消除参数匹配的歧义。",
+        "chapter": "第2章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-8-1782288965858-7e8f",
+        "number": 8,
+        "question": "使用静态工厂方式实例化 Bean 时，需要开发者定义一个静态工厂类，并在其中编写静态方法来创建 Bean的实例 。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "这是Spring中静态工厂方法实例化Bean的标准方式。开发者需要提供一个包含静态方法的工厂类，该方法负责创建目标Bean的实例。在Spring配置中，通过指定factory-method属性指向这个静态方法，容器会调用该方法来获取Bean，而不是通过构造器直接创建。",
+        "chapter": "第2章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-9-1782288965858-9ifj",
+        "number": 9,
+        "question": "Spring使用属性的setter方法注入Bean时，Bean类必须为需要注入的属性提供对应的setter方法。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "这是setter注入（也叫设值注入）的基本前提。当使用`<property>`标签进行注入时，Spring容器会通过反射调用目标Bean中与属性名对应的setter方法（如属性name对应setName()方法）来传入依赖对象。因此，对应的setter方法是必须的。",
+        "chapter": "第2章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-10-1782288965858-g2jg",
+        "number": 10,
+        "question": "对于prototype作用域的Bean，Spring容器不会管理其完整的生命周期。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "对于singleton作用域的Bean，Spring容器负责其完整的生命周期（创建、初始化、销毁）。而对于prototype作用域的Bean，Spring容器只负责创建和初始化。一旦将Bean实例返回给客户端，容器就不再跟踪其生命周期，也不会在容器关闭时调用其销毁方法。销毁逻辑需要客户端代码自行负责。",
+        "chapter": "第2章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-11-1782288965858-r016",
+        "number": 11,
+        "question": "下列选项中，不属于ApplicationContext的实现类的是（）。",
+        "options": [
+          "A. ClassPathXmlApplicationContext",
+          "B. FileSystemXmlApplicationContext",
+          "C. AnnotationConfigApplicationContext",
+          "D. BeanFactory"
+        ],
+        "answer": "D. BeanFactory",
+        "explanation": "ApplicationContext是一个接口，其常见实现类包括从类路径加载配置的ClassPathXmlApplicationContext、从文件系统加载配置的FileSystemXmlApplicationContext、以及基于注解配置的AnnotationConfigApplicationContext。BeanFactory是ApplicationContext的父接口，是一个更基础的容器，本身并非ApplicationContext的实现类，因此D选项正确。",
+        "chapter": "第2章",
+        "type": "choice"
+      },
+      {
+        "id": "q-12-1782288965858-oaua",
+        "number": 12,
+        "question": "下列选项中，对于Spring Bean的配置的标签说法错误的是（）。",
+        "options": [
+          "A. `<constructor-arg>`标签用于设置Bean的构造方法参数",
+          "B. `<property>`标签用于设置Bean中Set类型的属性值",
+          "C. `<list>`标签用于设置Bean中List类型的属性值",
+          "D. `<map>`标签用于设置Bean中Map类型的属性值"
+        ],
+        "answer": "B. `<property>`标签用于设置Bean中Set类型的属性值",
+        "explanation": "`<property>`标签用于设置Bean的任意属性值，它支持各种类型，包括简单类型、引用类型以及集合类型。虽然它可以为Set类型的属性赋值，但需要内嵌`<set>`标签来实现。选项B说\"用于设置Bean中Set类型的属性值\"，表述不准确，因为`<property>`本身不是专门为Set类型设计的，它需要搭配`<set>`标签使用。",
+        "chapter": "第2章",
+        "type": "choice"
+      },
+      {
+        "id": "q-13-1782288965858-b4gy",
+        "number": 13,
+        "question": "下列选项中，关于Spring支持的作用域描述错误的是（ ）。",
+        "options": [
+          "A. singleton是Spring框架的默认作用域",
+          "B. 当将Bean的作用域设置为prototype时，每次从容器中请求Bean都会创建一个新的Bean",
+          "C. 当将Bean的作用域设置为request时，Bean在整个Web应用中都有效",
+          "D. 当将Bean的作用域设置为application时，整个Web应用的生命周期内只存在一个Bean"
+        ],
+        "answer": "C. 当将Bean的作用域设置为request时，Bean在整个Web应用中都有效",
+        "explanation": "request作用域表明，在每个HTTP请求的生命周期内，容器会为每个请求创建一个全新的Bean实例。当请求处理完毕，Bean实例就会被销毁。选项C说\"Bean在整个Web应用中都有效\"是错误的，这实际上是application作用域的行为，而非request作用域。",
+        "chapter": "第2章",
+        "type": "choice"
+      },
+      {
+        "id": "q-14-1782288965858-v1v4",
+        "number": 14,
+        "question": "下列选项中，关于Spring用于装配注解描述错误的是（ ）。",
+        "options": [
+          "A. @Component用于标识类为Spring中的Bean",
+          "B. @Scope指定Bean的作用域",
+          "C. @Value指定自动装配的对象名称",
+          "D. @Autowired 指定要自动装配的对象"
+        ],
+        "answer": "C. @Value指定自动装配的对象名称",
+        "explanation": "@Value注解主要用于注入属性值，通常用于注入配置文件中或硬编码的字符串、数字等简单值，而不是用于指定自动装配的对象名称。指定自动装配对象名称或类型通常使用@Autowired、@Resource等注解。@Qualifier常与@Autowired配合使用来指定Bean的名称。",
+        "chapter": "第2章",
+        "type": "choice"
+      },
+      {
+        "id": "q-15-1782288965858-o0pv",
+        "number": 15,
+        "question": "下列选项中，对于Bean的什么周期描述错误的是（ ）。",
+        "options": [
+          "A. Bean的生命周期是指Bean从创建到销毁的整个过程",
+          "B. Spring中作用域不同的Bean在生命周期管理上没有区别",
+          "C. 开发者可以通过@Bean注解的initMethod属性指定初始化方法",
+          "D. 开发者可以通过@Bean注解的destroyMethod属性指定销毁方法"
+        ],
+        "answer": "B. Spring中作用域不同的Bean在生命周期管理上没有区别",
+        "explanation": "Bean的生命周期管理在Spring中会因作用域的不同而有所区别。Singleton作用域的Bean生命周期由容器完全管理，包括初始化、使用和销毁。而Prototype作用域的Bean，容器仅在创建和初始化时管理，之后便不再跟踪其状态，销毁也不由容器管理。因此，不同作用域的Bean在生命周期管理上存在显著区别。",
+        "chapter": "第2章",
+        "type": "choice"
+      },
+      {
+        "id": "q-1-1782288965858-9t2y",
+        "number": 1,
+        "question": "AOP中的______动态代理是一种基于接口的代理方式。",
+        "options": [],
+        "answer": "JDK",
+        "explanation": "AOP的实现依赖于动态代理。Spring AOP默认使用两种动态代理机制：JDK动态代理和CGLIB动态代理。其中，JDK动态代理是基于接口的，它要求目标对象实现一个或多个接口，代理对象会实现这些接口。",
+        "chapter": "第3章",
+        "type": "input"
+      },
+      {
+        "id": "q-2-1782288965858-ngx1",
+        "number": 2,
+        "question": "使用______动态代理时，代理类需要实现MethodInterceptor接口。",
+        "options": [],
+        "answer": "CGLIB",
+        "explanation": "在Spring AOP中，当使用CGLIB动态代理时，代理生成库会创建目标类的子类作为代理。为了应用增强逻辑，开发者提供的MethodInterceptor（方法拦截器）接口实现类会被CGLIB调用，允许在目标方法执行前后插入自定义代码。",
+        "chapter": "第3章",
+        "type": "input"
+      },
+      {
+        "id": "q-3-1782288965858-nuva",
+        "number": 3,
+        "question": "AOP中的______是指程序执行过程中满足预先指定条件的连接点。",
+        "options": [],
+        "answer": "切入点",
+        "explanation": "在AOP术语中，连接点（Joinpoint）是程序执行过程中的一个点，例如方法调用或异常抛出。切点（Pointcut）则是一个更具体的概念，它定义了哪些连接点（比如哪些类或哪些方法）应该被增强。切点通过表达式（如execution表达式）来匹配连接点。",
+        "chapter": "第3章",
+        "type": "input"
+      },
+      {
+        "id": "q-4-1782288965858-oen6",
+        "number": 4,
+        "question": "______标签是Spring AOP配置的根标签。",
+        "options": [],
+        "answer": "<aop:config>",
+        "explanation": "在Spring的XML配置文件中，所有AOP相关的配置（如定义切面、切点、通知等）都需要包含在`<aop:config>`标签内部。这个标签是AOP配置的顶层或根元素。",
+        "chapter": "第3章",
+        "type": "input"
+      },
+      {
+        "id": "q-5-1782288965858-rkwl",
+        "number": 5,
+        "question": "______注解用于将一个类标记为切面。",
+        "options": [],
+        "answer": "@AspectJ",
+        "explanation": "@AspectJ是Spring AOP用于声明一个类为切面（Aspect）的注解。这个类中可以包含各种通知（Advice）方法（如@Before、@After）以及切点（Pointcut）定义，用以封装横切逻辑。",
+        "chapter": "第3章",
+        "type": "input"
+      },
+      {
+        "id": "q-6-1782288965858-e6kn",
+        "number": 6,
+        "question": "AOP可以通过将业务逻辑与横切关注点，从而实现更好的代码模块化、可维护性和可复用性。 （ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "AOP（面向切面编程）的核心价值在于将横切关注点（如日志、安全、事务等）从核心业务逻辑中分离出来，形成独立的模块（切面）。这种分离使业务代码更清晰、简洁，横切逻辑也更容易维护和复用。",
+        "chapter": "第3章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-7-1782288965858-9s0b",
+        "number": 7,
+        "question": "基于AOP的切面是一种垂直方向上的扩展。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "在AOP中，切面（Aspect）是对业务逻辑的横向扩展或横切。它并不会改变业务逻辑本身的纵向层次结构，而是\"切入\"到业务逻辑的多个点上（横向）来添加增强功能。因此，它被称为\"横切关注点\"，而非垂直扩展。",
+        "chapter": "第3章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-8-1782288965858-syuc",
+        "number": 8,
+        "question": "`<aop:advisor>`用于配置切点，可以指定切面在哪些连接点处起作用。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "`<aop:advisor>`标签在Spring AOP配置中用于定义一个\"顾问\"（Advisor），它通常是由一个通知（Advice）和一个切点（Pointcut）组成的。它的作用是结合通知和切点，以在特定的切点位置上执行特定的通知。它本身不是用于配置切点，而是配置一个\"增强器\"。",
+        "chapter": "第3章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-9-1782288965858-01ah",
+        "number": 9,
+        "question": "@After注解用于定义最终final通知，不管应用程序是否抛出异常，该通知都会执行。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "在Spring AOP中，@After注解定义的通知是最终通知（也叫后置通知）。这种通知的特点是，无论目标方法执行过程中是否抛出异常，它都将在方法执行完毕后被执行。这与@AfterReturning（返回后通知）和@AfterThrowing（异常后通知）有所不同。",
+        "chapter": "第3章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-10-1782288965858-5c1v",
+        "number": 10,
+        "question": "`<aop:advisor>`标签用于配置环绕方式,在目标方法执行前后实施增强。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "`<aop:around>`标签用于配置环绕通知，它允许开发者在目标方法执行前后都织入增强逻辑。而`<aop:advisor>`标签是将一个通知和切点关联起来，它本身并不代表环绕通知。环绕通知是通过`<aop:around>`标签或@Around注解来配置的。",
+        "chapter": "第3章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-11-1782288965858-ut1s",
+        "number": 11,
+        "question": "下列选项中，关于AOP的常用术语描述错误的是（）。",
+        "options": [
+          "A. 切点是切面中的实际代码，用于实现切面的具体功能",
+          "B. 目标对象指的是被切面增强的原始对象",
+          "C. 织入是指将切面代码插入到目标对象上，从而生成代理对象的过程",
+          "D. 代理是织入切面后创建的对象，用于应用通知到目标对象"
+        ],
+        "answer": "A. 切点是切面中的实际代码，用于实现切面的具体功能",
+        "explanation": "A选项描述错误。切点（Pointcut）并非\"切面中的实际代码\"，而是指一组定义了\"在哪些连接点（如哪些方法）执行增强\"的规则或表达式。切面中的实际代码是\"通知\"（Advice）。目标对象、织入、代理的定义均正确。",
+        "chapter": "第3章",
+        "type": "choice"
+      },
+      {
+        "id": "q-12-1782288965858-i0lb",
+        "number": 12,
+        "question": "下列选项中，关于JDK动态代理的描述错误的是（）。",
+        "options": [
+          "A. AOP中的JDK动态代理是Spring AOP的默认的动态代理机制",
+          "B. JDK动态代理利用Java反射机制在运行时动态地创建目标对象的代理对象",
+          "C. JDK动态代理需要定义一个InvocationHandler实现类",
+          "D. JDK动态代理不能能为接口创建代理实例"
+        ],
+        "answer": "D. JDK动态代理不能能为接口创建代理实例",
+        "explanation": "JDK动态代理是基于接口的代理机制，它恰恰是为实现了接口的目标对象创建代理实例的。选项D说\"不能为接口创建代理实例\"是错误的，这正是JDK动态代理的功能。如果目标对象没有实现接口，才不能使用JDK动态代理，而需要使用CGLIB。",
+        "chapter": "第3章",
+        "type": "choice"
+      },
+      {
+        "id": "q-13-1782288965858-qoaw",
+        "number": 13,
+        "question": "下列选项中，关于CGLIB动态代理的描述错误的是（）。",
+        "options": [
+          "A. CGLIB动态代理只能为接口创建代理实例",
+          "B. CGLIB动态代理可以在运行时扩展Java类和实现接口",
+          "C. 使用CGLIB动态代理时，代理类需要实现MethodInterceptor接口",
+          "D. 使用CGLIB动态代理时，运行时的执行效率比 JDK 动态代理快"
+        ],
+        "answer": "A. CGLIB动态代理只能为接口创建代理实例",
+        "explanation": "CGLIB动态代理是通过生成目标类的子类来创建代理对象的，因此它通常用于为没有实现接口的类创建代理。选项A说\"只能为接口创建代理实例\"是错误的，这恰恰是JDK动态代理的特点。CGLIB可以扩展类（创建子类），也可以实现接口。",
+        "chapter": "第3章",
+        "type": "choice"
+      },
+      {
+        "id": "q-14-1782288965858-3efd",
+        "number": 14,
+        "question": "下列选项中，关于配置AOP的标签描述错误的是（）。",
+        "options": [
+          "A. `<aop:pointcut>`用于配置切点",
+          "B. `<aop:before>`用于配置前置通知，在目标方法执行前实施增强",
+          "C. `<aop:after>`用于配置后置通知,在目标方法执行后实施增强",
+          "D. `<aop:around>`用于配置返回通知"
+        ],
+        "answer": "D. `<aop:around>`用于配置返回通知",
+        "explanation": "在Spring AOP配置中，`<aop:around>`标签用于配置环绕通知（Around Advice），它可以在目标方法执行前后都实施增强。而返回通知（After Returning Advice）是由`<aop:after-returning>`标签配置的，它仅在目标方法正常返回后执行。因此，D选项描述错误。",
+        "chapter": "第3章",
+        "type": "choice"
+      },
+      {
+        "id": "q-15-1782288965858-785d",
+        "number": 15,
+        "question": "下列选项中，关于AspectJ的常用注解描述错误的是（）。",
+        "options": [
+          "A. @Pointcut用于定义切点表达式，可以通过一个方法签名来表示切点名称",
+          "B. @Before 用于定义前置通知",
+          "C. @AfterReturning 用于定义后置通知",
+          "D. @Around 用于定义异常通知"
+        ],
+        "answer": "D. @Around 用于定义异常通知",
+        "explanation": "@Around注解用于定义环绕通知（Around Advice），它允许在目标方法执行前后进行增强，并可以控制是否继续执行目标方法。异常通知（After Throwing Advice）是由@AfterThrowing注解定义的。因此，D选项描述错误。A、B、C选项的描述均正确。",
+        "chapter": "第3章",
+        "type": "choice"
+      },
+      {
+        "id": "q-1-1782288965858-ah0f",
+        "number": 1,
+        "question": "Spring JDBC模块主要由______、dataSource、object、support四个包组成。",
+        "options": [],
+        "answer": "core",
+        "explanation": "Spring的JDBC模块（spring-jdbc）的核心功能包是core，它包含了Spring JDBC的核心类，尤其是JdbcTemplate。其他三个包：dataSource提供数据源支持，object包含用于封装数据库操作的类，support提供了各种辅助类。",
+        "chapter": "第4章",
+        "type": "input"
+      },
+      {
+        "id": "q-2-1782288965858-exnr",
+        "number": 2,
+        "question": "Spring提供了______注解来实现声明式事务管理。",
+        "options": [],
+        "answer": "@Transactional",
+        "explanation": "@Transactional是Spring框架中最核心的事务注解。通过在类或方法上添加此注解，Spring会自动为该方法或类中的所有方法添加事务管理功能，包括事务的开启、提交、回滚，以及事务隔离级别、传播行为等的配置。",
+        "chapter": "第4章",
+        "type": "input"
+      },
+      {
+        "id": "q-3-1782288965858-fy59",
+        "number": 3,
+        "question": "______标签主要用于配置每个方法具体的事务属性。",
+        "options": [],
+        "answer": "<tx:method>",
+        "explanation": "在XML配置方式的事务管理中，`<tx:method>`标签是`<tx:attributes>`的子标签，用于为特定的方法名或方法名模式配置详细的事务属性，如隔离级别、传播行为、是否只读等。",
+        "chapter": "第4章",
+        "type": "input"
+      },
+      {
+        "id": "q-4-1782288965858-kfgl",
+        "number": 4,
+        "question": "在Spring框架中，提供了两种主要的事务管理方式：______事务管理和声明式事务管理。",
+        "options": [],
+        "answer": "编程式",
+        "explanation": "Spring支持两种事务管理方式：编程式事务管理（通过编写代码，使用TransactionTemplate或PlatformTransactionManager手动控制事务的开始、提交和回滚）和声明式事务管理（通过配置或注解，将事务管理与业务代码分离）。后者是更常用、更推荐的方式。",
+        "chapter": "第4章",
+        "type": "input"
+      },
+      {
+        "id": "q-5-1782288965858-uq7r",
+        "number": 5,
+        "question": "`<tx:advice>`的transaction-manager属性用于指定______。",
+        "options": [],
+        "answer": "事务管理器",
+        "explanation": "在Spring的XML事务配置中，`<tx:advice>`标签用于定义事务增强。其transaction-manager属性用于指定要使用的事务管理器（PlatformTransactionManager）的Bean名称，告诉Spring应该使用哪个事务管理器来管理该增强所定义的事务。",
+        "chapter": "第4章",
+        "type": "input"
+      },
+      {
+        "id": "q-6-1782288965858-ws88",
+        "number": 6,
+        "question": "JdbcTemplate提供了一种模板化的方式来执行SQL查询、更新等操作。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "JdbcTemplate是Spring JDBC模块的核心类，它采用了模板方法模式，封装了JDBC操作中的样板代码（如获取连接、创建声明、处理异常、释放资源等），开发者只需提供SQL语句和参数，极大地简化了JDBC编程。",
+        "chapter": "第4章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-7-1782288965858-ipz3",
+        "number": 7,
+        "question": "Spring的事务管理主要基于PlatformTransactionManager接口、TransactionDefinition接口、TransactionStatus接口实现。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "Spring事务抽象层中的三个核心接口是：PlatformTransactionManager（事务管理器），负责事务的提交、回滚等操作；TransactionDefinition（事务定义），定义了事务的隔离级别、传播行为等属性；TransactionStatus（事务状态），表示当前事务的状态信息。这三个接口构成了Spring事务管理的基石。",
+        "chapter": "第4章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-8-1782288965858-4ftp",
+        "number": 8,
+        "question": "Spring通过TransactionStatus接口统一的事务管理机制。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "统一的事务管理机制是由PlatformTransactionManager接口提供的。它屏蔽了不同事务管理（如JDBC、Hibernate、JTA）之间的差异，为上层应用提供了统一的事务操作API。TransactionStatus接口是用来获取当前事务状态信息的，并非统一管理机制本身。",
+        "chapter": "第4章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-9-1782288965858-newd",
+        "number": 9,
+        "question": "事务的传播行为是指处于不同事务中的方法在相互调用时，方法执行期间，事务的维护情况 。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "这正是事务传播行为的定义。当一个事务方法（服务A的方法）调用另一个事务方法（服务B的方法）时，方法B应该如何参与事务？是加入当前事务？还是开启新事务？事务的传播行为（如REQUIRED, REQUIRES_NEW等）就定义了这种跨方法调用时的事务边界和传播规则。",
+        "chapter": "第4章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-10-1782288965858-sjbw",
+        "number": 10,
+        "question": "每个`<tx:attributes>`标签只能配置一个`<tx:method>`子标签 。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "`<tx:attributes>`标签是用来包含一个或多个`<tx:method>`子标签的容器。一个`<tx:attributes>`中可以定义多个`<tx:method>`，每个`<tx:method>`可以匹配不同的方法名模式，并为它们配置不同的事务属性。",
+        "chapter": "第4章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-11-1782288965858-jmwd",
+        "number": 11,
+        "question": "下列选项中，对于Spring的事务管理描述错误的是（）。",
+        "options": [
+          "A. PlatformTransactionManager接口是Spring事务管理的核心，它提供了管理事务的方法",
+          "B. TransactionDefinition接口中定义了事务描述相关的常量",
+          "C. 当事务被标记为只读时，意味着该事务只从数据库中读取数据而不修改数据",
+          "D. 编程式事务管理是通过在配置文件中或者使用注解的方式来声明事务的管理方式"
+        ],
+        "answer": "D. 编程式事务管理是通过在配置文件中或者使用注解的方式来声明事务的管理方式",
+        "explanation": "编程式事务管理需要通过编写代码（如使用TransactionTemplate）来显式地控制事务的边界、提交和回滚。选项D描述的\"在配置文件中或者使用注解的方式来声明\"是声明式事务管理的方式，因此D选项错误。A、B、C选项的描述均正确。",
+        "chapter": "第4章",
+        "type": "choice"
+      },
+      {
+        "id": "q-12-1782288965858-b9j0",
+        "number": 12,
+        "question": "下列选项中，关于事务的传播行为描述错误的是（）。",
+        "options": [
+          "A. PROPAGATION_REQUIRED为默认的事务传播行为",
+          "B. PROPAGATION_SUPPORTS指定如果当前没有事务，则创建一个新的事务",
+          "C. PROPAGATION_MANDATORY指定当前必须存在一个事务，如果没有，就抛出异常",
+          "D. PROPAGATION_REQUIRES_NEW指定创建一个新的事务，如果当前已存在一个事务，将已存在的事务挂起"
+        ],
+        "answer": "B. PROPAGATION_SUPPORTS指定如果当前没有事务，则创建一个新的事务",
+        "explanation": "PROPAGATION_SUPPORTS的含义是：如果当前存在事务，则加入该事务；如果当前没有事务，则以非事务方式执行。选项B说\"创建一个新的事务\"是错误的，这实际上是PROPAGATION_REQUIRED的行为（当前没事务则新建）。D选项关于REQUIRES_NEW的描述是正确的。",
+        "chapter": "第4章",
+        "type": "choice"
+      },
+      {
+        "id": "q-13-1782288965858-a5g6",
+        "number": 13,
+        "question": "下列选项中，关于事务的隔离级别的描述错误的是（ ）。",
+        "options": [
+          "A. ISOLATION_DEFAULT表示采用当前数据库默认的事务隔离级别",
+          "B. ISOLATION_READ_UNCOMMITTED表示读未提交",
+          "C. ISOLATION_READ_COMMITTED表示读已提交，无法避免脏读",
+          "D. REPEATABLE_SERIALIZABLE 使用该隔离级别不存在并发问题"
+        ],
+        "answer": "C. ISOLATION_READ_COMMITTED表示读已提交，无法避免脏读",
+        "explanation": "ISOLATION_READ_COMMITTED（读已提交）能够避免脏读问题，因为一个事务只能读取到另一个已提交事务的数据。选项C说\"无法避免脏读\"是错误的，这其实是ISOLATION_READ_UNCOMMITTED（读未提交）的问题。D选项的表述\"REPEATABLE_SERIALIZABLE\"是笔误，应为\"SERIALIZABLE\"（可串行化），它确实能避免所有并发问题，是最高隔离级别。",
+        "chapter": "第4章",
+        "type": "choice"
+      },
+      {
+        "id": "q-14-1782288965859-32lo",
+        "number": 14,
+        "question": "下列选项中，关于`<tx:method>`标签的常用属性描述错误的是（ ）。",
+        "options": [
+          "A. name用于指定方法名的匹配模式，该属性为必选属性，它指定了与事务属性相关的方法名",
+          "B. propagation用于指定事务的传播行为",
+          "C. read-only用于指定事务是否只读",
+          "D. no-rollback-for用于指定触发事务回滚的异常类"
+        ],
+        "answer": "D. no-rollback-for用于指定触发事务回滚的异常类",
+        "explanation": "`<tx:method>`标签的no-rollback-for属性用于指定哪些异常类型不应该触发事务回滚（即即使抛出这些异常，事务也照常提交），而不是指定\"触发事务回滚的异常类\"。指定触发回滚的异常类使用的是rollback-for属性。因此D选项错误。",
+        "chapter": "第4章",
+        "type": "choice"
+      },
+      {
+        "id": "q-15-1782288965859-mqkl",
+        "number": 15,
+        "question": "下列选项中，关于@Transactional的常用属性描述错误的是（）。",
+        "options": [
+          "A. rollbackFor用于指定使用的事务管理器",
+          "B. propagation用于指定事务的传播行为",
+          "C. isolation用于指定事务的隔离级别",
+          "D. rollbackFor用于指定导致事务回滚的异常类数组"
+        ],
+        "answer": "A. rollbackFor用于指定使用的事务管理器",
+        "explanation": "在@Transactional注解中，用于指定要使用的事务管理器名称的属性是transactionManager（或直接使用value属性），而非rollbackFor。rollbackFor属性用于指定在抛出哪些异常类时触发事务回滚。B、C、D选项的描述均是正确的。",
+        "chapter": "第4章",
+        "type": "choice"
+      },
+      {
+        "id": "q-1-1782288965859-rvy9",
+        "number": 1,
+        "question": "MVC模式将应用程序分为三个核心部分：Model、View和______。",
+        "options": [],
+        "answer": "Controller",
+        "explanation": "MVC（Model-View-Controller）是一种经典的设计模式。Model（模型）负责处理数据和业务逻辑，View（视图）负责展示数据（用户界面），Controller（控制器）负责接收用户请求，并调用模型处理，然后选择视图进行响应。",
+        "chapter": "第5章",
+        "type": "input"
+      },
+      {
+        "id": "q-2-1782288965859-4rbq",
+        "number": 2,
+        "question": "Spring提供了______注解用于标识 Spring MVC的处理器类。",
+        "options": [],
+        "answer": "@Controller",
+        "explanation": "@Controller是Spring MVC中用于将一个普通的Java类标记为控制器（Controller）的注解。被此注解标记的类会由Spring容器管理，并且其中的方法可以被@RequestMapping等注解映射为处理Web请求的处理器。",
+        "chapter": "第5章",
+        "type": "input"
+      },
+      {
+        "id": "q-3-1782288965859-ouph",
+        "number": 3,
+        "question": "Spring MVC的______注解用于建立请求URL和处理器之间的映射关系。",
+        "options": [],
+        "answer": "@RequestMapping",
+        "explanation": "@RequestMapping是Spring MVC中最重要的注解之一。它可以用在类或方法上，用于将特定的HTTP请求（由URL、HTTP方法、参数等定义）映射到对应的处理器类或处理器方法上，即建立\"请求\"与\"处理代码\"之间的对应关系。",
+        "chapter": "第5章",
+        "type": "input"
+      },
+      {
+        "id": "q-4-1782288965859-jm76",
+        "number": 4,
+        "question": "______属性是@RequestMapping注解的默认属性。",
+        "options": [],
+        "answer": "value",
+        "explanation": "@RequestMapping注解的value属性（或其别名path）用于指定请求的URL路径，这是该注解最核心、最常用的属性。当只需要指定URL路径时，可以省略value=，直接写路径字符串，例如@RequestMapping(\"/user\")。",
+        "chapter": "第5章",
+        "type": "input"
+      },
+      {
+        "id": "q-5-1782288965859-vf1i",
+        "number": 5,
+        "question": "______注解用于匹配基于HTTP的GET方法的请求。",
+        "options": [],
+        "answer": "@GetMapping",
+        "explanation": "@GetMapping是Spring MVC提供的组合注解之一，它实际上是@RequestMapping(method = RequestMethod.GET)的快捷方式。专门用于处理HTTP GET请求的方法，提高了代码的可读性和简洁性。",
+        "chapter": "第5章",
+        "type": "input"
+      },
+      {
+        "id": "q-6-1782288965859-abhv",
+        "number": 6,
+        "question": "Spring MVC是基于MVC设计模式的一个轻量级的Web框架 。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "Spring MVC是Spring框架中用于构建Web应用程序的模块。它严格遵循MVC设计模式，将控制器、模型和视图分离，并且作为Spring家族的一部分，它是一个轻量级的、灵活的、高度可配置的Web框架。",
+        "chapter": "第5章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-7-1782288965859-vo7q",
+        "number": 7,
+        "question": "@RequestMapping注解不能标注在类上。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "@RequestMapping注解既可以标注在类上，也可以标注在方法上。标注在类上时，它为类中所有处理器方法提供一个基础的URL路径映射；标注在方法上则提供更具体的路径映射。两者结合使用可以构建出清晰的URL层次结构。",
+        "chapter": "第5章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-8-1782288965859-3l0i",
+        "number": 8,
+        "question": "如果@RequestMapping注解没有指定method属性的值，程序会在运行时出错。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "method属性在@RequestMapping中不是必需的。当没有指定method属性时，该映射默认会处理所有HTTP方法（GET、POST、PUT、DELETE等）的请求。程序不会因此出错。",
+        "chapter": "第5章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-9-1782288965859-1707",
+        "number": 9,
+        "question": "params属性中定义的值可以将请求映射的定位范围缩小。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "@RequestMapping注解的params属性用于指定请求中必须包含某些参数以及这些参数的值必须满足的条件。例如@RequestMapping(value=\"/list\", params=\"type=1\")，这表示只有请求路径为/list且参数type的值为1的请求才会被映射到此方法，从而缩小了映射的匹配范围。",
+        "chapter": "第5章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-10-1782288965859-ohx6",
+        "number": 10,
+        "question": "@GetMapping的作用和@RequestMapping(method = RequestMethod.GET)的作用相同。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "@GetMapping是Spring MVC从4.3版本开始引入的组合注解，它的作用完全等同于@RequestMapping(method = RequestMethod.GET)。它提供了更明确的语义，专门用于处理GET请求。",
+        "chapter": "第5章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-11-1782288965859-nqjp",
+        "number": 11,
+        "question": "下列选项中，关于Spring MVC常用的组件描述错误的是（ ）。",
+        "options": [
+          "A. DispatcherServlet为前端控制器，是整个Spring MVC 流程控制中心",
+          "B. HandlerMapping为处理器映射器，根据请求的URL、HTTP方法等信息找到对应的处理器",
+          "C. Handler为处理器适配器，负责将请求适配到对应处理器处理请求",
+          "D. ViewResolver为视图解析器，视图解析器会根据逻辑视图名解析成物理视图名"
+        ],
+        "answer": "C. Handler为处理器适配器，负责将请求适配到对应处理器处理请求",
+        "explanation": "HandlerMapping（处理器映射器）和HandlerAdapter（处理器适配器）是两个不同的组件。HandlerMapping负责查找处理器，而HandlerAdapter负责调用处理器。选项C将\"Handler\"称为\"处理器适配器\"是错误的，正确的名称是HandlerAdapter。",
+        "chapter": "第5章",
+        "type": "choice"
+      },
+      {
+        "id": "q-12-1782288965859-xid7",
+        "number": 12,
+        "question": "下列选项中，关于@RequestMapping注解的属性描述错误的是（ ）。",
+        "options": [
+          "A. name属性用于为请求映射提供一个名称",
+          "B. method属性用于指定该方法可以处理哪种类型的HTTP请求",
+          "C. params属性用于指定请求参数的条件，为必选属性",
+          "D. headers属性用于指定请求头的条件"
+        ],
+        "answer": "C. params属性用于指定请求参数的条件，为必选属性",
+        "explanation": "params属性用于指定请求参数的条件，但它是可选属性，并非必选。只有当需要根据参数来细化映射范围时才使用它。A、B、D选项的描述均正确。",
+        "chapter": "第5章",
+        "type": "choice"
+      },
+      {
+        "id": "q-13-1782288965859-9rcs",
+        "number": 13,
+        "question": "下列选项中，关于Spring MVC的执行流程描述错误的是（ ）。",
+        "options": [
+          "A. 用户通过浏览器向服务器发送请求，请求会被Spring MVC的前端控制器拦截",
+          "B. 前端控制器拦截到请求后，会调用处理器映射器",
+          "C. 处理器适配器会调用并执行相应的处理器",
+          "D. 处理器执行完成后，会返回一个DispatcherServlet对象，该对象中会包含视图名或包含数据模型和视图名"
+        ],
+        "answer": "D. 处理器执行完成后，会返回一个DispatcherServlet对象，该对象中会包含视图名或包含数据模型和视图名",
+        "explanation": "处理器执行完成后，会返回一个ModelAndView对象给DispatcherServlet，而不是返回DispatcherServlet对象本身。ModelAndView对象包含了视图名称或视图实例，以及模型数据。因此，D选项描述错误。",
+        "chapter": "第5章",
+        "type": "choice"
+      },
+      {
+        "id": "q-14-1782288965859-c57s",
+        "number": 14,
+        "question": "下列选项中，关于Ant风格的描述错误的是（ ）。",
+        "options": [
+          "A. ?通配符用于匹配任何单字符",
+          "B. *通配符用于匹配任意1个",
+          "C. **通配符用于匹配任意数量的目录层级",
+          "D. Ant风格其实就是一种通配符风格，可以在处理器映射路径中使用通配符对访问的URL路径进行关联"
+        ],
+        "answer": "B. *通配符用于匹配任意1个",
+        "explanation": "在Ant风格的URL路径匹配中，*通配符用于匹配任意数量的字符（可以是0个或多个），但仅限于当前目录层级。选项B说\"匹配任意1个\"是不准确的，这其实是?通配符的功能（匹配单个字符）。**用于匹配任意数量的目录层级。",
+        "chapter": "第5章",
+        "type": "choice"
+      },
+      {
+        "id": "q-15-1782288965859-3275",
+        "number": 15,
+        "question": "下列选项中，关于RESTful风格的描述错误的是（ ）。",
+        "options": [
+          "A. RESTful是按照REST风格访问网络资源的一种实践",
+          "B. RESTful是把请求参数变成请求路径的一种风格",
+          "C. RESTful风格在HTTP请求中，GET表示用于获取资源",
+          "D. RESTful风格在HTTP请求中，POST表示用于更新资源"
+        ],
+        "answer": "D. RESTful风格在HTTP请求中，POST表示用于更新资源",
+        "explanation": "在RESTful风格中，HTTP方法的使用遵循特定的语义：GET用于获取资源，POST用于创建资源，PUT用于更新资源，DELETE用于删除资源。选项D说\"POST表示用于更新资源\"是错误的，更新资源通常使用PUT方法。POST主要用于创建新的资源。",
+        "chapter": "第5章",
+        "type": "choice"
+      },
+      {
+        "id": "q-1-1782288965859-8cag",
+        "number": 1,
+        "question": "______注解用于从请求中获取参数的值并将其传递给处理器方法的参数。",
+        "options": [],
+        "answer": "@RequestParam",
+        "explanation": "@RequestParam注解在Spring MVC中用于将HTTP请求中的参数（例如URL中的查询参数，或表单提交的字段）绑定到处理器方法的形参上。它支持参数名称映射、是否必需、默认值等配置，是处理请求参数最常用的注解之一。",
+        "chapter": "第6章",
+        "type": "input"
+      },
+      {
+        "id": "q-2-1782288965859-n7dj",
+        "number": 2,
+        "question": "当请求的映射方式是REST风格时，可以通过______注解可以将URL中占位符参数绑定到处理器方法的形参中。",
+        "options": [],
+        "answer": "@PathVariable",
+        "explanation": "@PathVariable注解专门用于将URL模板中的变量（即{...}占位符）绑定到处理器方法的参数上。这是RESTful风格服务中获取资源ID等路径信息的关键注解。",
+        "chapter": "第6章",
+        "type": "input"
+      },
+      {
+        "id": "q-3-1782288965859-fe7w",
+        "number": 3,
+        "question": "Spring MVC中，当一个请求需要将请求体中的数据，可以在方法参数上使用______注解。",
+        "options": [],
+        "answer": "@RequestBody",
+        "explanation": "@RequestBody注解用于将HTTP请求的body（请求体）内容绑定到处理器方法的形参上。它通常用于处理客户端提交的JSON或XML格式的数据，Spring会自动使用HttpMessageConverter将其转换为对应的Java对象。",
+        "chapter": "第6章",
+        "type": "input"
+      },
+      {
+        "id": "q-4-1782288965859-6nzj",
+        "number": 4,
+        "question": "Model的实现类对象和ModelMap对象都可以设置模型数据，模型数据会填充到______域中，以供视图层使用。",
+        "options": [],
+        "answer": "Request",
+        "explanation": "在Spring MVC中，控制器方法返回视图时，模型数据（Model）会被存储到HttpServletRequest的请求域（Request Scope）中，这样视图解析器在渲染视图时，就可以从请求域中获取这些数据进行展示。",
+        "chapter": "第6章",
+        "type": "input"
+      },
+      {
+        "id": "q-5-1782288965859-kjjx",
+        "number": 5,
+        "question": "______注解相当于@Controller+@ResponseBody两个注解的结合。",
+        "options": [],
+        "answer": "@RestController",
+        "explanation": "@RestController是Spring 4.0引入的组合注解，它将@Controller和@ResponseBody的功能合二为一。当一个类被标记为@RestController后，它表示这个类是一个控制器，并且其中所有处理器方法的返回值都会自动以JSON或XML等格式直接写入响应体中，而不经过视图解析器，常用于构建RESTful API。",
+        "chapter": "第6章",
+        "type": "input"
+      },
+      {
+        "id": "q-6-1782288965859-aiys",
+        "number": 6,
+        "question": "在Spring MVC中进行简单类型的数据绑定，只需客户端请求参数的名称和处理器的形参名称一致即可。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "这是Spring MVC数据绑定的基本规则之一。对于简单类型（如int、String、Integer等），只要HTTP请求参数名与处理器方法形参名一致，Spring MVC就能自动完成类型转换和赋值。",
+        "chapter": "第6章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-7-1782288965859-nu3d",
+        "number": 7,
+        "question": "在POJO类型的数据绑定过程中，需要确保请求的参数名称与要绑定的POJO类中的属性名称保持一致。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "当使用POJO对象作为控制器方法的参数时，Spring MVC会根据请求参数名与POJO类属性名的匹配关系，自动将参数值填充到对应的属性中。两者名称一致是绑定的前提。",
+        "chapter": "第6章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-8-1782288965859-d2a9",
+        "number": 8,
+        "question": "@ResponseBody注解的作用是将处理器方法返回的对象通过适当的转换器转换为指定的格式之后，写入到HttpServletResponse对象的响应体中。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "@ResponseBody注解的职责是告诉Spring MVC，处理器方法的返回值不应该被解析为视图名称，而应该直接作为响应体内容返回。Spring会利用HttpMessageConverter将返回值转换为合适的格式（如JSON、XML）并写入HTTP响应流中。",
+        "chapter": "第6章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-9-1782288965859-1vx4",
+        "number": 9,
+        "question": "当Spring MVC方法的返回值为void时，方法执行后会跳转到项目中视图名称为index的页面。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "当控制器方法返回void时，Spring MVC默认会使用请求的URL作为逻辑视图名。例如，如果请求URL是\"/user/list\"，那么视图名会是\"user/list\"，而非固定的\"index\"。只有当视图解析器配置了前缀后缀，或者有其他默认规则时，才会转到特定页面。",
+        "chapter": "第6章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-10-1782288965859-cowo",
+        "number": 10,
+        "question": "使用@DateTimeFormat注解完成日期类型的格式转换无需自定义类型转换器，也无需在配置文件中定义转换器工厂或格式化工厂 。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "在Spring MVC中，只要正确配置了AnnotationDriven（`<mvc:annotation-driven>`）或启用了@EnableWebMvc，Spring就会自动注册一个能够处理@DateTimeFormat注解的格式化器。因此，开发者只需在日期字段上添加@DateTimeFormat(pattern=\"yyyy-MM-dd\")等注解，Spring就会自动进行格式转换，无需再手动定义转换器。",
+        "chapter": "第6章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-11-1782288965859-79fw",
+        "number": 11,
+        "question": "下列选项中，不属于Spring MVC默认支持的类型的是（）。",
+        "options": [
+          "A. HttpServletRequest",
+          "B. HttpServletResponse",
+          "C. HttpSession",
+          "D. Cookie"
+        ],
+        "answer": "D. Cookie",
+        "explanation": "Spring MVC默认支持多种Web相关的对象作为控制器方法的参数，包括HttpServletRequest、HttpServletResponse、HttpSession、WebRequest、Model、ModelMap等。Cookie虽然可以获取，但需要通过@CookieValue注解显式绑定，而不是直接作为形参类型。",
+        "chapter": "第6章",
+        "type": "choice"
+      },
+      {
+        "id": "q-12-1782288965859-2gyn",
+        "number": 12,
+        "question": "下列选项中，关于@RequestParam注解的属性描述错误的是（）。",
+        "options": [
+          "A. value用于指定要绑定的请求参数的名称",
+          "B. name与value属性作用一致",
+          "C. required用于指定参数是否必须，默认是false",
+          "D. defaultValue用于指定参数的默认值"
+        ],
+        "answer": "C. required用于指定参数是否必须，默认是false",
+        "explanation": "在@RequestParam注解中，required属性的默认值是true，表示该请求参数必须存在，否则会抛出异常。若希望参数可选，需要显式设置为required=false。因此，C选项说\"默认是false\"是错误的。",
+        "chapter": "第6章",
+        "type": "choice"
+      },
+      {
+        "id": "q-13-1782288965859-lguv",
+        "number": 13,
+        "question": "下列选项中，关于ModelAndView设置视图和模型数据的方法的描述错误的是（ ）。",
+        "options": [
+          "A. setViewName()方法用于在ModelAndView对象中设置一个逻辑视图名称，会覆盖预先存在的逻辑视图名称",
+          "B. setView()方法用于在ModelAndView对象中设置一个视图实例，会覆盖预先存在的视图实例",
+          "C. addObject()方法用于在ModelAndView对象中添加模型数据和视图实例",
+          "D. addAllObjects()方法用于在ModelAndView对象中添加模型数据"
+        ],
+        "answer": "C. addObject()方法用于在ModelAndView对象中添加模型数据和视图实例",
+        "explanation": "addObject()方法（及其重载形式）专门用于向ModelAndView对象中添加模型数据（以键值对的形式），它的作用不是\"添加视图实例\"。要设置视图，应使用setViewName()或setView()方法。因此，C选项的描述是错误的。",
+        "chapter": "第6章",
+        "type": "choice"
+      },
+      {
+        "id": "q-14-1782288965859-12a7",
+        "number": 14,
+        "question": "下列选项中，关于Spring MVC数据绑定的描述错误的是（）。",
+        "options": [
+          "A. 当使用Spring MVC默认支持的数据类型作为处理器的形参类型时，Spring MVC的参数处理适配器能够将HTTP请求中的参数自动转换并绑定到处理器方法的形参上",
+          "B. 在POJO类型的数据绑定过程中，需要确保请求的参数名称与要绑定的POJO类中的属性名称保持一致",
+          "C. Spring MVC的默认类型转换器可以转换Java中所有的数据类型",
+          "D. @RequestBody注解需要书写在方法的形参前"
+        ],
+        "answer": "C. Spring MVC的默认类型转换器可以转换Java中所有的数据类型",
+        "explanation": "Spring MVC提供了一些内置的类型转换器，可以处理常见的类型（如String到int、日期等），但它并不能转换Java中所有的数据类型。对于复杂或自定义的类型转换，仍需要开发者编写自定义的转换器（Converter）或格式化器（Formatter）。因此，C选项的说法过于绝对，是错误的。",
+        "chapter": "第6章",
+        "type": "choice"
+      },
+      {
+        "id": "q-15-1782288965859-y83q",
+        "number": 15,
+        "question": "下列选项中，关于Spring MVC页面跳转和数据回写的描述错误的是（）。",
+        "options": [
+          "A. 当Spring MVC方法的返回值为void时，没有配置视图解析器，则会报HTTP Status 500错误",
+          "B. 当Spring MVC方法的返回值为 String 类型时，处理器方法执行后，Spring MVC 会根据方法的返回值跳转到对应的视图",
+          "C. 当Spring MVC方法的返回值为String 类型时，方法返回的字符串添加了\"forward:\"或\"redirect:\"前缀，则视图解析器不再会为方法返回值会拼接后缀但是不会拼接前缀",
+          "D. ModelAndView对象主要用于存储模型数据和视图信息。"
+        ],
+        "answer": "C. 当Spring MVC方法的返回值为String 类型时，方法返回的字符串添加了\"forward:\"或\"redirect:\"前缀，则视图解析器不再会为方法返回值会拼接后缀但是不会拼接前缀",
+        "explanation": "当处理器方法返回String类型，且带有\"forward:\"或\"redirect:\"前缀时，表示这是一个逻辑视图名，但包含前缀指示了请求转发或重定向。在这种情况下，视图解析器（InternalResourceViewResolver）不会对该返回值进行任何前后缀拼接操作。Spring MVC会直接处理这个带有前缀的字符串，执行转发或重定向。选项C说\"不会拼接后缀但是不会拼接前缀\"表述不准确，实际上拼接前后缀都不会执行，因此该选项错误。正确的说法是：它既不会拼接前缀，也不会拼接后缀，因为\"forward:\"或\"redirect:\"本身不是视图路径的一部分，而是操作指令。",
+        "chapter": "第6章",
+        "type": "choice"
+      },
+      {
+        "id": "q-1-1782288965859-ue65",
+        "number": 1,
+        "question": "______注解是Spring MVC用于定义全局处理器通知的注解。",
+        "options": [],
+        "answer": "@ControllerAdvice",
+        "explanation": "@ControllerAdvice是Spring MVC提供的一个强大注解，用于定义一个全局的控制器增强类。它可以被用来全局处理控制器抛出的异常（与@ExceptionHandler结合）、全局绑定数据（@ModelAttribute）或全局绑定初始化参数（@InitBinder），作用于所有或特定的控制器。",
+        "chapter": "第7章",
+        "type": "input"
+      },
+      {
+        "id": "q-2-1782288965859-afpq",
+        "number": 2,
+        "question": "Spring MVC程序中可以使用______注解中指定需要处理的异常类型。",
+        "options": [],
+        "answer": "@ExceptionHandler",
+        "explanation": "@ExceptionHandler注解用于在控制器或@ControllerAdvice类中定义一个方法，专门用于处理特定类型的异常。通过指定其value属性，可以声明该方法能够处理哪些异常类。当控制器抛出匹配的异常时，该方法会执行并返回相应的视图或响应。",
+        "chapter": "第7章",
+        "type": "input"
+      },
+      {
+        "id": "q-3-1782288965859-k2pa",
+        "number": 3,
+        "question": "Spring MVC的______使得开发者能够在请求进入处理器之前、处理器处理完请求后以及渲染视图之后执行一些特定的操作。",
+        "options": [],
+        "answer": "拦截器",
+        "explanation": "Spring MVC的拦截器（Interceptor）是类似于Servlet Filter的一种机制，但它更精细，专门针对Spring MVC的控制器进行拦截。它提供了三个主要的拦截点：preHandle（处理器执行前）、postHandle（处理器执行后、视图渲染前）、afterCompletion（整个请求结束后），允许开发者在这些关键节点插入自定义逻辑。",
+        "chapter": "第7章",
+        "type": "input"
+      },
+      {
+        "id": "q-4-1782288965859-eg4o",
+        "number": 4,
+        "question": "自定义拦截器类可以通过实现______ 接口实现。",
+        "options": [],
+        "answer": "HandlerInterceptor",
+        "explanation": "要创建一个自定义的Spring MVC拦截器，开发者需要实现HandlerInterceptor接口，并重写其三个方法：preHandle()、postHandle()和afterCompletion()。这个接口定义了拦截器在不同执行阶段的钩子方法。",
+        "chapter": "第7章",
+        "type": "input"
+      },
+      {
+        "id": "q-5-1782288965859-3wq5",
+        "number": 5,
+        "question": "在Spring MVC的XML配置文件中，可以使用______标签配置拦截器的信息。",
+        "options": [],
+        "answer": "<mvc:interceptors>",
+        "explanation": "`<mvc:interceptors>`是Spring MVC XML配置中用于定义多个拦截器的根标签。在这个标签内部，可以使用`<bean>`直接定义拦截器，或使用`<mvc:interceptor>`标签更精细地配置拦截器及其映射路径（`<mvc:mapping>`）和排除路径（`<mvc:exclude-mapping>`）。",
+        "chapter": "第7章",
+        "type": "input"
+      },
+      {
+        "id": "q-6-1782288965859-tsx0",
+        "number": 6,
+        "question": "在使用SimpleMappingExceptionResolver时，需要配置异常与视图之间的映射关系。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "SimpleMappingExceptionResolver是Spring MVC提供的一个简单的异常解析器。它需要开发者通过其exceptionMappings属性来配置，指定当哪种异常类型抛出时，应该跳转到哪个指定的错误视图页面。因此，配置映射关系是使用它的核心步骤。",
+        "chapter": "第7章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-7-1782288965859-6fxk",
+        "number": 7,
+        "question": "HandlerExceptionResolver 接口是Spring MVC中用于全局异常处理的接口。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "HandlerExceptionResolver是Spring MVC中处理控制器执行过程中发生的异常的核心接口。它的实现类（如DefaultHandlerExceptionResolver、SimpleMappingExceptionResolver和@ControllerAdvice中基于注解的异常处理）共同构成了Spring MVC的全局异常处理机制。",
+        "chapter": "第7章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-8-1782288965859-xrzy",
+        "number": 8,
+        "question": "@ControllerAdvice注解标注的类也需要使用@Controller或@RestController注解进行标注。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "@ControllerAdvice本身已经包含了@Component注解，因此被@ControllerAdvice标注的类会被Spring容器识别为一个Bean，无需再添加@Controller或@RestController。它是一个独立的注解，专门用于定义全局增强的控制器顾问类。",
+        "chapter": "第7章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-9-1782288965859-a7q4",
+        "number": 9,
+        "question": "拦截器的preHandler()方法会在请求处理之后被调用。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "preHandler()方法是拦截器生命周期中的第一个方法，它在处理器（Controller方法）执行之前被调用。postHandle()方法是在处理器执行之后、视图渲染之前被调用。因此，preHandler()被调用的时机远早于请求处理（即处理器执行）之后。",
+        "chapter": "第7章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-10-1782288965859-6e9i",
+        "number": 10,
+        "question": "通过实现WebMvcConfigurer接口，开发者可以扩展Spring MVC的默认配置。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "在基于Java配置的Spring MVC应用中，通过实现WebMvcConfigurer接口（或继承WebMvcConfigurerAdapter），开发者可以重写其各种configure*方法，来定制Spring MVC的默认配置，如添加拦截器、配置视图解析器、配置跨域资源共享等。",
+        "chapter": "第7章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-11-1782288965859-xqvm",
+        "number": 11,
+        "question": "下列选项中，关于SimpleMappingExceptionResolver类描述错的是（ ）。",
+        "options": [
+          "A. exceptionMappings：用于配置异常与视图之间的映射关系",
+          "B. defaultErrorView：用于定义默认的异常处理视图",
+          "C. exceptionAttribute：用于指定异常信息在视图中的属性名称。",
+          "D. 上述说法都错误"
+        ],
+        "answer": "D. 上述说法都错误",
+        "explanation": "A、B、C三个选项都是对SimpleMappingExceptionResolver类中属性的正确描述。exceptionMappings用于存储异常类型和对应的视图名的映射；defaultErrorView指定当异常未在映射中定义时使用的默认视图；exceptionAttribute指定将异常对象存入Model时的属性名，以便在视图中显示异常信息。因此，选择D\"上述说法都错误\"。",
+        "chapter": "第7章",
+        "type": "choice"
+      },
+      {
+        "id": "q-12-1782288965859-pu7v",
+        "number": 12,
+        "question": "下列选项中，不是HandlerInterceptor接口中的方法的是（ ）。",
+        "options": [
+          "A. preHandler()",
+          "B. postHandle()",
+          "C. afterCompletion()",
+          "D. handler()"
+        ],
+        "answer": "D. handler()",
+        "explanation": "HandlerInterceptor接口定义了三个方法：preHandler()（处理器执行前）、postHandle()（处理器执行后视图渲染前）、afterCompletion()（整个请求完成后）。handler()方法是WebRequestInterceptor接口中定义的方法，不是HandlerInterceptor接口中的方法，因此D正确。",
+        "chapter": "第7章",
+        "type": "choice"
+      },
+      {
+        "id": "q-13-1782288965859-xy9c",
+        "number": 13,
+        "question": "下列选项中，关于Spring MVC配置文件中拦截器的配置的说法错误的是（）。",
+        "options": [
+          "A. `<mvc:interceptors>`标签中可以使用`<bean>`标签配置拦截器",
+          "B. `<mvc:mapping>`标签的path的属性值为\"/\"时，表示拦截所有路径",
+          "C. `<mvc:interceptors>`标签中可以使用`<mvc:interceptor>`标签配置拦截器",
+          "D. `<mvc:exclude-mapping>`标签的path属性用于配置不需要拦截的路径请求"
+        ],
+        "answer": "B. `<mvc:mapping>`标签的path的属性值为\"/\"时，表示拦截所有路径",
+        "explanation": "在拦截器配置中，`<mvc:mapping>`标签的path属性用于配置要拦截的URL模式。当path属性的值为\"/**\"时，表示拦截所有路径（包括子路径）。而单独的\"/\"通常表示拦截根路径，并非所有路径。因此，B选项的描述不准确，是错误的。",
+        "chapter": "第7章",
+        "type": "choice"
+      },
+      {
+        "id": "q-14-1782288965859-0p9g",
+        "number": 14,
+        "question": "下列选项中，关于拦截器的描述错误的是（）。",
+        "options": [
+          "A. 拦截器（基于动态拦截的机制对Web请求进行拦截和处理",
+          "B. preHandler()方法会在请求处理之前被调用",
+          "C. postHandle()方法会在请求处理之后，以及视图渲染之后被调用",
+          "D. afterCompletion()方法会在整个请求处理流程结束之后被调用"
+        ],
+        "answer": "C. postHandle()方法会在请求处理之后，以及视图渲染之后被调用",
+        "explanation": "拦截器的方法执行顺序为：preHandler()（处理器之前）→ 处理器执行 → postHandle()（处理器之后，视图渲染之前）→ 视图渲染 → afterCompletion()（整个请求结束）。选项C说postHandle()\"在视图渲染之后被调用\"是错误的，它是在视图渲染之前被调用的。",
+        "chapter": "第7章",
+        "type": "choice"
+      },
+      {
+        "id": "q-15-1782288965859-5uhw",
+        "number": 15,
+        "question": "下列选项中，关于文件上传表单说法错误的是（）。",
+        "options": [
+          "A. 表单提交的HTTP请求方法需要为GET",
+          "B. 表单的enctype属性的值需要设置为multipart/form-data",
+          "C. 需要提供文件上传输入框",
+          "D. 文件上传输入框中需要增加了一个multiple属性"
+        ],
+        "answer": "A. 表单提交的HTTP请求方法需要为GET",
+        "explanation": "文件上传请求通常涉及大量数据，因此必须使用HTTP POST方法（或PUT），不能使用GET方法（GET请求有长度限制且不支持请求体）。选项A说\"需要为GET\"是错误的。B、C、D选项都是实现文件上传表单的正确要求。",
+        "chapter": "第7章",
+        "type": "choice"
+      },
+      {
+        "id": "q-1-1782288965859-t9ds",
+        "number": 1,
+        "question": "MyBatis中主要负责创建SqlSession对象的接口是______。",
+        "options": [],
+        "answer": "SqlSessionFactory",
+        "explanation": "SqlSessionFactory是MyBatis框架中的核心接口，它负责创建SqlSession对象的实例。通常，一个应用只会创建一个SqlSessionFactory单例，每个数据库操作请求会从该工厂获取一个新的SqlSession。",
+        "chapter": "第8章",
+        "type": "input"
+      },
+      {
+        "id": "q-2-1782288965859-lit2",
+        "number": 2,
+        "question": "MyBatis核心配置文件通过______标签将所有的配置信息组织起来。",
+        "options": [],
+        "answer": "<configuration>",
+        "explanation": "MyBatis的核心配置文件（通常命名为mybatis-config.xml）的根元素必须是`<configuration>`标签。所有的配置信息，如数据库连接、类型别名、映射器注册、插件等，都作为其子标签组织在这个根标签下。",
+        "chapter": "第8章",
+        "type": "input"
+      },
+      {
+        "id": "q-3-1782288965859-ifwr",
+        "number": 3,
+        "question": "MyBatis核心配置文件中，`<properties>`标签可以通过______或 url属性读取指定位置的外部属性文件。",
+        "options": [],
+        "answer": "resource",
+        "explanation": "在MyBatis核心配置文件中，`<properties>`标签的resource属性用于从类路径下加载属性文件（如db.properties），而url属性用于从文件系统或网络路径加载属性文件。",
+        "chapter": "第8章",
+        "type": "input"
+      },
+      {
+        "id": "q-4-1782288965859-8r3h",
+        "number": 4,
+        "question": "MyBatis映射文件以______标签作为其根元素，用以标识一个独立的XML映射单元。",
+        "options": [],
+        "answer": "<mapper>",
+        "explanation": "每一个MyBatis的XML映射文件（如UserMapper.xml）都以`<mapper>`标签作为其根元素。该标签的namespace（命名空间）属性用于绑定一个对应的Mapper接口，使得接口和XML映射文件能够关联起来。",
+        "chapter": "第8章",
+        "type": "input"
+      },
+      {
+        "id": "q-5-1782288965859-qona",
+        "number": 5,
+        "question": "MyBatis映射文件中，`<select>`标签的______属性用于指定查询结果的映射类型。",
+        "options": [],
+        "answer": "resultType",
+        "explanation": "`<select>`标签中的resultType属性用于指定查询结果应被映射到的Java类型（如完整的类名或别名）。它适用于查询结果能够被直接映射到单一类型（如简单类型、POJO）的场景。当结果映射比较复杂时，则应使用resultMap属性。",
+        "chapter": "第8章",
+        "type": "input"
+      },
+      {
+        "id": "q-6-1782288965859-ji1w",
+        "number": 6,
+        "question": "MyBatis基于ORM技术实现数据的持久化操作。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "MyBatis是一种优秀的持久层框架，它支持自定义SQL、存储过程以及高级映射。它确实基于ORM（对象关系映射）思想，允许开发者通过XML或注解来配置Java对象与数据库表之间的映射关系，从而简化数据持久化操作。",
+        "chapter": "第8章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-7-1782288965859-8vqq",
+        "number": 7,
+        "question": "SqlSessionFactory类的主要职责是读取MyBatis的配置信息，并解析配置信息。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "负责读取和解析MyBatis配置信息、构建SqlSessionFactory的是SqlSessionFactoryBuilder类。SqlSessionFactory本身的主要职责是创建SqlSession实例，而非解析配置。因此，该说法错误。",
+        "chapter": "第8章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-8-1782288965859-ahif",
+        "number": 8,
+        "question": "SqlSession接口提供了一系列方法用于执行SQL查询、更新、插入和删除操作。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "SqlSession接口是MyBatis中执行数据库操作的核心API。它提供了众多方法，如selectOne()、selectList()用于查询，insert()、update()、delete()用于数据修改，以及commit()、rollback()用于事务管理。",
+        "chapter": "第8章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-9-1782288965859-rlrm",
+        "number": 9,
+        "question": "`<properties>` 标签内定义的属性优先级低于从外部属性文件中读取到的属性。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "",
+        "chapter": "第8章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-10-1782288965859-ykv8",
+        "number": 10,
+        "question": "MyBatis映射文件中， `<insert>`标签的useGeneratedKeys属性用于指定是否返回生成的主键值。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "对于支持自动生成主键的数据库（如MySQL的AUTO_INCREMENT），在MyBatis的`<insert>`标签中，可以通过设置useGeneratedKeys=\"true\"并指定keyProperty属性，让MyBatis在执行插入操作后，将数据库生成的主键值回填到传入的Java对象的对应属性中。",
+        "chapter": "第8章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-11-1782288965859-9u60",
+        "number": 11,
+        "question": "下列选项中，关于SqlSession的描述错误的是（ ）。",
+        "options": [
+          "A. SqlSession接口的实例用于表示应用程序与数据库的一次会话",
+          "B. 在多线程环境下，SqlSession 的实例是线程安全的",
+          "C. 默认情况下，SqlSession对象的事务不会自动提交",
+          "D. DefaultSqlSession是MyBatis提供的SqlSession接口默认实现类"
+        ],
+        "answer": "B. 在多线程环境下，SqlSession 的实例是线程安全的",
+        "explanation": "SqlSession是非线程安全的。每个线程应该拥有自己的SqlSession实例，不能在多线程间共享。选项B说\"线程安全\"是错误的。A、C、D选项对SqlSession的描述均正确。",
+        "chapter": "第8章",
+        "type": "choice"
+      },
+      {
+        "id": "q-12-1782288965859-eznq",
+        "number": 12,
+        "question": "下列选项中，关于MyBatis核心配置文件中的标签描述错误的是（ ）。",
+        "options": [
+          "A. `<properties>`标签用于定义属性",
+          "B. `<settings>`标签用于配置数据库环境",
+          "C. `<typeAliases>`标签用于定义类型的别名",
+          "D. `<plugins>`标签用于定义插件"
+        ],
+        "answer": "B. `<settings>`标签用于配置数据库环境",
+        "explanation": "在MyBatis核心配置文件中，用于配置数据库环境（如事务管理器、数据源）的标签是`<environments>`及其子标签`<environment>`。`<settings>`标签用于配置MyBatis的全局运行时行为，如缓存、懒加载、日志等。因此B选项错误。",
+        "chapter": "第8章",
+        "type": "choice"
+      },
+      {
+        "id": "q-13-1782288965859-c868",
+        "number": 13,
+        "question": "下列选项中，关于`<mappers>`标签的描述错误的是（ ）。",
+        "options": [
+          "A. 可以通过`<mapper>`子标签和`<package>`子标签实现映射器信息的指定",
+          "B. `<mapper>`子标签可以通过资源路径指定映射文件",
+          "C. `<mapper>`子标签通过映射器接口的实现类指定映射器",
+          "D. `<package>`子标签用于指定包含映射器接口的包名。"
+        ],
+        "answer": "C. `<mapper>`子标签通过映射器接口的实现类指定映射器",
+        "explanation": "在MyBatis中注册映射器（Mapper）的方式包括：使用`<mapper resource=\"...\"/>`（指定XML文件路径）、`<mapper class=\"...\"/>`（指定接口类）、`<package name=\"...\"/>`（指定接口所在包）。选项C说通过\"映射器接口的实现类\"是错误的，MyBatis并不需要为Mapper接口编写实现类，而是通过动态代理生成代理对象。",
+        "chapter": "第8章",
+        "type": "choice"
+      },
+      {
+        "id": "q-14-1782288965859-qerk",
+        "number": 14,
+        "question": "下列选项中，关于MyBatis映射文件中`<select>`标签的属性描述错误的是（ ）。",
+        "options": [
+          "A. id属性用于定义当前查询的唯一标识，是必需的属性。",
+          "B. resultType属性用于指定查询结果的映射类型",
+          "C. resultMap属性用于指定一个结果集映射",
+          "D. 当查询结果需要复杂映射时，可以同时使用resultMap和resultType实现。"
+        ],
+        "answer": "D. 当查询结果需要复杂映射时，可以同时使用resultMap和resultType实现。",
+        "explanation": "在`<select>`标签中，resultType和resultMap属性是互斥的，不能同时使用。如果查询结果需要复杂映射（如嵌套属性、关联对象等），应使用resultMap；如果结果简单，则使用resultType。同时使用会导致配置错误。因此，D选项描述错误。",
+        "chapter": "第8章",
+        "type": "choice"
+      },
+      {
+        "id": "q-15-1782288965859-n8kq",
+        "number": 15,
+        "question": "下列选项中，对于MyBatis映射文件中的标签的描述错误的是（ ）。",
+        "options": [
+          "A. `<select>`标签用于配置 SQL 查询语句以及查询结果的映射规则",
+          "B. `<resultType>`标签为定义结果集映射的根标签",
+          "C. `<sql>`标签用于定义可重用的SQL片段",
+          "D. `<include>`标签用于在SQL语句中引用前面定义的SQL片段"
+        ],
+        "answer": "B. `<resultType>`标签为定义结果集映射的根标签",
+        "explanation": "在MyBatis映射文件中，用于定义结果集映射的根标签是`<resultMap>`，而非`<resultType>`。`<resultType>`是`<select>`标签的一个属性，用来指定返回结果的类型。因此，B选项错误。",
+        "chapter": "第8章",
+        "type": "choice"
+      },
+      {
+        "id": "q-1-1782288965859-ck41",
+        "number": 1,
+        "question": "______标签可以根据指定的条件表达式的结果动态生成SQL语句。",
+        "options": [],
+        "answer": "<if>",
+        "explanation": "`<if>`是MyBatis动态SQL中最基础的标签，它类似于Java中的if语句。通过其test属性设置条件表达式，只有当条件为true时，`<if>`标签内部的SQL片段才会被包含到最终的SQL语句中。",
+        "chapter": "第9章",
+        "type": "input"
+      },
+      {
+        "id": "q-2-1782288965859-2qgw",
+        "number": 2,
+        "question": "`<foreach>`标签的separator属性用于指定每次迭代之间插入的______。",
+        "options": [],
+        "answer": "分隔符",
+        "explanation": "在`<foreach>`标签中，用于遍历集合或数组以生成动态的IN子句或批量插入语句。separator属性定义了在每次迭代生成的文本之间插入的分隔字符，例如逗号（,），用于正确构建SQL语法。",
+        "chapter": "第9章",
+        "type": "input"
+      },
+      {
+        "id": "q-3-1782288965859-06k4",
+        "number": 3,
+        "question": "MyBatis映射文件中，通过______标签可以根据条件动态地生成SET子句。",
+        "options": [],
+        "answer": "<set>",
+        "explanation": "`<set>`标签专门用于动态更新语句。它能够智能地在UPDATE语句中生成SET关键字，并自动移除最后一个不需要的逗号，从而简化动态更新SQL的编写。",
+        "chapter": "第9章",
+        "type": "input"
+      },
+      {
+        "id": "q-4-1782288965859-wyij",
+        "number": 4,
+        "question": "`<trim>`标签的______属性用于指定给SQL语句增加的前缀字符串。",
+        "options": [],
+        "answer": "prefix",
+        "explanation": "`<trim>`标签是一个功能强大的动态SQL标签，它可以对包含的SQL片段进行定制化处理。其prefix属性用于在SQL片段的开头添加指定的字符串（如WHERE、SET等关键字）。",
+        "chapter": "第9章",
+        "type": "input"
+      },
+      {
+        "id": "q-5-1782288965859-btn2",
+        "number": 5,
+        "question": "`<foreach>`标签的______属性用于指定遍历的可迭代对象。",
+        "options": [],
+        "answer": "collection",
+        "explanation": "collection是`<foreach>`标签中最重要的属性之一，它指定了要被遍历的集合、数组或可迭代对象的名称。该名称对应传递给Mapper方法的参数名（当使用@Param注解时，就是注解的值）。",
+        "chapter": "第9章",
+        "type": "input"
+      },
+      {
+        "id": "q-6-1782288965859-6but",
+        "number": 6,
+        "question": "`<choose>`标签用于从多个备选项中选择一个满足条件的选项 。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "`<choose>`标签在MyBatis中相当于Java中的switch或if-else if-else结构。它包含多个`<when>`子标签和一个可选的`<otherwise>`标签，会从上到下依次判断`<when>`的test条件，一旦有一个满足，就包含其SQL片段并结束整个`<choose>`块。",
+        "chapter": "第9章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-7-1782288965859-w3a3",
+        "number": 7,
+        "question": "`<when>`标签用于定义`<choose>`标签中的备选条件，它包含一个test属性，用于指定条件表达式。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "这是对`<when>`标签功能的正确描述。它必须作为`<choose>`标签的子标签出现，并且其test属性是必需且不可少的，用于定义分支条件。",
+        "chapter": "第9章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-8-1782288965859-gg11",
+        "number": 8,
+        "question": "`<where>` 标签会确保只有所有条件都成立时，才会在SQL语句中添加WHERE关键字。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "`<where>`标签的逻辑是：只有当其内部的至少一个条件成立（即内部有可用的SQL片段）时，它才会在最终SQL中添加WHERE关键字，并且它会智能地去除第一个条件前的多余AND或OR。它并非要求\"所有条件都成立\"，而是\"至少有一个条件成立\"。",
+        "chapter": "第9章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-9-1782288965859-b65s",
+        "number": 9,
+        "question": "`<set>`标签会自动去掉最后一个字段更新后的多余逗号 。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "这是`<set>`标签的核心智能功能。在使用动态UPDATE语句时，如果最后一个`<if>`条件为false，可能会导致SET子句末尾留下多余的逗号，从而引起SQL语法错误。`<set>`标签会自动检测并移除这个多余的逗号。",
+        "chapter": "第9章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-10-1782288965859-tfll",
+        "number": 10,
+        "question": "`<trim>`标签可以根据条件动态地添加或者删除指定的字符。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "`<trim>`标签提供了prefix、suffix（添加前缀/后缀）以及prefixOverrides、suffixOverrides（移除前/后缀中指定的字符）四个属性，可以灵活地对内部的SQL片段进行\"修剪\"（添加或删除特定字符），因此该说法正确。",
+        "chapter": "第9章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-11-1782288965859-dguc",
+        "number": 11,
+        "question": "下列选项中，关于MyBatis映射文件中生成动态SQL的标签描述错误的是（）。",
+        "options": [
+          "A. `<if>`标签的test属性用于指定条件表达式，如果条件表达式的值为true，则包含`<if>`标签内部的SQL语句",
+          "B. `<foreach>`标签不能遍历数组",
+          "C. `<where>` 标签可以自动处理条件语句中的逻辑连接词，如AND或OR",
+          "D. `<choose>`标签类似于Java中的switch语句"
+        ],
+        "answer": "B. `<foreach>`标签不能遍历数组",
+        "explanation": "`<foreach>`标签不仅能够遍历List、Set等集合，也能够遍历数组（Array）。只需在collection属性中正确指定数组参数名即可。因此，选项B\"不能遍历数组\"的描述是错误的。",
+        "chapter": "第9章",
+        "type": "choice"
+      },
+      {
+        "id": "q-12-1782288965859-hnxh",
+        "number": 12,
+        "question": "下列选项中，关于`<choose>`标签、`<when>`标签和`<otherwise>`标签的描述错误的是（ ）。",
+        "options": [
+          "A. `<choose>`标签类可以包含零个或多个`<when>`标签",
+          "B. `<choose>`标签类可以包含一个或多个`<otherwise>`标签",
+          "C. 如果所有`<when>`子标签的条件表达式都不为true，则`<otherwise>`标签内部的SQL片段会被包含到最终生成的SQL语句中",
+          "D. 一旦某个 `<when>`标签的条件满足后，整个 `<choose>` 块的执行就结束了，后续的 `<when>` 标签和 `<otherwise>`标签将不会再执行"
+        ],
+        "answer": "B. `<choose>`标签类可以包含一个或多个`<otherwise>`标签",
+        "explanation": "`<choose>`标签可以包含零个或多个`<when>`标签，但最多只能包含一个`<otherwise>`标签。因此，选项B说\"可以包含一个或多个`<otherwise>`标签\"是错误的。",
+        "chapter": "第9章",
+        "type": "choice"
+      },
+      {
+        "id": "q-13-1782288965859-essu",
+        "number": 13,
+        "question": "下列选项中，关于`<foreach>`标签的属性描述错误的是（）。",
+        "options": [
+          "A. item属性用于指定遍历过程中每个元素的别名",
+          "B. index属性用于指定在遍历过程中当前元素的索引值",
+          "C. open属性用于指定循环开始处插入的字符串，常用于包围循环内容的起始符号",
+          "D. separator属性与open相对应，用于定义在循环结束处插入的字符串，用于包围循环内容的终止符号"
+        ],
+        "answer": "D. separator属性与open相对应，用于定义在循环结束处插入的字符串，用于包围循环内容的终止符号",
+        "explanation": "separator属性是用于设置每次迭代之间插入的分隔符（如逗号），它并不对应open属性。与open属性相对应的是close属性，close用于在循环结束处插入字符串（如右括号）来包围循环内容。因此，D选项的描述是错误的。",
+        "chapter": "第9章",
+        "type": "choice"
+      },
+      {
+        "id": "q-14-1782288965859-ojtd",
+        "number": 14,
+        "question": "`<foreach>`标签中用于指定遍历过程中每个元素的别名的属性的是（）。",
+        "options": [
+          "A. item",
+          "B. index",
+          "C. separator",
+          "D. collection"
+        ],
+        "answer": "A. item",
+        "explanation": "`<foreach>`标签的item属性用于指定在遍历过程中，代表当前迭代到的元素（集合中的单个对象）的变量名。在循环体内部可以使用该变量名来引用元素。因此，正确答案是A。",
+        "chapter": "第9章",
+        "type": "choice"
+      },
+      {
+        "id": "q-15-1782288965859-l0ya",
+        "number": 15,
+        "question": "`<trim>`标签中用于指定给SQL语句增加的后缀的属性的是（ ）。",
+        "options": [
+          "A. prefix",
+          "B. prefixOverrides",
+          "C. suffix",
+          "D. suffixOverrides"
+        ],
+        "answer": "C. suffix",
+        "explanation": "`<trim>`标签的suffix属性用于指定要添加到SQL片段末尾的字符串（如右括号、逗号等）。prefix是添加前缀，suffix是添加后缀。因此，正确答案是C。",
+        "chapter": "第9章",
+        "type": "choice"
+      },
+      {
+        "id": "q-1-1782288965859-ncef",
+        "number": 1,
+        "question": "MyBatis的______注解用于标记插入操作的方法。",
+        "options": [],
+        "answer": "@Insert",
+        "explanation": "在MyBatis注解开发中，@Insert注解用于标注在Mapper接口的方法上，表示该方法对应的SQL语句是一条插入（INSERT）语句。MyBatis会执行该SQL并将结果返回。",
+        "chapter": "第10章",
+        "type": "input"
+      },
+      {
+        "id": "q-2-1782288965859-fuej",
+        "number": 2,
+        "question": "MyBatis的______注解用于定义单个Java对象属性与数据表字段的映射关系。",
+        "options": [],
+        "answer": "@Result",
+        "explanation": "@Result注解用于在@Results注解内部，定义一条具体的映射规则。它描述了Java对象的一个属性（property）如何映射到数据表的一个字段（column）。例如，@Result(property=\"userName\", column=\"user_name\")。",
+        "chapter": "第10章",
+        "type": "input"
+      },
+      {
+        "id": "q-3-1782288965859-9jyq",
+        "number": 3,
+        "question": "MyBatis的______注解用于设置一对一关联查询时的细节信息。",
+        "options": [],
+        "answer": "@One",
+        "explanation": "@One注解（不是@OneToMany）在MyBatis中用于配置一对一关联关系（one-to-one）的查询映射。通常用在@Result注解的one属性中，指定通过一个单独的查询（select属性）来获取关联的对象。",
+        "chapter": "第10章",
+        "type": "input"
+      },
+      {
+        "id": "q-4-1782288965859-tb84",
+        "number": 4,
+        "question": "MyBatis的______注解用于描述一对多关联关系。",
+        "options": [],
+        "answer": "@Many",
+        "explanation": "@Many注解用于配置一对多（one-to-many）或集合类型的关联映射。它通常用在@Result注解的many属性中，指定通过一个单独的查询（select属性）来获取关联的集合对象。",
+        "chapter": "第10章",
+        "type": "input"
+      },
+      {
+        "id": "q-5-1782288965859-qn3b",
+        "number": 5,
+        "question": "MyBatis的______注解用于标记方法参数在SQL语句中的占位符名称。",
+        "options": [],
+        "answer": "@Param",
+        "explanation": "@Param注解用于标注在Mapper接口方法的参数上。当SQL语句中有多个参数，或者需要使用XML中引用的参数名时，使用@Param可以明确地给参数命名，以便在SQL语句中通过#{名称}来引用。",
+        "chapter": "第10章",
+        "type": "input"
+      },
+      {
+        "id": "q-6-1782288965859-z3gf",
+        "number": 6,
+        "question": "@Select注解的SQL语句中可以使用 #{} 语法来引用方法中的参数 。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "在MyBatis中，无论是注解（如@Select）还是XML映射文件，都可以使用#{}占位符来引用方法参数，这是一种预编译的、安全的参数传递方式，可以防止SQL注入。",
+        "chapter": "第10章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-7-1782288965859-2wv7",
+        "number": 7,
+        "question": "MyBatis中的@Options注解可以指定是否使用生成的键和设置超时时间 。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "@Options注解在MyBatis中用于为映射语句（如@Insert）提供配置选项。常用属性包括useGeneratedKeys、keyProperty、keyColumn、timeout等，允许细粒度地控制语句执行行为。",
+        "chapter": "第10章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-8-1782288965859-2b5k",
+        "number": 8,
+        "question": "@Results 注解用于定义多个结果映射规则，可以包含多个 @Result 注解。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "@Results注解是一个容器注解，它内部使用一个@Result数组。当查询结果需要映射到Java对象的多个属性时，可以在@Results中定义多个@Result，每个@Result描述一个属性-字段的映射关系。",
+        "chapter": "第10章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-9-1782288965859-we3m",
+        "number": 9,
+        "question": "@One注解可以通过select属性指定关联查询的SQL语句或方法。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "这是@One注解的核心功能。其select属性用于指定一个已经定义的查询方法（可以是XML中的`<select>`的id，也可以是@Select注解的方法全限定名），该查询会返回关联的对象。",
+        "chapter": "第10章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-10-1782288965859-rhx8",
+        "number": 10,
+        "question": "MyBatis中的@Many 注解是直接提供多对多关联查询的注解。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "@Many注解用于处理一对多（One-to-Many）关系，它在映射中代表一个集合类型的属性。虽然它可以用于多对多关系（通过中间表），但它的直接用途是描述一对多关联。更准确地说，@Many是用于处理集合类型（List、Set）的关联，而不仅仅是\"多对多\"。",
+        "chapter": "第10章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-11-1782288965859-jscr",
+        "number": 11,
+        "question": "下列选项中，用于标记方法参数在SQL语句中的占位符名称的注解是（ ）。",
+        "options": [
+          "A. @Insert",
+          "B. @Param",
+          "C. @Results",
+          "D. @Result"
+        ],
+        "answer": "B. @Param",
+        "explanation": "@Param注解专门用于给Mapper方法参数命名，使得SQL语句中的#{}占位符可以准确引用该参数。@Insert是插入方法标记，@Results和@Result是结果映射相关注解。因此，正确答案是B。",
+        "chapter": "第10章",
+        "type": "choice"
+      },
+      {
+        "id": "q-12-1782288965859-auvq",
+        "number": 12,
+        "question": "下列选项中，关于MyBatis中@Result注解的属性描述错误的是（ ）。",
+        "options": [
+          "A. property属性用于指定实体类的类型",
+          "B. column属性用于指定查询结果集中对应的字段名",
+          "C. one属性用于指定描述一对一关联关系的@One注解",
+          "D. many属性用于指定描述一对多关联关系的@Many 注解"
+        ],
+        "answer": "A. property属性用于指定实体类的类型",
+        "explanation": "在@Result注解中，property属性用于指定Java实体类中的属性名（字段名），而非实体类的类型。实体类的类型是在@Results的id属性或其他地方指定的。因此，选项A描述错误。",
+        "chapter": "第10章",
+        "type": "choice"
+      },
+      {
+        "id": "q-13-1782288965859-zky5",
+        "number": 13,
+        "question": "下列选项中，关于MyBatis中@one注解描述错误的是（ ）。",
+        "options": [
+          "A. 用于标记插入一条记录的方法",
+          "B. 提供了fetchType属性用于指定控制关联对象的加载策略",
+          "C. 提供了select用于指定关联查询的SQL语句或方法",
+          "D. 通常与@Results注解一起使用"
+        ],
+        "answer": "A. 用于标记插入一条记录的方法",
+        "explanation": "@One注解用于配置一对一关联查询，而不是\"标记插入一条记录的方法\"。标记插入操作使用的是@Insert注解。因此，选项A错误。B、C、D选项均是对@One注解的正确描述。",
+        "chapter": "第10章",
+        "type": "choice"
+      },
+      {
+        "id": "q-14-1782288965859-qjag",
+        "number": 14,
+        "question": "下列选项中，关于MyBatis中@Many 注解描述错误的是（ ）。",
+        "options": [
+          "A. 用于标记插入多条记录的方法",
+          "B. 通常与@Results注解一起使用",
+          "C. 常用于在查询结果中嵌套加载一组关联对象的集合",
+          "D. @Many注解的属性和@One注解的属性一致"
+        ],
+        "answer": "A. 用于标记插入多条记录的方法",
+        "explanation": "@Many注解用于配置一对多的关联查询，而不是\"标记插入多条记录的方法\"。标记插入操作仍然使用@Insert注解。因此，选项A描述错误。@Many通常在@Results中使用，用于加载集合，且其属性（select、fetchType等）与@One一致。",
+        "chapter": "第10章",
+        "type": "choice"
+      },
+      {
+        "id": "q-15-1782288965859-au1v",
+        "number": 15,
+        "question": "MyBatis中@Result注解用于指定查询结果集中对应的字段名的属性是（ ）。",
+        "options": [
+          "A. property",
+          "B. column",
+          "C. one",
+          "D. many"
+        ],
+        "answer": "B. column",
+        "explanation": "在@Result注解中，column属性用于指定查询结果集中对应的数据库列名（字段名）。property是Java对象属性名。因此，正确答案是B。",
+        "chapter": "第10章",
+        "type": "choice"
+      },
+      {
+        "id": "q-1-1782288965859-gcji",
+        "number": 1,
+        "question": "MyBatis的一级缓存是在______级别上进行管理的。",
+        "options": [],
+        "answer": "SqlSession",
+        "explanation": "一级缓存是MyBatis默认开启的缓存，其作用域是单个SqlSession对象。同一个SqlSession内执行的相同SQL会命中一级缓存，而不同的SqlSession之间的缓存是相互隔离的。",
+        "chapter": "第11章",
+        "type": "input"
+      },
+      {
+        "id": "q-2-1782288965859-ta62",
+        "number": 2,
+        "question": "MyBatis二级缓存是______级别的缓存。",
+        "options": [],
+        "answer": "SessionFactory",
+        "explanation": "",
+        "chapter": "第11章",
+        "type": "input"
+      },
+      {
+        "id": "q-3-1782288965859-shyl",
+        "number": 3,
+        "question": "从数据库表结构反向生成对应的Java实体类、Mapper接口、XML映射文件的工程化实现通常称为______。",
+        "options": [],
+        "answer": "逆向工程",
+        "explanation": "逆向工程（Reverse Engineering）是MyBatis Generator等工具提供的功能，能够根据已有的数据库表结构，自动生成对应的Java POJO类、操作数据库的Mapper接口以及SQL映射XML文件，极大地减少了手动编写重复代码的工作量。",
+        "chapter": "第11章",
+        "type": "input"
+      },
+      {
+        "id": "q-4-1782288965859-ipcx",
+        "number": 4,
+        "question": "开启当前Mapper的namespace下的二级缓存，可以通过MyBatis映射文件中的______标签完成。",
+        "options": [],
+        "answer": "<cache>",
+        "explanation": "要在某个Mapper映射文件中启用二级缓存，只需在该文件的根`<mapper>`标签下添加一个`<cache>`标签即可。该标签可以配置缓存的各种属性，如淘汰策略、刷新间隔、大小等。",
+        "chapter": "第11章",
+        "type": "input"
+      },
+      {
+        "id": "q-5-1782288965859-v5ti",
+        "number": 5,
+        "question": "当MyBatis开启二级缓存后，首次查询数据时，缓存命中率为______。",
+        "options": [],
+        "answer": "0",
+        "explanation": "缓存命中率是指从缓存中成功获取数据的次数占总查询次数的比例。在二级缓存开启后，首次执行查询操作时，缓存中并无数据，因此数据必须从数据库中查询，此时缓存命中率为0。命中率从第二次查询相同数据时开始计算。",
+        "chapter": "第11章",
+        "type": "input"
+      },
+      {
+        "id": "q-6-1782288965859-7kyu",
+        "number": 6,
+        "question": "MyBatis Generator是MyBatis逆向工程的核心工具之一 。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "MyBatis Generator（简称MBG）是MyBatis官方提供的逆向工程工具，它可以通过配置生成Java实体类、Mapper接口和XML映射文件，是进行MyBatis逆向工程开发的核心工具。",
+        "chapter": "第11章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-7-1782288965859-e64t",
+        "number": 7,
+        "question": "MyBatis Generator会默认加载名称为generatorConfig.xml 的配置文件 。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "",
+        "chapter": "第11章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-8-1782288965859-5pgw",
+        "number": 8,
+        "question": "在MyBatis应用程序中执行查询时，如果缓存中没有对应的结果，程序会出错。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "缓存机制是为了提高性能而设计的。当查询数据时，MyBatis会首先检查一级缓存和二级缓存。如果缓存中没有数据，MyBatis会正常地执行SQL查询数据库，并将查询结果存入缓存后返回，程序不会出错。",
+        "chapter": "第11章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-9-1782288965859-orux",
+        "number": 9,
+        "question": "MyBatis的二级缓存中，同一SqlSessionFactory创建的SqlSession之间，其缓存是共享的。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "二级缓存是基于Mapper命名空间进行共享的，而Mapper命名空间是全局的，与SqlSessionFactory相关。因此，从同一个SqlSessionFactory创建的所有SqlSession实例，在开启了二级缓存的情况下，是可以共享同一个Mapper的缓存数据的。",
+        "chapter": "第11章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-10-1782288965859-ketm",
+        "number": 10,
+        "question": "MyBatis的一级缓存和二级缓存都需要手动开启。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "一级缓存是MyBatis默认开启的，无需手动配置。二级缓存默认是关闭的，需要开发者通过配置（如添加`<cache>`标签）手动开启。因此，该说法错误。",
+        "chapter": "第11章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-11-1782288965859-glhs",
+        "number": 11,
+        "question": "下列选项中，关于MyBatis的一级缓存的描述错误的是（）。",
+        "options": [
+          "A. 为每个SqlSession提供了一个私有的缓存区域",
+          "B. MyBatis一级缓存中的数据只有在SqlSession关闭时候才会被清除",
+          "C. MyBatis的一级缓存是默认开启的",
+          "D. 只有当同一个SqlSession对象多次执行完全相同的SQL语句时，才会到缓存中查询"
+        ],
+        "answer": "B. MyBatis一级缓存中的数据只有在SqlSession关闭时候才会被清除",
+        "explanation": "MyBatis一级缓存中的数据在SqlSession关闭时确实会被清除，但并非只有在这个时候才会被清除。在执行了INSERT、UPDATE、DELETE等会修改数据的操作后，或者调用了SqlSession的clearCache()方法时，一级缓存也会被清除。因此，选项B的说法过于绝对且不完整，是错误的。",
+        "chapter": "第11章",
+        "type": "choice"
+      },
+      {
+        "id": "q-12-1782288965859-cv4w",
+        "number": 12,
+        "question": "下列选项中，关于MyBatis的二级缓存的描述错误的是（）。",
+        "options": [
+          "A. MyBatis二级缓存基于Mapper的名称空间进行划分",
+          "B. MyBatis二级缓存可以实现SqlSession之间的缓存共享",
+          "C. MyBatis的二级缓存是默认开启的",
+          "D. 执行插入操作后，二级缓存中的数据会被清楚"
+        ],
+        "answer": "C. MyBatis的二级缓存是默认开启的",
+        "explanation": "在MyBatis中，二级缓存默认是关闭的，需要开发者进行配置（在MyBatis核心配置文件中设置全局开关，并在具体Mapper中添加`<cache>`标签）才能启用。因此，选项C\"默认开启\"是错误的。",
+        "chapter": "第11章",
+        "type": "choice"
+      },
+      {
+        "id": "q-13-1782288965859-3uea",
+        "number": 13,
+        "question": "下列选项中，关于MyBatis中`<cache>`标签的属性描述错误的是（）。",
+        "options": [
+          "A. type属性用于指定需要缓存的Mapper的全限定类名",
+          "B. eviction属性用于指定缓存的淘汰策略",
+          "C. flushInterval属性用于指定缓存的刷新间隔",
+          "D. size属性用于指定缓存的最大容量"
+        ],
+        "answer": "A. type属性用于指定需要缓存的Mapper的全限定类名",
+        "explanation": "在`<cache>`标签中，type属性用于指定自定义缓存实现类的全限定类名，而不是\"需要缓存的Mapper的全限定类名\"。`<cache>`标签本身就是用在Mapper文件中的，因此不需要再指定Mapper名称。选项A的描述是错误的。",
+        "chapter": "第11章",
+        "type": "choice"
+      },
+      {
+        "id": "q-14-1782288965859-b0am",
+        "number": 14,
+        "question": "下列选项中，用于开启当前Mapper的命名空间下的二级缓存的标签（）。",
+        "options": [
+          "A. `<settings>`",
+          "B. `<cache>`",
+          "C. `<setting>`",
+          "D. `<environment>`"
+        ],
+        "answer": "B. `<cache>`",
+        "explanation": "要为一个特定的Mapper映射文件启用二级缓存，需要在该文件的`<mapper>`标签内添加`<cache>`标签。因此，正确答案是B。",
+        "chapter": "第11章",
+        "type": "choice"
+      },
+      {
+        "id": "q-15-1782288965859-lsuu",
+        "number": 15,
+        "question": "下列选项中，关于MyBatis缓存的描述错误的是（）。",
+        "options": [
+          "A. 当MyBatis开启二级缓存后，首次查询数据时，缓存命中率为1",
+          "B. MyBatis的缓存机制旨在减少数据库的负载和提高系统的响应速",
+          "C. 当终端用户访问缓存时，如果在缓存中找到了要访问的数据，称为缓存命中",
+          "D. SqlSession关闭时，MyBatis会将一级缓存中的数据清除"
+        ],
+        "answer": "A. 当MyBatis开启二级缓存后，首次查询数据时，缓存命中率为1",
+        "explanation": "当MyBatis开启二级缓存后，首次执行查询时，因为缓存中还没有数据，所以会查询数据库，缓存不会命中，命中率应为0，而不是1。只有在后续的查询中才可能命中缓存。因此，选项A错误。",
+        "chapter": "第11章",
+        "type": "choice"
+      },
+      {
+        "id": "q-1-1782288965859-fkdc",
+        "number": 1,
+        "question": "MyBatis-Plus的______注解用于指定这个实体类所对应数据表的名称。",
+        "options": [],
+        "answer": "@TableName",
+        "explanation": "MyBatis-Plus通过注解来映射实体类和数据表。@TableName注解用于指定当前实体类对应数据库中的哪一张表。当实体类名与表名不一致时，必须使用该注解进行配置。",
+        "chapter": "第12章",
+        "type": "input"
+      },
+      {
+        "id": "q-2-1782288965859-1hob",
+        "number": 2,
+        "question": "MyBatis-Plus的______注解用于标识实体类中和数据表主键字段对应的属性。",
+        "options": [],
+        "answer": "@TableId",
+        "explanation": "在MyBatis-Plus中，@TableId注解用于标记实体类中的某个属性为数据表的主键字段。它还可以配合type属性来指定主键生成策略（如AUTO、INPUT、ID_WORKER等）。",
+        "chapter": "第12章",
+        "type": "input"
+      },
+      {
+        "id": "q-3-1782288965859-jwz2",
+        "number": 3,
+        "question": "______接口是MyBatis-Plus中定义的一个基础映射器接口。",
+        "options": [],
+        "answer": "BaseMapper",
+        "explanation": "BaseMapper是MyBatis-Plus提供的通用Mapper接口，它定义了一系列的CRUD方法（如insert、deleteById、updateById、selectList等）。开发者自定义的Mapper接口只需继承BaseMapper<T>，即可获得这些通用的数据访问能力，无需编写XML或SQL。",
+        "chapter": "第12章",
+        "type": "input"
+      },
+      {
+        "id": "q-4-1782288965859-2g5r",
+        "number": 4,
+        "question": "条件构造器的______方法用于匹配字段中值等于某个值的记录。",
+        "options": [],
+        "answer": "eq()",
+        "explanation": "在MyBatis-Plus的条件构造器（如QueryWrapper）中，eq方法用于构建\"等于\"（=）条件。例如，queryWrapper.eq(\"age\", 18)会生成SQL条件 age = 18。",
+        "chapter": "第12章",
+        "type": "input"
+      },
+      {
+        "id": "q-5-1782288965859-xdku",
+        "number": 5,
+        "question": "______接口是MyBatis-Plus服务层的通用接口。",
+        "options": [],
+        "answer": "IService",
+        "explanation": "IService是MyBatis-Plus为Service层提供的通用接口，它定义了一系列通用的业务方法，如批量操作、分页查询等。配合ServiceImpl类，开发者可以快速实现Service层。",
+        "chapter": "第12章",
+        "type": "input"
+      },
+      {
+        "id": "q-6-1782288965859-sar7",
+        "number": 6,
+        "question": "MyBatis-Plus在MyBatis的基础上只做增强不做改变。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "这是MyBatis-Plus的设计哲学。它完全兼容MyBatis，并且在其之上提供了更丰富的功能（如通用CRUD、代码生成器、分页插件、条件构造器等），但并不会改变MyBatis已有的核心行为，开发者可以自由混合使用MyBatis和MyBatis-Plus的特性。",
+        "chapter": "第12章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-7-1782288965859-1ovi",
+        "number": 7,
+        "question": "Lombok的@Data注解在编译时会自动为类生成常用的方法，如getter、setter、toString()等。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "Lombok是一个编译时注解处理框架。@Data注解是一个组合注解，它会为标注的类在编译时自动生成所有字段的getter和setter、equals、hashCode、toString等方法，显著减少了样板代码。",
+        "chapter": "第12章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-8-1782288965859-4j5h",
+        "number": 8,
+        "question": "MyBatis-Plus的条件构造器允许开发者以链式调用的方式构建SQL查询条件。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "MyBatis-Plus的条件构造器（如QueryWrapper、LambdaQueryWrapper）的方法都返回当前对象本身，因此支持链式编程风格，使得构建复杂查询条件的代码更流畅、易读。",
+        "chapter": "第12章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-9-1782288965859-o0o6",
+        "number": 9,
+        "question": "@TableField注解用于标识实体类中和数据表主键字段对应的属性 。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "@TableField注解用于标识实体类中非主键字段与数据表字段的映射关系。它可以处理字段名不一致、字段不存在、自动填充等情况。而用于标识主键字段的注解是@TableId。",
+        "chapter": "第12章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-10-1782288965859-xjie",
+        "number": 10,
+        "question": "AbstractWrapper是所有条件构造器的基类。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "MyBatis-Plus的条件构造器类层次结构为：AbstractWrapper提供了所有条件构造器的公共方法（如eq、gt、like、orderBy等），QueryWrapper、UpdateWrapper、LambdaQueryWrapper等都继承自AbstractWrapper。",
+        "chapter": "第12章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-11-1782288965859-mwdn",
+        "number": 11,
+        "question": "下列选项中，关于MyBatis-Plus的特性描述错误的是（ ）。",
+        "options": [
+          "A. 侵入性强",
+          "B. 支持主键自动生成",
+          "C. 内置代码生成器",
+          "D. 支持自定义全局通用操作"
+        ],
+        "answer": "A. 侵入性强",
+        "explanation": "MyBatis-Plus的设计目标是\"只做增强不做改变\"，它的特性之一就是\"无侵入\"，即对已有代码的侵入性非常低。选项A说\"侵入性强\"是错误的。B、C、D选项都是MyBatis-Plus的显著特性。",
+        "chapter": "第12章",
+        "type": "choice"
+      },
+      {
+        "id": "q-12-1782288965859-mau2",
+        "number": 12,
+        "question": "下列选项中，关于@TableField注解的属性描述错误的是（ ）。",
+        "options": [
+          "A. value属性用于指定属性默认的属性值",
+          "B. exist属性用于标识该属性在数据库是否有对应的字段",
+          "C. fill属性用于指定该字段的自动填充策略",
+          "D. update属性用于标识该字段是否参与UPDATE操作"
+        ],
+        "answer": "A. value属性用于指定属性默认的属性值",
+        "explanation": "在@TableField注解中，value属性用于指定当前实体属性映射到数据库表的哪个字段名，而不是\"指定属性默认的属性值\"。指定默认值通常是Java代码层面的初始化，或使用数据库默认值。因此，选项A描述错误。",
+        "chapter": "第12章",
+        "type": "choice"
+      },
+      {
+        "id": "q-13-1782288965859-wdw7",
+        "number": 13,
+        "question": "下列选项中，关于MyBatis-Plus的条件构造器描述错误的是（）。",
+        "options": [
+          "A. AbstractWrapper是QueryWrapper的子类，用于构建查询条件",
+          "B. AbstractWrapper它定义了一系列条件构造器的通用方法，这些方法构成了构建SQL条件的基础",
+          "C. LambdaQueryWrapper可以使用Lambda表达式代替字符串形式的字段名",
+          "D. MyBatis-Plus的条件构造器是一个强大的查询条件构建工具"
+        ],
+        "answer": "A. AbstractWrapper是QueryWrapper的子类，用于构建查询条件",
+        "explanation": "在MyBatis-Plus的条件构造器体系中，AbstractWrapper是所有Wrapper类的父类，它定义了所有通用的条件方法。而QueryWrapper是AbstractWrapper的子类，用于普通字段名的查询条件构建。选项A说\"AbstractWrapper是QueryWrapper的子类\"颠倒了继承关系，是错误的。",
+        "chapter": "第12章",
+        "type": "choice"
+      },
+      {
+        "id": "q-14-1782288965859-kdo9",
+        "number": 14,
+        "question": "下列选项中，关于MyBatis-Plus的条件构造器的方法描述错误的是（）。",
+        "options": [
+          "A. ne()方法用于匹配字段中值不等于某个值的记录",
+          "B. gt()方法用于匹配字段中值大于某个值的记录",
+          "C. ge()方法用于匹配字段中值大于或等于某个值的记录",
+          "D. lt()方法用于匹配字段中值小于或等于某个值的记录"
+        ],
+        "answer": "D. lt()方法用于匹配字段中值小于或等于某个值的记录",
+        "explanation": "lt()方法是\"小于\"（less than）的缩写，它表示匹配字段值小于（<）某个值的记录，不包括等于。而小于或等于（<=）对应的方法是le()（less than or equal to）。因此，选项D描述错误。",
+        "chapter": "第12章",
+        "type": "choice"
+      },
+      {
+        "id": "q-15-1782288965859-zb2o",
+        "number": 15,
+        "question": "下列选项中，对于 between(\"age\", 18, 30)的解释正确的是（ ）。",
+        "options": [
+          "A. 用于匹配age字段中值等于18或者等于30的记录",
+          "B. 用于匹配age字段中值大于18并且小于30的记录",
+          "C. 用于匹配age字段中值小于18或者大于30的记录",
+          "D. 用于匹配age字段中值不等于18并且不等于30的记录"
+        ],
+        "answer": "B. 用于匹配age字段中值大于18并且小于30的记录",
+        "explanation": "在MyBatis-Plus条件构造器中，between方法用于构建BETWEEN SQL子句。between(\"age\", 18, 30)会生成SQL片段 age BETWEEN 18 AND 30，含义是age字段的值在18和30之间（包含18和30）。这四个选项中，最接近的B选项（大于18并且小于30）描述的是开区间（不包含边界），虽然不完全准确（BETWEEN包含边界），但在给定的选项中，B是语义上最接近\"在两者之间\"的描述，其他选项完全不相关。因此，本题答案为B。更精确地说，between(\"age\", 18, 30)匹配的是 age >= 18 AND age <= 30。",
+        "chapter": "第12章",
+        "type": "choice"
+      },
+      {
+        "id": "q-1-1782288965859-7yw9",
+        "number": 1,
+        "question": "Spring Boot通过自动配置和______的原则，与Spring框架紧密结合。",
+        "options": [],
+        "answer": "约定优于配置",
+        "explanation": "Spring Boot的核心设计哲学之一就是\"约定优于配置\"（Convention over Configuration）。它基于大量的默认约定来减少项目的配置工作，开发者只需遵循这些约定，即可快速启动和运行一个Spring应用。",
+        "chapter": "第13章",
+        "type": "input"
+      },
+      {
+        "id": "q-2-1782288965859-g9ee",
+        "number": 2,
+        "question": "YAML文件的后缀名为______或.yaml。",
+        "options": [],
+        "answer": ".yml",
+        "explanation": "YAML（YAML Ain't Markup Language）是一种数据序列化格式，常用于Spring Boot的配置文件。其标准的文件扩展名是.yml或.yaml。",
+        "chapter": "第13章",
+        "type": "input"
+      },
+      {
+        "id": "q-3-1782288965859-yhci",
+        "number": 3,
+        "question": "application.properties文件中属性通过______格式进行设置。",
+        "options": [],
+        "answer": "键值对",
+        "explanation": "传统的Spring Boot属性配置文件application.properties使用Key=Value的格式来配置每一个属性，例如spring.application.name=myapp。",
+        "chapter": "第13章",
+        "type": "input"
+      },
+      {
+        "id": "q-4-1782288965859-o2fc",
+        "number": 4,
+        "question": "Spring Boot将用于实现特定功能的一系列依赖及其配置封装到一个特色的组件中，这种特色的组件称为______。",
+        "options": [],
+        "answer": "启动器",
+        "explanation": "Spring Boot的\"启动器\"（Starter）是一组预定义的Maven/Gradle依赖集合，它包含了运行特定功能所需的所有jar包和自动配置。例如spring-boot-starter-web包含了Spring MVC、Tomcat等依赖。",
+        "chapter": "第13章",
+        "type": "input"
+      },
+      {
+        "id": "q-5-1782288965859-mj2c",
+        "number": 5,
+        "question": "YAML中，使用\"Key: Value\"的形式表示一对键值对，其中Value之前包含一个英文______。",
+        "options": [],
+        "answer": "空格",
+        "explanation": "在YAML语法中，冒号（:）后面必须跟一个英文空格，才能正确表示一个键值对。这是YAML格式的强制要求，用于区分键值对和普通文本。",
+        "chapter": "第13章",
+        "type": "input"
+      },
+      {
+        "id": "q-6-1782288965859-qsxd",
+        "number": 6,
+        "question": "Spring Boot是替代Spring框架的解决方案。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "Spring Boot并不是要替代Spring框架，而是建立在Spring框架之上的一个快速开发脚手架。它通过自动配置和启动器来简化Spring应用的构建和部署，底层依然依赖于Spring框架的核心功能（IoC、AOP等）。",
+        "chapter": "第13章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-7-1782288965859-c03q",
+        "number": 7,
+        "question": "使用Maven方式构建Spring Boot项目必须处于联网状态，否则会创建失败。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "首次创建Spring Boot项目时，Maven需要从中央仓库或私服下载所需的依赖包，因此需要网络。但如果本地仓库已经缓存了所有必要的依赖，则即使离线也可以成功构建。选项说\"必须处于联网状态\"过于绝对。",
+        "chapter": "第13章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-8-1782288965859-ldak",
+        "number": 8,
+        "question": "Spring Boot官方针对所有场景开发的技术框架都提供了启动器。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "Spring Boot官方提供了大量的常用启动器，但并非针对所有场景和技术框架都提供了官方启动器。对于一些非主流或第三方的技术，可能需要开发者自定义启动器或手动配置。",
+        "chapter": "第13章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-9-1782288965859-b9qy",
+        "number": 9,
+        "question": "默认情况下，application.yml文件中配置的字符串必须使用单引号或双引号进行修饰。 （ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "B. 错",
+        "explanation": "在YAML文件中，字符串通常可以省略引号，直接写文本即可，除非字符串中包含特殊字符（如冒号、井号、空格等）可能导致解析歧义。默认情况下，字符串不需要引号修饰。",
+        "chapter": "第13章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-10-1782288965859-pe3g",
+        "number": 10,
+        "question": "Spring Boot直接内嵌了Tomcat、Jetty或Undertow等Web容器。（ ）",
+        "options": [
+          "A. 对",
+          "B. 错"
+        ],
+        "answer": "A. 对",
+        "explanation": "Spring Boot在添加了spring-boot-starter-web依赖后，会默认内嵌一个Tomcat容器作为Web服务器。开发者也可以通过配置切换到Jetty或Undertow。这使得Spring Boot应用可以打包为可执行的Jar文件，无需外部部署到Web容器。",
+        "chapter": "第13章",
+        "type": "truefalse"
+      },
+      {
+        "id": "q-11-1782288965859-eojq",
+        "number": 11,
+        "question": "下列选项中，关于Spring Boot概述错误的是（ ）。",
+        "options": [
+          "A. 使用Spring Boot开发程序时，几乎可以实现开箱即用",
+          "B. Spring Boot框架本身并不提供Spring框架的核心特性以及扩展功能",
+          "C. Spring Boot是替代Spring框架的解决方案",
+          "D. Spring Boot集成了大量常用的第三方库配置"
+        ],
+        "answer": "C. Spring Boot是替代Spring框架的解决方案",
+        "explanation": "Spring Boot是基于Spring框架的，它增强并简化了Spring的应用开发，但并非替代Spring框架。选项C说\"替代Spring框架\"是错误的。A、B、D选项是对Spring Boot的正确描述。",
+        "chapter": "第13章",
+        "type": "choice"
+      },
+      {
+        "id": "q-12-1782288965859-3pga",
+        "number": 12,
+        "question": "下列选项中，对于application.yml中配置属性的规则描述错误的是（ ）。",
+        "options": [
+          "A. 使用缩进表示层级关系",
+          "B. 可以使用Tab键进行缩进",
+          "C. 同级元素必须左侧对齐",
+          "D. 大小写敏感"
+        ],
+        "answer": "B. 可以使用Tab键进行缩进",
+        "explanation": "在YAML语法规范中，缩进必须使用空格，不能使用Tab键（制表符）。这是YAML的硬性规定，使用Tab会导致解析错误。因此，选项B错误。A、C、D选项都是YAML的正确规则。",
+        "chapter": "第13章",
+        "type": "choice"
+      },
+      {
+        "id": "q-13-1782288965859-ms1g",
+        "number": 13,
+        "question": "下列选项中，关于Spring Boot的全局配置文件描述错误的是（ ）。",
+        "options": [
+          "A. Spring Boot默认支持application.properties、application.yaml作为全局配置文件",
+          "B. Spring Boot项目中可以存在多个全局配置文件",
+          "C. 位于相同位置的application.properties的优先级低于application.yml",
+          "D. 如果存在相同的配置内容时，高优先级的内容会覆盖低优先级的内容"
+        ],
+        "answer": "C. 位于相同位置的application.properties的优先级低于application.yml",
+        "explanation": "在Spring Boot中，当application.properties和application.yml同时存在于相同位置时，application.properties的优先级高于application.yml。也就是说，如果两个文件中存在相同配置项，properties文件中的值会覆盖yml文件中的值。因此，C选项说\"优先级低于\"是错误的。",
+        "chapter": "第13章",
+        "type": "choice"
+      },
+      {
+        "id": "q-14-1782288965859-641c",
+        "number": 14,
+        "question": "下列选项中，关于Spring Boot的application.yml文件描述错误的是（）。",
+        "options": [
+          "A. 通常用于表示数据结构和配置信息，使用缩进和外观依赖的方式表示层级关系",
+          "B. 使用Key: Value的形式表示一对键值对",
+          "C. 缩进时可以使用制表符和空格",
+          "D. 在配置字面量类型的属性时，默认情况下字符串是不需要使用单引号或双引号"
+        ],
+        "answer": "C. 缩进时可以使用制表符和空格",
+        "explanation": "YAML文件的缩进必须使用空格，不能使用制表符。选项C说\"可以使用制表符和空格\"是错误的。A、B、D选项都是对application.yml文件的正确描述。",
+        "chapter": "第13章",
+        "type": "choice"
+      },
+      {
+        "id": "q-15-1782288965859-zofw",
+        "number": 15,
+        "question": "下列选项中，关于application.properties文件中的配置描述错误的是（）。",
+        "options": [
+          "A. 属性的表示形式为Key=Value",
+          "B. 在application.properties文件中配置字面量的属性时，直接将字面量作为Value直接写在键值对中即可",
+          "C. 默认情况下字符串是需要使用单引号或双引号进行修饰",
+          "D. 在application.properties文件中配置数组类型属性时，元素值之间使用逗号间隔。"
+        ],
+        "answer": "C. 默认情况下字符串是需要使用单引号或双引号进行修饰",
+        "explanation": "在application.properties文件中，配置字符串类型的属性值时，默认情况下不需要使用单引号或双引号修饰，直接写值即可。只有特殊字符（如逗号、等号、中文空格等）才可能需要转义或引号。因此，选项C描述错误。",
+        "chapter": "第13章",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782524678440-4pmm",
+        "number": 1,
+        "question": "请编写一个 Spring MVC入门控制器，要求：\n\t使用@Controller注解声明控制器；\n\t定义访问路径/home；\n\t方法返回逻辑视图home.jsp。",
+        "options": [],
+        "answer": "@Controller\npublic class IndexController {\n\n    @RequestMapping(\"/home\")\n    public String index(){\n        return \"home.jsp\";\n    }\n}",
+        "explanation": "",
+        "chapter": "大题",
+        "type": "essay"
+      },
+      {
+        "id": "q-1782524909923-zjke",
+        "number": 2,
+        "question": "请完整编写MyBatis核心配置文件mybatis-config.xml片段，要求包含：\n\t配置环境（默认开发环境）；\n\t配置数据库连接驱动、url、用户名、密码；\n\t配置映射文件扫描。",
+        "options": [],
+        "answer": "<configuration>\n    <!-- 配置环境 -->\n    <environments default=\"development\">\n        <environment id=\"development\">\n            <transactionManager type=\"JDBC\"/>\n            <dataSource type=\"POOLED\">\n                <property name=\"driver\" value=\"com.mysql.cj.jdbc.Driver\"/>\n                <property name=\"url\" value=\"jdbc:mysql://localhost:3306/mybatis\"/>\n                <property name=\"username\" value=\"root\"/>\n                <property name=\"password\" value=\"root\"/>\n            </dataSource>\n        </environment>\n    </configuration>\n\n    <!-- 映射文件配置 -->\n    <mappers>\n        <mapper resource=\"mapper/UserMapper.xml\"/>\n    </mappers>\n</configuration>\n",
+        "explanation": "",
+        "chapter": "大题",
+        "type": "essay"
+      },
+      {
+        "id": "q-1782526051482-lqei",
+        "number": 3,
+        "question": "使用@GetMapping编写控制器方法：\n\t访问地址/detail\n\t接收普通字符串参数name\n\t在控制台打印输出用户名。",
+        "options": [],
+        "answer": "@Controller\npublic class ShowController {\n\n    @GetMapping(\"/detail\")\n    public void show(String name){\n        System.out.println(\"访问用户：\" + name);\n    }\n}",
+        "explanation": "",
+        "chapter": "大题",
+        "type": "essay"
+      },
+      {
+        "id": "q-1782526070486-tloc",
+        "number": 4,
+        "question": "4. 编写UserMapper.xml映射文件，要求：\n\t设置命名空间\n\t根据id查询用户\n\t添加用户\n\t根据id删除用户",
+        "options": [],
+        "answer": "<!-- 命名空间 -->\n<mapper namespace=\"com.itheima.mapper.UserMapper\">\n\n    <!-- 根据id查询用户 -->\n    <select id=\"findById\" resultType=\"User\">\n        select id,username from user where id = #{id}\n    </select>\n\n    <!-- 新增用户 -->\n    <insert id=\"addUser\">\n        insert into user(username) values(#{username})\n    </insert>\n\n    <!-- 根据id删除用户 -->\n    <delete id=\"deleteById\">\n        delete from user where id = #{id}\n    </delete>\n\n</mapper>",
+        "explanation": "",
+        "chapter": "大题",
+        "type": "essay"
+      }
     ],
-    "quizMode": "sequential",
-    "shuffledQuestions": null,
-    "selectedChapters": [],
-    "selectedTypes": [],
-    "isFinished": false
+    "wrongIds": [
+      "q-1-1782288965858-y64i",
+      "q-2-1782288965858-7fey",
+      "q-1782524154378-gvu3",
+      "q-1782524909923-zjke",
+      "q-1782524678440-4pmm",
+      "q-5-1782288965859-3wq5",
+      "q-11-1782288965858-cj2z",
+      "q-9-1782288965859-rlrm"
+    ]
   },
   "quiz-subjects": [
     {
@@ -26,7 +2536,10 @@
     }
   ],
   "quiz-achievements": [
-    "complete_subject"
+    "complete_subject",
+    "first_perfect",
+    "streak_10",
+    "streak_20"
   ],
   "quiz-cover-blur": 4,
   "quiz-progress-subj-1782026994278-2": {
@@ -3832,7 +6345,7 @@
   ],
   "quiz-cover-seen-v2": true,
   "quiz-progress-subj-1782026926147-1": {
-    "currentIndex": 29,
+    "currentIndex": 0,
     "answers": {},
     "submittedIds": [],
     "quizMode": "sequential",
@@ -3846,2480 +6359,19 @@
   "quiz-theme": "light",
   "quiz-mascot-enabled": true,
   "quiz-active-subject": "subj-1782026926147-1",
-  "quiz-sound-muted": true,
-  "quiz-subject-data-subj-1782026926147-1": {
-    "questions": [
-      {
-        "id": "q-1-1782288965858-y64i",
-        "number": 1,
-        "question": "在______方面，Spring框架提供了对Spring MVC、Struts2等框架的整合。",
-        "options": [],
-        "answer": "表现层",
-        "explanation": "Spring框架是一个分层架构，其中表现层（Web层）负责处理用户交互和界面展示。Spring MVC和Struts2都是典型的Web层框架，Spring通过提供对它们的整合支持，帮助开发者构建Web应用。因此，此处应填\"表现层\"。",
-        "chapter": "第1章",
-        "type": "input"
-      },
-      {
-        "id": "q-2-1782288965858-7fey",
-        "number": 2,
-        "question": "______是指框架或工具的使用不会对被应用程序的核心逻辑产生侵入性的影响。",
-        "options": [],
-        "answer": "非侵入式",
-        "explanation": "非侵入式是框架设计的一个重要理念。当一个框架是非侵入式的，意味着开发者在使用该框架时，不需要修改应用程序的核心业务代码（如实现特定接口或继承特定类）来适应框架，降低了框架与业务代码的耦合度，使得代码更易于维护和测试。Spring就是典型的非侵入式框架。",
-        "chapter": "第1章",
-        "type": "input"
-      },
-      {
-        "id": "q-3-1782288965858-gm43",
-        "number": 3,
-        "question": "Spring的核心容器主要由______模块、Core模块、Contex模块和SpEL模块组成。",
-        "options": [],
-        "answer": "Beans",
-        "explanation": "Spring的核心容器是Spring框架的基础，它负责管理应用中的对象（Bean）。Beans模块提供了Bean的配置、创建和管理功能，是所有其他Spring模块的基础。Core模块提供核心工具类，Context模块提供应用上下文，SpEL模块提供表达式语言支持。",
-        "chapter": "第1章",
-        "type": "input"
-      },
-      {
-        "id": "q-4-1782288965858-ku09",
-        "number": 4,
-        "question": "Spring的______模块提供了对面向切面编程的支持，允许开发者定义切面来截取应用程序的流程。",
-        "options": [],
-        "answer": "AOP",
-        "explanation": "AOP（Aspect-Oriented Programming，面向切面编程）是Spring框架的关键特性之一。它允许开发者将横切关注点（如日志记录、性能监控、事务管理等）从业务逻辑中分离出来，通过定义\"切面\"来模块化这些功能，并在程序执行的特定\"连接点\"（如方法调用前后）织入增强代码。",
-        "chapter": "第1章",
-        "type": "input"
-      },
-      {
-        "id": "q-5-1782288965858-d66m",
-        "number": 5,
-        "question": "Spring框架的______容器主要包括BeanFactory和ApplicationContext。",
-        "options": [],
-        "answer": "IoC",
-        "explanation": "IoC（Inversion of Control，控制反转）容器是Spring框架的核心，它负责创建、配置和管理应用中的对象（Bean）。BeanFactory是基础的IoC容器，提供了基本的依赖注入功能；ApplicationContext是更高级的容器，提供了更多企业级功能。",
-        "chapter": "第1章",
-        "type": "input"
-      },
-      {
-        "id": "q-6-1782288965858-g2lx",
-        "number": 6,
-        "question": "与EJB相比，Spring框架代码简洁，并且更易于集成到不同的环境中 。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "EJB（Enterprise JavaBeans）是早期的Java EE企业级应用规范，通常需要复杂的配置和部署到专用的应用服务器。Spring框架则设计为轻量级、非侵入式的，代码更加简洁，配置灵活，且可以独立运行在各种环境（如Web容器、独立应用）中，集成度高，因此该说法正确。",
-        "chapter": "第1章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-7-1782288965858-hyh5",
-        "number": 7,
-        "question": "在Spring框架中，Bean是指由Spring容器管理的对象实例 。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "在Spring框架中，\"Bean\"是一个核心概念，它指的是由Spring IoC容器负责实例化、配置和管理的任何Java对象。简单来说，应用程序中那些由Spring容器创建并维护其生命周期的对象，都被称为Spring Bean。",
-        "chapter": "第1章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-8-1782288965858-q616",
-        "number": 8,
-        "question": "Beans模块提供了Spring框架的基本组成部分，包括IoC和AOP功能。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "Beans模块确实提供了Spring框架的基本组成部分，但它主要关注的是Bean的配置、创建和管理，即IoC（控制反转）功能。而AOP（面向切面编程）功能是由独立的Spring AOP模块提供的，并非包含在Beans模块中。",
-        "chapter": "第1章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-9-1782288965858-ej0b",
-        "number": 9,
-        "question": "DI是控制反转的英文缩写。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "DI（Dependency Injection）是\"依赖注入\"的英文缩写，它是实现IoC（Inversion of Control，控制反转）的一种主要方式。控制反转的英文缩写是IoC，而不是DI。",
-        "chapter": "第1章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-10-1782288965858-sxms",
-        "number": 10,
-        "question": "Spring的Context模块构建于Beans模块和Core模块之上 。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "Spring框架的核心模块之间具有层次关系。Context模块（应用上下文）是建立在Beans模块和Core模块基础之上的，它提供了更高级的容器功能，如国际化、事件传播、资源加载等，并集成了Beans和Core的功能，为应用提供一个运行环境。",
-        "chapter": "第1章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-11-1782288965858-cj2z",
-        "number": 11,
-        "question": "下列选项中，包含IoC和DI功能的模块是（ ）。",
-        "options": [
-          "A. Beans",
-          "B. Core",
-          "C. Context",
-          "D. SpEL"
-        ],
-        "answer": "A. Beans",
-        "explanation": "Beans模块是Spring IoC容器的基础，它提供了BeanFactory接口，该接口负责管理Bean的创建、配置和依赖注入（DI）。Core模块提供基础工具，Context模块在Beans之上提供上下文服务，SpEL是表达式语言。因此，包含IoC和DI核心功能的模块是Beans模块。",
-        "chapter": "第1章",
-        "type": "choice"
-      },
-      {
-        "id": "q-12-1782288965858-3raz",
-        "number": 12,
-        "question": "下列选项中，关于Spring框架优点的说法不正确的是（ ）。",
-        "options": [
-          "A. 非侵入式设计",
-          "B. 支持声明式事务",
-          "C. 支持AOP编程",
-          "D. 提供了自动配置和嵌入式Web服务器。"
-        ],
-        "answer": "D. 提供了自动配置和嵌入式Web服务器。",
-        "explanation": "A、B、C选项都是Spring框架的优点。非侵入式设计允许轻量级开发，声明式事务简化了事务管理，AOP编程提供了强大的横切关注点分离能力。选项D提到的\"自动配置和嵌入式Web服务器\"是Spring Boot的特性，而不是Spring框架本身的优点。Spring框架本身不提供嵌入式服务器，需要集成其他Web容器。",
-        "chapter": "第1章",
-        "type": "choice"
-      },
-      {
-        "id": "q-13-1782288965858-nnr4",
-        "number": 13,
-        "question": "下列选项中，关于Spring框架的描述，错误的是（ ）。",
-        "options": [
-          "A. Spring是一个提供了一站式服务的框架",
-          "B. Spring是轻量级框架",
-          "C. Spring是开源框架",
-          "D. Spring提高了组件之间的耦合度"
-        ],
-        "answer": "D. Spring提高了组件之间的耦合度",
-        "explanation": "Spring框架的核心目标之一就是降低组件之间的耦合度，通过IoC和DI技术实现松耦合，从而提升代码的可维护性和可测试性。因此，选项D说\"提高了组件之间的耦合度\"是错误的。A、B、C选项都是对Spring框架的正确描述。",
-        "chapter": "第1章",
-        "type": "choice"
-      },
-      {
-        "id": "q-14-1782288965858-4kay",
-        "number": 14,
-        "question": "下列选项中，对于Spring的数据访问及集成模块说法错误的是（）。",
-        "options": [
-          "A. JDBC模块简化了JDBC编程的过程",
-          "B. JMS模块主要用于处理消息传递，包括消息的生产和消费",
-          "C. ORM模块提供了对主流的对象关系映射框架的集成支持",
-          "D. Transactions模块负责事务管理，但是没有提供声明式事务管理的功能"
-        ],
-        "answer": "D. Transactions模块负责事务管理，但是没有提供声明式事务管理的功能",
-        "explanation": "Transactions模块提供了强大的事务管理功能，包括编程式事务管理和声明式事务管理。声明式事务管理允许开发者通过配置或注解的方式定义事务边界，无需编写事务管理代码。因此，选项D说\"没有提供声明式事务管理的功能\"是错误的。A、B、C选项的描述都是正确的。",
-        "chapter": "第1章",
-        "type": "choice"
-      },
-      {
-        "id": "q-15-1782288965858-efab",
-        "number": 15,
-        "question": "下列选项中，对于Spring框架中的IoC和DI描述错误的是（）。",
-        "options": [
-          "A. IoC表示控制反转",
-          "B. IoC旨在构建松耦合的应用程序，降低代码的复杂度",
-          "C. 通常谈及Spring容器时，指的就是Spring框架中的DI容器",
-          "D. DI表示依赖注入，是IoC的一种实现方式。"
-        ],
-        "answer": "C. 通常谈及Spring容器时，指的就是Spring框架中的DI容器",
-        "explanation": "IoC（控制反转）是一种设计思想，目的是为了降低代码耦合度，实现松耦合。DI（依赖注入）是实现IoC的具体方式。在Spring框架中，我们所说的\"Spring容器\"通常指IoC容器（也常被称为DI容器），它负责管理Bean的创建和依赖注入。选项C说\"指的就是DI容器\"，虽然DI容器是IoC容器的核心功能，但通常称为IoC容器更为准确和通用，因此C选项的说法有误。",
-        "chapter": "第1章",
-        "type": "choice"
-      },
-      {
-        "id": "q-1-1782288965858-81ak",
-        "number": 1,
-        "question": "常见的IoC容器有BeanFactory和______。",
-        "options": [],
-        "answer": "ApplicationContext",
-        "explanation": "Spring提供了两种主要的IoC容器接口：BeanFactory和ApplicationContext。BeanFactory是Spring框架最基础的容器接口，采用延迟加载策略。ApplicationContext是BeanFactory的子接口，功能更强大，支持国际化、事件发布、资源加载等特性，是大多数实际应用中选择的容器。",
-        "chapter": "第2章",
-        "type": "input"
-      },
-      {
-        "id": "q-2-1782288965858-kmsi",
-        "number": 2,
-        "question": "`<bean>`标签的______属性用于指定Bean的具体类型。",
-        "options": [],
-        "answer": "class",
-        "explanation": "在Spring的XML配置文件中，`<bean>`标签的class属性用于指定将要创建的Bean的全限定类名（包含包路径的完整类名）。Spring容器会通过反射机制，使用这个类名来实例化对应的对象。",
-        "chapter": "第2章",
-        "type": "input"
-      },
-      {
-        "id": "q-3-1782288965858-09b0",
-        "number": 3,
-        "question": "Spring框架提供了______注解，该注解用于指定Bean的作用域。",
-        "options": [],
-        "answer": "@Scope",
-        "explanation": "@Scope注解用于显式地设置一个Bean的作用域，例如singleton（单例，默认）、prototype（原型）、request、session等。通过在类或配置方法上添加此注解，可以控制Spring容器在何时、以及如何为Bean创建实例。",
-        "chapter": "第2章",
-        "type": "input"
-      },
-      {
-        "id": "q-4-1782288965858-xe1v",
-        "number": 4,
-        "question": "在Spring的XML配置文件中，可以通过`<bean>`标签的______属性指定初始化方法的名称。",
-        "options": [],
-        "answer": "init-method",
-        "explanation": "在Spring的XML配置中，`<bean>`标签的init-method属性允许开发者指定一个自定义的初始化方法。当Spring容器创建并完成Bean的依赖注入后，会自动调用这个方法执行一些初始化逻辑（例如检查资源状态、建立连接等）。",
-        "chapter": "第2章",
-        "type": "input"
-      },
-      {
-        "id": "q-5-1782288965858-554x",
-        "number": 5,
-        "question": "Spring的______注解用于指定要自动装配的对象。",
-        "options": [],
-        "answer": "@Autowired",
-        "explanation": "@Autowired是Spring框架提供的一个核心注解，用于实现依赖的自动注入。当Spring容器扫描到带有此注解的构造器、方法、参数或字段时，它会尝试根据类型从容器中查找匹配的Bean，并将其自动赋值给该成员或参数。",
-        "chapter": "第2章",
-        "type": "input"
-      },
-      {
-        "id": "q-6-1782288965858-anb1",
-        "number": 6,
-        "question": "BeanFactory采用延迟加载的方式创建Bean的实例。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "这是BeanFactory和ApplicationContext的一个重要区别。BeanFactory容器在启动时不会预先实例化所有的单例Bean，而是在代码第一次请求获取某个Bean时才进行实例化和依赖注入。这种延迟加载机制有助于在资源有限的环境中减少启动开销。",
-        "chapter": "第2章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-7-1782288965858-v5g5",
-        "number": 7,
-        "question": "`<constructor-arg>`标签的index属性用于指定构造方法的参数索引，参数索引从0开始依次递增1。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "`<constructor-arg>`标签的index属性用于明确指定该参数在构造方法参数列表中的位置。索引值从0开始，代表第一个参数，1代表第二个，以此类推。这对于重载的构造方法来说，可以消除参数匹配的歧义。",
-        "chapter": "第2章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-8-1782288965858-7e8f",
-        "number": 8,
-        "question": "使用静态工厂方式实例化 Bean 时，需要开发者定义一个静态工厂类，并在其中编写静态方法来创建 Bean的实例 。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "这是Spring中静态工厂方法实例化Bean的标准方式。开发者需要提供一个包含静态方法的工厂类，该方法负责创建目标Bean的实例。在Spring配置中，通过指定factory-method属性指向这个静态方法，容器会调用该方法来获取Bean，而不是通过构造器直接创建。",
-        "chapter": "第2章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-9-1782288965858-9ifj",
-        "number": 9,
-        "question": "Spring使用属性的setter方法注入Bean时，Bean类必须为需要注入的属性提供对应的setter方法。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "这是setter注入（也叫设值注入）的基本前提。当使用`<property>`标签进行注入时，Spring容器会通过反射调用目标Bean中与属性名对应的setter方法（如属性name对应setName()方法）来传入依赖对象。因此，对应的setter方法是必须的。",
-        "chapter": "第2章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-10-1782288965858-g2jg",
-        "number": 10,
-        "question": "对于prototype作用域的Bean，Spring容器不会管理其完整的生命周期。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "对于singleton作用域的Bean，Spring容器负责其完整的生命周期（创建、初始化、销毁）。而对于prototype作用域的Bean，Spring容器只负责创建和初始化。一旦将Bean实例返回给客户端，容器就不再跟踪其生命周期，也不会在容器关闭时调用其销毁方法。销毁逻辑需要客户端代码自行负责。",
-        "chapter": "第2章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-11-1782288965858-r016",
-        "number": 11,
-        "question": "下列选项中，不属于ApplicationContext的实现类的是（）。",
-        "options": [
-          "A. ClassPathXmlApplicationContext",
-          "B. FileSystemXmlApplicationContext",
-          "C. AnnotationConfigApplicationContext",
-          "D. BeanFactory"
-        ],
-        "answer": "D. BeanFactory",
-        "explanation": "ApplicationContext是一个接口，其常见实现类包括从类路径加载配置的ClassPathXmlApplicationContext、从文件系统加载配置的FileSystemXmlApplicationContext、以及基于注解配置的AnnotationConfigApplicationContext。BeanFactory是ApplicationContext的父接口，是一个更基础的容器，本身并非ApplicationContext的实现类，因此D选项正确。",
-        "chapter": "第2章",
-        "type": "choice"
-      },
-      {
-        "id": "q-12-1782288965858-oaua",
-        "number": 12,
-        "question": "下列选项中，对于Spring Bean的配置的标签说法错误的是（）。",
-        "options": [
-          "A. `<constructor-arg>`标签用于设置Bean的构造方法参数",
-          "B. `<property>`标签用于设置Bean中Set类型的属性值",
-          "C. `<list>`标签用于设置Bean中List类型的属性值",
-          "D. `<map>`标签用于设置Bean中Map类型的属性值"
-        ],
-        "answer": "B. `<property>`标签用于设置Bean中Set类型的属性值",
-        "explanation": "`<property>`标签用于设置Bean的任意属性值，它支持各种类型，包括简单类型、引用类型以及集合类型。虽然它可以为Set类型的属性赋值，但需要内嵌`<set>`标签来实现。选项B说\"用于设置Bean中Set类型的属性值\"，表述不准确，因为`<property>`本身不是专门为Set类型设计的，它需要搭配`<set>`标签使用。",
-        "chapter": "第2章",
-        "type": "choice"
-      },
-      {
-        "id": "q-13-1782288965858-b4gy",
-        "number": 13,
-        "question": "下列选项中，关于Spring支持的作用域描述错误的是（ ）。",
-        "options": [
-          "A. singleton是Spring框架的默认作用域",
-          "B. 当将Bean的作用域设置为prototype时，每次从容器中请求Bean都会创建一个新的Bean",
-          "C. 当将Bean的作用域设置为request时，Bean在整个Web应用中都有效",
-          "D. 当将Bean的作用域设置为application时，整个Web应用的生命周期内只存在一个Bean"
-        ],
-        "answer": "C. 当将Bean的作用域设置为request时，Bean在整个Web应用中都有效",
-        "explanation": "request作用域表明，在每个HTTP请求的生命周期内，容器会为每个请求创建一个全新的Bean实例。当请求处理完毕，Bean实例就会被销毁。选项C说\"Bean在整个Web应用中都有效\"是错误的，这实际上是application作用域的行为，而非request作用域。",
-        "chapter": "第2章",
-        "type": "choice"
-      },
-      {
-        "id": "q-14-1782288965858-v1v4",
-        "number": 14,
-        "question": "下列选项中，关于Spring用于装配注解描述错误的是（ ）。",
-        "options": [
-          "A. @Component用于标识类为Spring中的Bean",
-          "B. @Scope指定Bean的作用域",
-          "C. @Value指定自动装配的对象名称",
-          "D. @Autowired 指定要自动装配的对象"
-        ],
-        "answer": "C. @Value指定自动装配的对象名称",
-        "explanation": "@Value注解主要用于注入属性值，通常用于注入配置文件中或硬编码的字符串、数字等简单值，而不是用于指定自动装配的对象名称。指定自动装配对象名称或类型通常使用@Autowired、@Resource等注解。@Qualifier常与@Autowired配合使用来指定Bean的名称。",
-        "chapter": "第2章",
-        "type": "choice"
-      },
-      {
-        "id": "q-15-1782288965858-o0pv",
-        "number": 15,
-        "question": "下列选项中，对于Bean的什么周期描述错误的是（ ）。",
-        "options": [
-          "A. Bean的生命周期是指Bean从创建到销毁的整个过程",
-          "B. Spring中作用域不同的Bean在生命周期管理上没有区别",
-          "C. 开发者可以通过@Bean注解的initMethod属性指定初始化方法",
-          "D. 开发者可以通过@Bean注解的destroyMethod属性指定销毁方法"
-        ],
-        "answer": "B. Spring中作用域不同的Bean在生命周期管理上没有区别",
-        "explanation": "Bean的生命周期管理在Spring中会因作用域的不同而有所区别。Singleton作用域的Bean生命周期由容器完全管理，包括初始化、使用和销毁。而Prototype作用域的Bean，容器仅在创建和初始化时管理，之后便不再跟踪其状态，销毁也不由容器管理。因此，不同作用域的Bean在生命周期管理上存在显著区别。",
-        "chapter": "第2章",
-        "type": "choice"
-      },
-      {
-        "id": "q-1-1782288965858-9t2y",
-        "number": 1,
-        "question": "AOP中的______动态代理是一种基于接口的代理方式。",
-        "options": [],
-        "answer": "JDK",
-        "explanation": "AOP的实现依赖于动态代理。Spring AOP默认使用两种动态代理机制：JDK动态代理和CGLIB动态代理。其中，JDK动态代理是基于接口的，它要求目标对象实现一个或多个接口，代理对象会实现这些接口。",
-        "chapter": "第3章",
-        "type": "input"
-      },
-      {
-        "id": "q-2-1782288965858-ngx1",
-        "number": 2,
-        "question": "使用______动态代理时，代理类需要实现MethodInterceptor接口。",
-        "options": [],
-        "answer": "CGLIB",
-        "explanation": "在Spring AOP中，当使用CGLIB动态代理时，代理生成库会创建目标类的子类作为代理。为了应用增强逻辑，开发者提供的MethodInterceptor（方法拦截器）接口实现类会被CGLIB调用，允许在目标方法执行前后插入自定义代码。",
-        "chapter": "第3章",
-        "type": "input"
-      },
-      {
-        "id": "q-3-1782288965858-nuva",
-        "number": 3,
-        "question": "AOP中的______是指程序执行过程中满足预先指定条件的连接点。",
-        "options": [],
-        "answer": "切入点",
-        "explanation": "在AOP术语中，连接点（Joinpoint）是程序执行过程中的一个点，例如方法调用或异常抛出。切点（Pointcut）则是一个更具体的概念，它定义了哪些连接点（比如哪些类或哪些方法）应该被增强。切点通过表达式（如execution表达式）来匹配连接点。",
-        "chapter": "第3章",
-        "type": "input"
-      },
-      {
-        "id": "q-4-1782288965858-oen6",
-        "number": 4,
-        "question": "______标签是Spring AOP配置的根标签。",
-        "options": [],
-        "answer": "<aop:config>",
-        "explanation": "在Spring的XML配置文件中，所有AOP相关的配置（如定义切面、切点、通知等）都需要包含在`<aop:config>`标签内部。这个标签是AOP配置的顶层或根元素。",
-        "chapter": "第3章",
-        "type": "input"
-      },
-      {
-        "id": "q-5-1782288965858-rkwl",
-        "number": 5,
-        "question": "______注解用于将一个类标记为切面。",
-        "options": [],
-        "answer": "@AspectJ",
-        "explanation": "@AspectJ是Spring AOP用于声明一个类为切面（Aspect）的注解。这个类中可以包含各种通知（Advice）方法（如@Before、@After）以及切点（Pointcut）定义，用以封装横切逻辑。",
-        "chapter": "第3章",
-        "type": "input"
-      },
-      {
-        "id": "q-6-1782288965858-e6kn",
-        "number": 6,
-        "question": "AOP可以通过将业务逻辑与横切关注点，从而实现更好的代码模块化、可维护性和可复用性。 （ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "AOP（面向切面编程）的核心价值在于将横切关注点（如日志、安全、事务等）从核心业务逻辑中分离出来，形成独立的模块（切面）。这种分离使业务代码更清晰、简洁，横切逻辑也更容易维护和复用。",
-        "chapter": "第3章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-7-1782288965858-9s0b",
-        "number": 7,
-        "question": "基于AOP的切面是一种垂直方向上的扩展。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "在AOP中，切面（Aspect）是对业务逻辑的横向扩展或横切。它并不会改变业务逻辑本身的纵向层次结构，而是\"切入\"到业务逻辑的多个点上（横向）来添加增强功能。因此，它被称为\"横切关注点\"，而非垂直扩展。",
-        "chapter": "第3章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-8-1782288965858-syuc",
-        "number": 8,
-        "question": "`<aop:advisor>`用于配置切点，可以指定切面在哪些连接点处起作用。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "`<aop:advisor>`标签在Spring AOP配置中用于定义一个\"顾问\"（Advisor），它通常是由一个通知（Advice）和一个切点（Pointcut）组成的。它的作用是结合通知和切点，以在特定的切点位置上执行特定的通知。它本身不是用于配置切点，而是配置一个\"增强器\"。",
-        "chapter": "第3章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-9-1782288965858-01ah",
-        "number": 9,
-        "question": "@After注解用于定义最终final通知，不管应用程序是否抛出异常，该通知都会执行。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "在Spring AOP中，@After注解定义的通知是最终通知（也叫后置通知）。这种通知的特点是，无论目标方法执行过程中是否抛出异常，它都将在方法执行完毕后被执行。这与@AfterReturning（返回后通知）和@AfterThrowing（异常后通知）有所不同。",
-        "chapter": "第3章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-10-1782288965858-5c1v",
-        "number": 10,
-        "question": "`<aop:advisor>`标签用于配置环绕方式,在目标方法执行前后实施增强。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "`<aop:around>`标签用于配置环绕通知，它允许开发者在目标方法执行前后都织入增强逻辑。而`<aop:advisor>`标签是将一个通知和切点关联起来，它本身并不代表环绕通知。环绕通知是通过`<aop:around>`标签或@Around注解来配置的。",
-        "chapter": "第3章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-11-1782288965858-ut1s",
-        "number": 11,
-        "question": "下列选项中，关于AOP的常用术语描述错误的是（）。",
-        "options": [
-          "A. 切点是切面中的实际代码，用于实现切面的具体功能",
-          "B. 目标对象指的是被切面增强的原始对象",
-          "C. 织入是指将切面代码插入到目标对象上，从而生成代理对象的过程",
-          "D. 代理是织入切面后创建的对象，用于应用通知到目标对象"
-        ],
-        "answer": "A. 切点是切面中的实际代码，用于实现切面的具体功能",
-        "explanation": "A选项描述错误。切点（Pointcut）并非\"切面中的实际代码\"，而是指一组定义了\"在哪些连接点（如哪些方法）执行增强\"的规则或表达式。切面中的实际代码是\"通知\"（Advice）。目标对象、织入、代理的定义均正确。",
-        "chapter": "第3章",
-        "type": "choice"
-      },
-      {
-        "id": "q-12-1782288965858-i0lb",
-        "number": 12,
-        "question": "下列选项中，关于JDK动态代理的描述错误的是（）。",
-        "options": [
-          "A. AOP中的JDK动态代理是Spring AOP的默认的动态代理机制",
-          "B. JDK动态代理利用Java反射机制在运行时动态地创建目标对象的代理对象",
-          "C. JDK动态代理需要定义一个InvocationHandler实现类",
-          "D. JDK动态代理不能能为接口创建代理实例"
-        ],
-        "answer": "D. JDK动态代理不能能为接口创建代理实例",
-        "explanation": "JDK动态代理是基于接口的代理机制，它恰恰是为实现了接口的目标对象创建代理实例的。选项D说\"不能为接口创建代理实例\"是错误的，这正是JDK动态代理的功能。如果目标对象没有实现接口，才不能使用JDK动态代理，而需要使用CGLIB。",
-        "chapter": "第3章",
-        "type": "choice"
-      },
-      {
-        "id": "q-13-1782288965858-qoaw",
-        "number": 13,
-        "question": "下列选项中，关于CGLIB动态代理的描述错误的是（）。",
-        "options": [
-          "A. CGLIB动态代理只能为接口创建代理实例",
-          "B. CGLIB动态代理可以在运行时扩展Java类和实现接口",
-          "C. 使用CGLIB动态代理时，代理类需要实现MethodInterceptor接口",
-          "D. 使用CGLIB动态代理时，运行时的执行效率比 JDK 动态代理快"
-        ],
-        "answer": "A. CGLIB动态代理只能为接口创建代理实例",
-        "explanation": "CGLIB动态代理是通过生成目标类的子类来创建代理对象的，因此它通常用于为没有实现接口的类创建代理。选项A说\"只能为接口创建代理实例\"是错误的，这恰恰是JDK动态代理的特点。CGLIB可以扩展类（创建子类），也可以实现接口。",
-        "chapter": "第3章",
-        "type": "choice"
-      },
-      {
-        "id": "q-14-1782288965858-3efd",
-        "number": 14,
-        "question": "下列选项中，关于配置AOP的标签描述错误的是（）。",
-        "options": [
-          "A. `<aop:pointcut>`用于配置切点",
-          "B. `<aop:before>`用于配置前置通知，在目标方法执行前实施增强",
-          "C. `<aop:after>`用于配置后置通知,在目标方法执行后实施增强",
-          "D. `<aop:around>`用于配置返回通知"
-        ],
-        "answer": "D. `<aop:around>`用于配置返回通知",
-        "explanation": "在Spring AOP配置中，`<aop:around>`标签用于配置环绕通知（Around Advice），它可以在目标方法执行前后都实施增强。而返回通知（After Returning Advice）是由`<aop:after-returning>`标签配置的，它仅在目标方法正常返回后执行。因此，D选项描述错误。",
-        "chapter": "第3章",
-        "type": "choice"
-      },
-      {
-        "id": "q-15-1782288965858-785d",
-        "number": 15,
-        "question": "下列选项中，关于AspectJ的常用注解描述错误的是（）。",
-        "options": [
-          "A. @Pointcut用于定义切点表达式，可以通过一个方法签名来表示切点名称",
-          "B. @Before 用于定义前置通知",
-          "C. @AfterReturning 用于定义后置通知",
-          "D. @Around 用于定义异常通知"
-        ],
-        "answer": "D. @Around 用于定义异常通知",
-        "explanation": "@Around注解用于定义环绕通知（Around Advice），它允许在目标方法执行前后进行增强，并可以控制是否继续执行目标方法。异常通知（After Throwing Advice）是由@AfterThrowing注解定义的。因此，D选项描述错误。A、B、C选项的描述均正确。",
-        "chapter": "第3章",
-        "type": "choice"
-      },
-      {
-        "id": "q-1-1782288965858-ah0f",
-        "number": 1,
-        "question": "Spring JDBC模块主要由______、dataSource、object、support四个包组成。",
-        "options": [],
-        "answer": "core",
-        "explanation": "Spring的JDBC模块（spring-jdbc）的核心功能包是core，它包含了Spring JDBC的核心类，尤其是JdbcTemplate。其他三个包：dataSource提供数据源支持，object包含用于封装数据库操作的类，support提供了各种辅助类。",
-        "chapter": "第4章",
-        "type": "input"
-      },
-      {
-        "id": "q-2-1782288965858-exnr",
-        "number": 2,
-        "question": "Spring提供了______注解来实现声明式事务管理。",
-        "options": [],
-        "answer": "@Transactional",
-        "explanation": "@Transactional是Spring框架中最核心的事务注解。通过在类或方法上添加此注解，Spring会自动为该方法或类中的所有方法添加事务管理功能，包括事务的开启、提交、回滚，以及事务隔离级别、传播行为等的配置。",
-        "chapter": "第4章",
-        "type": "input"
-      },
-      {
-        "id": "q-3-1782288965858-fy59",
-        "number": 3,
-        "question": "______标签主要用于配置每个方法具体的事务属性。",
-        "options": [],
-        "answer": "<tx:method>",
-        "explanation": "在XML配置方式的事务管理中，`<tx:method>`标签是`<tx:attributes>`的子标签，用于为特定的方法名或方法名模式配置详细的事务属性，如隔离级别、传播行为、是否只读等。",
-        "chapter": "第4章",
-        "type": "input"
-      },
-      {
-        "id": "q-4-1782288965858-kfgl",
-        "number": 4,
-        "question": "在Spring框架中，提供了两种主要的事务管理方式：______事务管理和声明式事务管理。",
-        "options": [],
-        "answer": "编程式",
-        "explanation": "Spring支持两种事务管理方式：编程式事务管理（通过编写代码，使用TransactionTemplate或PlatformTransactionManager手动控制事务的开始、提交和回滚）和声明式事务管理（通过配置或注解，将事务管理与业务代码分离）。后者是更常用、更推荐的方式。",
-        "chapter": "第4章",
-        "type": "input"
-      },
-      {
-        "id": "q-5-1782288965858-uq7r",
-        "number": 5,
-        "question": "`<tx:advice>`的transaction-manager属性用于指定______。",
-        "options": [],
-        "answer": "事务管理器",
-        "explanation": "在Spring的XML事务配置中，`<tx:advice>`标签用于定义事务增强。其transaction-manager属性用于指定要使用的事务管理器（PlatformTransactionManager）的Bean名称，告诉Spring应该使用哪个事务管理器来管理该增强所定义的事务。",
-        "chapter": "第4章",
-        "type": "input"
-      },
-      {
-        "id": "q-6-1782288965858-ws88",
-        "number": 6,
-        "question": "JdbcTemplate提供了一种模板化的方式来执行SQL查询、更新等操作。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "JdbcTemplate是Spring JDBC模块的核心类，它采用了模板方法模式，封装了JDBC操作中的样板代码（如获取连接、创建声明、处理异常、释放资源等），开发者只需提供SQL语句和参数，极大地简化了JDBC编程。",
-        "chapter": "第4章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-7-1782288965858-ipz3",
-        "number": 7,
-        "question": "Spring的事务管理主要基于PlatformTransactionManager接口、TransactionDefinition接口、TransactionStatus接口实现。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "Spring事务抽象层中的三个核心接口是：PlatformTransactionManager（事务管理器），负责事务的提交、回滚等操作；TransactionDefinition（事务定义），定义了事务的隔离级别、传播行为等属性；TransactionStatus（事务状态），表示当前事务的状态信息。这三个接口构成了Spring事务管理的基石。",
-        "chapter": "第4章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-8-1782288965858-4ftp",
-        "number": 8,
-        "question": "Spring通过TransactionStatus接口统一的事务管理机制。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "统一的事务管理机制是由PlatformTransactionManager接口提供的。它屏蔽了不同事务管理（如JDBC、Hibernate、JTA）之间的差异，为上层应用提供了统一的事务操作API。TransactionStatus接口是用来获取当前事务状态信息的，并非统一管理机制本身。",
-        "chapter": "第4章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-9-1782288965858-newd",
-        "number": 9,
-        "question": "事务的传播行为是指处于不同事务中的方法在相互调用时，方法执行期间，事务的维护情况 。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "这正是事务传播行为的定义。当一个事务方法（服务A的方法）调用另一个事务方法（服务B的方法）时，方法B应该如何参与事务？是加入当前事务？还是开启新事务？事务的传播行为（如REQUIRED, REQUIRES_NEW等）就定义了这种跨方法调用时的事务边界和传播规则。",
-        "chapter": "第4章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-10-1782288965858-sjbw",
-        "number": 10,
-        "question": "每个`<tx:attributes>`标签只能配置一个`<tx:method>`子标签 。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "`<tx:attributes>`标签是用来包含一个或多个`<tx:method>`子标签的容器。一个`<tx:attributes>`中可以定义多个`<tx:method>`，每个`<tx:method>`可以匹配不同的方法名模式，并为它们配置不同的事务属性。",
-        "chapter": "第4章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-11-1782288965858-jmwd",
-        "number": 11,
-        "question": "下列选项中，对于Spring的事务管理描述错误的是（）。",
-        "options": [
-          "A. PlatformTransactionManager接口是Spring事务管理的核心，它提供了管理事务的方法",
-          "B. TransactionDefinition接口中定义了事务描述相关的常量",
-          "C. 当事务被标记为只读时，意味着该事务只从数据库中读取数据而不修改数据",
-          "D. 编程式事务管理是通过在配置文件中或者使用注解的方式来声明事务的管理方式"
-        ],
-        "answer": "D. 编程式事务管理是通过在配置文件中或者使用注解的方式来声明事务的管理方式",
-        "explanation": "编程式事务管理需要通过编写代码（如使用TransactionTemplate）来显式地控制事务的边界、提交和回滚。选项D描述的\"在配置文件中或者使用注解的方式来声明\"是声明式事务管理的方式，因此D选项错误。A、B、C选项的描述均正确。",
-        "chapter": "第4章",
-        "type": "choice"
-      },
-      {
-        "id": "q-12-1782288965858-b9j0",
-        "number": 12,
-        "question": "下列选项中，关于事务的传播行为描述错误的是（）。",
-        "options": [
-          "A. PROPAGATION_REQUIRED为默认的事务传播行为",
-          "B. PROPAGATION_SUPPORTS指定如果当前没有事务，则创建一个新的事务",
-          "C. PROPAGATION_MANDATORY指定当前必须存在一个事务，如果没有，就抛出异常",
-          "D. PROPAGATION_REQUIRES_NEW指定创建一个新的事务，如果当前已存在一个事务，将已存在的事务挂起"
-        ],
-        "answer": "B. PROPAGATION_SUPPORTS指定如果当前没有事务，则创建一个新的事务",
-        "explanation": "PROPAGATION_SUPPORTS的含义是：如果当前存在事务，则加入该事务；如果当前没有事务，则以非事务方式执行。选项B说\"创建一个新的事务\"是错误的，这实际上是PROPAGATION_REQUIRED的行为（当前没事务则新建）。D选项关于REQUIRES_NEW的描述是正确的。",
-        "chapter": "第4章",
-        "type": "choice"
-      },
-      {
-        "id": "q-13-1782288965858-a5g6",
-        "number": 13,
-        "question": "下列选项中，关于事务的隔离级别的描述错误的是（ ）。",
-        "options": [
-          "A. ISOLATION_DEFAULT表示采用当前数据库默认的事务隔离级别",
-          "B. ISOLATION_READ_UNCOMMITTED表示读未提交",
-          "C. ISOLATION_READ_COMMITTED表示读已提交，无法避免脏读",
-          "D. REPEATABLE_SERIALIZABLE 使用该隔离级别不存在并发问题"
-        ],
-        "answer": "C. ISOLATION_READ_COMMITTED表示读已提交，无法避免脏读",
-        "explanation": "ISOLATION_READ_COMMITTED（读已提交）能够避免脏读问题，因为一个事务只能读取到另一个已提交事务的数据。选项C说\"无法避免脏读\"是错误的，这其实是ISOLATION_READ_UNCOMMITTED（读未提交）的问题。D选项的表述\"REPEATABLE_SERIALIZABLE\"是笔误，应为\"SERIALIZABLE\"（可串行化），它确实能避免所有并发问题，是最高隔离级别。",
-        "chapter": "第4章",
-        "type": "choice"
-      },
-      {
-        "id": "q-14-1782288965859-32lo",
-        "number": 14,
-        "question": "下列选项中，关于`<tx:method>`标签的常用属性描述错误的是（ ）。",
-        "options": [
-          "A. name用于指定方法名的匹配模式，该属性为必选属性，它指定了与事务属性相关的方法名",
-          "B. propagation用于指定事务的传播行为",
-          "C. read-only用于指定事务是否只读",
-          "D. no-rollback-for用于指定触发事务回滚的异常类"
-        ],
-        "answer": "D. no-rollback-for用于指定触发事务回滚的异常类",
-        "explanation": "`<tx:method>`标签的no-rollback-for属性用于指定哪些异常类型不应该触发事务回滚（即即使抛出这些异常，事务也照常提交），而不是指定\"触发事务回滚的异常类\"。指定触发回滚的异常类使用的是rollback-for属性。因此D选项错误。",
-        "chapter": "第4章",
-        "type": "choice"
-      },
-      {
-        "id": "q-15-1782288965859-mqkl",
-        "number": 15,
-        "question": "下列选项中，关于@Transactional的常用属性描述错误的是（）。",
-        "options": [
-          "A. rollbackFor用于指定使用的事务管理器",
-          "B. propagation用于指定事务的传播行为",
-          "C. isolation用于指定事务的隔离级别",
-          "D. rollbackFor用于指定导致事务回滚的异常类数组"
-        ],
-        "answer": "A. rollbackFor用于指定使用的事务管理器",
-        "explanation": "在@Transactional注解中，用于指定要使用的事务管理器名称的属性是transactionManager（或直接使用value属性），而非rollbackFor。rollbackFor属性用于指定在抛出哪些异常类时触发事务回滚。B、C、D选项的描述均是正确的。",
-        "chapter": "第4章",
-        "type": "choice"
-      },
-      {
-        "id": "q-1-1782288965859-rvy9",
-        "number": 1,
-        "question": "MVC模式将应用程序分为三个核心部分：Model、View和______。",
-        "options": [],
-        "answer": "Controller",
-        "explanation": "MVC（Model-View-Controller）是一种经典的设计模式。Model（模型）负责处理数据和业务逻辑，View（视图）负责展示数据（用户界面），Controller（控制器）负责接收用户请求，并调用模型处理，然后选择视图进行响应。",
-        "chapter": "第5章",
-        "type": "input"
-      },
-      {
-        "id": "q-2-1782288965859-4rbq",
-        "number": 2,
-        "question": "Spring提供了______注解用于标识 Spring MVC的处理器类。",
-        "options": [],
-        "answer": "@Controller",
-        "explanation": "@Controller是Spring MVC中用于将一个普通的Java类标记为控制器（Controller）的注解。被此注解标记的类会由Spring容器管理，并且其中的方法可以被@RequestMapping等注解映射为处理Web请求的处理器。",
-        "chapter": "第5章",
-        "type": "input"
-      },
-      {
-        "id": "q-3-1782288965859-ouph",
-        "number": 3,
-        "question": "Spring MVC的______注解用于建立请求URL和处理器之间的映射关系。",
-        "options": [],
-        "answer": "@RequestMapping",
-        "explanation": "@RequestMapping是Spring MVC中最重要的注解之一。它可以用在类或方法上，用于将特定的HTTP请求（由URL、HTTP方法、参数等定义）映射到对应的处理器类或处理器方法上，即建立\"请求\"与\"处理代码\"之间的对应关系。",
-        "chapter": "第5章",
-        "type": "input"
-      },
-      {
-        "id": "q-4-1782288965859-jm76",
-        "number": 4,
-        "question": "______属性是@RequestMapping注解的默认属性。",
-        "options": [],
-        "answer": "value",
-        "explanation": "@RequestMapping注解的value属性（或其别名path）用于指定请求的URL路径，这是该注解最核心、最常用的属性。当只需要指定URL路径时，可以省略value=，直接写路径字符串，例如@RequestMapping(\"/user\")。",
-        "chapter": "第5章",
-        "type": "input"
-      },
-      {
-        "id": "q-5-1782288965859-vf1i",
-        "number": 5,
-        "question": "______注解用于匹配基于HTTP的GET方法的请求。",
-        "options": [],
-        "answer": "@GetMapping",
-        "explanation": "@GetMapping是Spring MVC提供的组合注解之一，它实际上是@RequestMapping(method = RequestMethod.GET)的快捷方式。专门用于处理HTTP GET请求的方法，提高了代码的可读性和简洁性。",
-        "chapter": "第5章",
-        "type": "input"
-      },
-      {
-        "id": "q-6-1782288965859-abhv",
-        "number": 6,
-        "question": "Spring MVC是基于MVC设计模式的一个轻量级的Web框架 。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "Spring MVC是Spring框架中用于构建Web应用程序的模块。它严格遵循MVC设计模式，将控制器、模型和视图分离，并且作为Spring家族的一部分，它是一个轻量级的、灵活的、高度可配置的Web框架。",
-        "chapter": "第5章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-7-1782288965859-vo7q",
-        "number": 7,
-        "question": "@RequestMapping注解不能标注在类上。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "@RequestMapping注解既可以标注在类上，也可以标注在方法上。标注在类上时，它为类中所有处理器方法提供一个基础的URL路径映射；标注在方法上则提供更具体的路径映射。两者结合使用可以构建出清晰的URL层次结构。",
-        "chapter": "第5章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-8-1782288965859-3l0i",
-        "number": 8,
-        "question": "如果@RequestMapping注解没有指定method属性的值，程序会在运行时出错。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "method属性在@RequestMapping中不是必需的。当没有指定method属性时，该映射默认会处理所有HTTP方法（GET、POST、PUT、DELETE等）的请求。程序不会因此出错。",
-        "chapter": "第5章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-9-1782288965859-1707",
-        "number": 9,
-        "question": "params属性中定义的值可以将请求映射的定位范围缩小。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "@RequestMapping注解的params属性用于指定请求中必须包含某些参数以及这些参数的值必须满足的条件。例如@RequestMapping(value=\"/list\", params=\"type=1\")，这表示只有请求路径为/list且参数type的值为1的请求才会被映射到此方法，从而缩小了映射的匹配范围。",
-        "chapter": "第5章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-10-1782288965859-ohx6",
-        "number": 10,
-        "question": "@GetMapping的作用和@RequestMapping(method = RequestMethod.GET)的作用相同。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "@GetMapping是Spring MVC从4.3版本开始引入的组合注解，它的作用完全等同于@RequestMapping(method = RequestMethod.GET)。它提供了更明确的语义，专门用于处理GET请求。",
-        "chapter": "第5章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-11-1782288965859-nqjp",
-        "number": 11,
-        "question": "下列选项中，关于Spring MVC常用的组件描述错误的是（ ）。",
-        "options": [
-          "A. DispatcherServlet为前端控制器，是整个Spring MVC 流程控制中心",
-          "B. HandlerMapping为处理器映射器，根据请求的URL、HTTP方法等信息找到对应的处理器",
-          "C. Handler为处理器适配器，负责将请求适配到对应处理器处理请求",
-          "D. ViewResolver为视图解析器，视图解析器会根据逻辑视图名解析成物理视图名"
-        ],
-        "answer": "C. Handler为处理器适配器，负责将请求适配到对应处理器处理请求",
-        "explanation": "HandlerMapping（处理器映射器）和HandlerAdapter（处理器适配器）是两个不同的组件。HandlerMapping负责查找处理器，而HandlerAdapter负责调用处理器。选项C将\"Handler\"称为\"处理器适配器\"是错误的，正确的名称是HandlerAdapter。",
-        "chapter": "第5章",
-        "type": "choice"
-      },
-      {
-        "id": "q-12-1782288965859-xid7",
-        "number": 12,
-        "question": "下列选项中，关于@RequestMapping注解的属性描述错误的是（ ）。",
-        "options": [
-          "A. name属性用于为请求映射提供一个名称",
-          "B. method属性用于指定该方法可以处理哪种类型的HTTP请求",
-          "C. params属性用于指定请求参数的条件，为必选属性",
-          "D. headers属性用于指定请求头的条件"
-        ],
-        "answer": "C. params属性用于指定请求参数的条件，为必选属性",
-        "explanation": "params属性用于指定请求参数的条件，但它是可选属性，并非必选。只有当需要根据参数来细化映射范围时才使用它。A、B、D选项的描述均正确。",
-        "chapter": "第5章",
-        "type": "choice"
-      },
-      {
-        "id": "q-13-1782288965859-9rcs",
-        "number": 13,
-        "question": "下列选项中，关于Spring MVC的执行流程描述错误的是（ ）。",
-        "options": [
-          "A. 用户通过浏览器向服务器发送请求，请求会被Spring MVC的前端控制器拦截",
-          "B. 前端控制器拦截到请求后，会调用处理器映射器",
-          "C. 处理器适配器会调用并执行相应的处理器",
-          "D. 处理器执行完成后，会返回一个DispatcherServlet对象，该对象中会包含视图名或包含数据模型和视图名"
-        ],
-        "answer": "D. 处理器执行完成后，会返回一个DispatcherServlet对象，该对象中会包含视图名或包含数据模型和视图名",
-        "explanation": "处理器执行完成后，会返回一个ModelAndView对象给DispatcherServlet，而不是返回DispatcherServlet对象本身。ModelAndView对象包含了视图名称或视图实例，以及模型数据。因此，D选项描述错误。",
-        "chapter": "第5章",
-        "type": "choice"
-      },
-      {
-        "id": "q-14-1782288965859-c57s",
-        "number": 14,
-        "question": "下列选项中，关于Ant风格的描述错误的是（ ）。",
-        "options": [
-          "A. ?通配符用于匹配任何单字符",
-          "B. *通配符用于匹配任意1个",
-          "C. **通配符用于匹配任意数量的目录层级",
-          "D. Ant风格其实就是一种通配符风格，可以在处理器映射路径中使用通配符对访问的URL路径进行关联"
-        ],
-        "answer": "B. *通配符用于匹配任意1个",
-        "explanation": "在Ant风格的URL路径匹配中，*通配符用于匹配任意数量的字符（可以是0个或多个），但仅限于当前目录层级。选项B说\"匹配任意1个\"是不准确的，这其实是?通配符的功能（匹配单个字符）。**用于匹配任意数量的目录层级。",
-        "chapter": "第5章",
-        "type": "choice"
-      },
-      {
-        "id": "q-15-1782288965859-3275",
-        "number": 15,
-        "question": "下列选项中，关于RESTful风格的描述错误的是（ ）。",
-        "options": [
-          "A. RESTful是按照REST风格访问网络资源的一种实践",
-          "B. RESTful是把请求参数变成请求路径的一种风格",
-          "C. RESTful风格在HTTP请求中，GET表示用于获取资源",
-          "D. RESTful风格在HTTP请求中，POST表示用于更新资源"
-        ],
-        "answer": "D. RESTful风格在HTTP请求中，POST表示用于更新资源",
-        "explanation": "在RESTful风格中，HTTP方法的使用遵循特定的语义：GET用于获取资源，POST用于创建资源，PUT用于更新资源，DELETE用于删除资源。选项D说\"POST表示用于更新资源\"是错误的，更新资源通常使用PUT方法。POST主要用于创建新的资源。",
-        "chapter": "第5章",
-        "type": "choice"
-      },
-      {
-        "id": "q-1-1782288965859-8cag",
-        "number": 1,
-        "question": "______注解用于从请求中获取参数的值并将其传递给处理器方法的参数。",
-        "options": [],
-        "answer": "@RequestParam",
-        "explanation": "@RequestParam注解在Spring MVC中用于将HTTP请求中的参数（例如URL中的查询参数，或表单提交的字段）绑定到处理器方法的形参上。它支持参数名称映射、是否必需、默认值等配置，是处理请求参数最常用的注解之一。",
-        "chapter": "第6章",
-        "type": "input"
-      },
-      {
-        "id": "q-2-1782288965859-n7dj",
-        "number": 2,
-        "question": "当请求的映射方式是REST风格时，可以通过______注解可以将URL中占位符参数绑定到处理器方法的形参中。",
-        "options": [],
-        "answer": "@PathVariable",
-        "explanation": "@PathVariable注解专门用于将URL模板中的变量（即{...}占位符）绑定到处理器方法的参数上。这是RESTful风格服务中获取资源ID等路径信息的关键注解。",
-        "chapter": "第6章",
-        "type": "input"
-      },
-      {
-        "id": "q-3-1782288965859-fe7w",
-        "number": 3,
-        "question": "Spring MVC中，当一个请求需要将请求体中的数据，可以在方法参数上使用______注解。",
-        "options": [],
-        "answer": "@RequestBody",
-        "explanation": "@RequestBody注解用于将HTTP请求的body（请求体）内容绑定到处理器方法的形参上。它通常用于处理客户端提交的JSON或XML格式的数据，Spring会自动使用HttpMessageConverter将其转换为对应的Java对象。",
-        "chapter": "第6章",
-        "type": "input"
-      },
-      {
-        "id": "q-4-1782288965859-6nzj",
-        "number": 4,
-        "question": "Model的实现类对象和ModelMap对象都可以设置模型数据，模型数据会填充到______域中，以供视图层使用。",
-        "options": [],
-        "answer": "Request",
-        "explanation": "在Spring MVC中，控制器方法返回视图时，模型数据（Model）会被存储到HttpServletRequest的请求域（Request Scope）中，这样视图解析器在渲染视图时，就可以从请求域中获取这些数据进行展示。",
-        "chapter": "第6章",
-        "type": "input"
-      },
-      {
-        "id": "q-5-1782288965859-kjjx",
-        "number": 5,
-        "question": "______注解相当于@Controller+@ResponseBody两个注解的结合。",
-        "options": [],
-        "answer": "@RestController",
-        "explanation": "@RestController是Spring 4.0引入的组合注解，它将@Controller和@ResponseBody的功能合二为一。当一个类被标记为@RestController后，它表示这个类是一个控制器，并且其中所有处理器方法的返回值都会自动以JSON或XML等格式直接写入响应体中，而不经过视图解析器，常用于构建RESTful API。",
-        "chapter": "第6章",
-        "type": "input"
-      },
-      {
-        "id": "q-6-1782288965859-aiys",
-        "number": 6,
-        "question": "在Spring MVC中进行简单类型的数据绑定，只需客户端请求参数的名称和处理器的形参名称一致即可。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "这是Spring MVC数据绑定的基本规则之一。对于简单类型（如int、String、Integer等），只要HTTP请求参数名与处理器方法形参名一致，Spring MVC就能自动完成类型转换和赋值。",
-        "chapter": "第6章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-7-1782288965859-nu3d",
-        "number": 7,
-        "question": "在POJO类型的数据绑定过程中，需要确保请求的参数名称与要绑定的POJO类中的属性名称保持一致。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "当使用POJO对象作为控制器方法的参数时，Spring MVC会根据请求参数名与POJO类属性名的匹配关系，自动将参数值填充到对应的属性中。两者名称一致是绑定的前提。",
-        "chapter": "第6章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-8-1782288965859-d2a9",
-        "number": 8,
-        "question": "@ResponseBody注解的作用是将处理器方法返回的对象通过适当的转换器转换为指定的格式之后，写入到HttpServletResponse对象的响应体中。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "@ResponseBody注解的职责是告诉Spring MVC，处理器方法的返回值不应该被解析为视图名称，而应该直接作为响应体内容返回。Spring会利用HttpMessageConverter将返回值转换为合适的格式（如JSON、XML）并写入HTTP响应流中。",
-        "chapter": "第6章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-9-1782288965859-1vx4",
-        "number": 9,
-        "question": "当Spring MVC方法的返回值为void时，方法执行后会跳转到项目中视图名称为index的页面。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "当控制器方法返回void时，Spring MVC默认会使用请求的URL作为逻辑视图名。例如，如果请求URL是\"/user/list\"，那么视图名会是\"user/list\"，而非固定的\"index\"。只有当视图解析器配置了前缀后缀，或者有其他默认规则时，才会转到特定页面。",
-        "chapter": "第6章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-10-1782288965859-cowo",
-        "number": 10,
-        "question": "使用@DateTimeFormat注解完成日期类型的格式转换无需自定义类型转换器，也无需在配置文件中定义转换器工厂或格式化工厂 。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "在Spring MVC中，只要正确配置了AnnotationDriven（`<mvc:annotation-driven>`）或启用了@EnableWebMvc，Spring就会自动注册一个能够处理@DateTimeFormat注解的格式化器。因此，开发者只需在日期字段上添加@DateTimeFormat(pattern=\"yyyy-MM-dd\")等注解，Spring就会自动进行格式转换，无需再手动定义转换器。",
-        "chapter": "第6章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-11-1782288965859-79fw",
-        "number": 11,
-        "question": "下列选项中，不属于Spring MVC默认支持的类型的是（）。",
-        "options": [
-          "A. HttpServletRequest",
-          "B. HttpServletResponse",
-          "C. HttpSession",
-          "D. Cookie"
-        ],
-        "answer": "D. Cookie",
-        "explanation": "Spring MVC默认支持多种Web相关的对象作为控制器方法的参数，包括HttpServletRequest、HttpServletResponse、HttpSession、WebRequest、Model、ModelMap等。Cookie虽然可以获取，但需要通过@CookieValue注解显式绑定，而不是直接作为形参类型。",
-        "chapter": "第6章",
-        "type": "choice"
-      },
-      {
-        "id": "q-12-1782288965859-2gyn",
-        "number": 12,
-        "question": "下列选项中，关于@RequestParam注解的属性描述错误的是（）。",
-        "options": [
-          "A. value用于指定要绑定的请求参数的名称",
-          "B. name与value属性作用一致",
-          "C. required用于指定参数是否必须，默认是false",
-          "D. defaultValue用于指定参数的默认值"
-        ],
-        "answer": "C. required用于指定参数是否必须，默认是false",
-        "explanation": "在@RequestParam注解中，required属性的默认值是true，表示该请求参数必须存在，否则会抛出异常。若希望参数可选，需要显式设置为required=false。因此，C选项说\"默认是false\"是错误的。",
-        "chapter": "第6章",
-        "type": "choice"
-      },
-      {
-        "id": "q-13-1782288965859-lguv",
-        "number": 13,
-        "question": "下列选项中，关于ModelAndView设置视图和模型数据的方法的描述错误的是（ ）。",
-        "options": [
-          "A. setViewName()方法用于在ModelAndView对象中设置一个逻辑视图名称，会覆盖预先存在的逻辑视图名称",
-          "B. setView()方法用于在ModelAndView对象中设置一个视图实例，会覆盖预先存在的视图实例",
-          "C. addObject()方法用于在ModelAndView对象中添加模型数据和视图实例",
-          "D. addAllObjects()方法用于在ModelAndView对象中添加模型数据"
-        ],
-        "answer": "C. addObject()方法用于在ModelAndView对象中添加模型数据和视图实例",
-        "explanation": "addObject()方法（及其重载形式）专门用于向ModelAndView对象中添加模型数据（以键值对的形式），它的作用不是\"添加视图实例\"。要设置视图，应使用setViewName()或setView()方法。因此，C选项的描述是错误的。",
-        "chapter": "第6章",
-        "type": "choice"
-      },
-      {
-        "id": "q-14-1782288965859-12a7",
-        "number": 14,
-        "question": "下列选项中，关于Spring MVC数据绑定的描述错误的是（）。",
-        "options": [
-          "A. 当使用Spring MVC默认支持的数据类型作为处理器的形参类型时，Spring MVC的参数处理适配器能够将HTTP请求中的参数自动转换并绑定到处理器方法的形参上",
-          "B. 在POJO类型的数据绑定过程中，需要确保请求的参数名称与要绑定的POJO类中的属性名称保持一致",
-          "C. Spring MVC的默认类型转换器可以转换Java中所有的数据类型",
-          "D. @RequestBody注解需要书写在方法的形参前"
-        ],
-        "answer": "C. Spring MVC的默认类型转换器可以转换Java中所有的数据类型",
-        "explanation": "Spring MVC提供了一些内置的类型转换器，可以处理常见的类型（如String到int、日期等），但它并不能转换Java中所有的数据类型。对于复杂或自定义的类型转换，仍需要开发者编写自定义的转换器（Converter）或格式化器（Formatter）。因此，C选项的说法过于绝对，是错误的。",
-        "chapter": "第6章",
-        "type": "choice"
-      },
-      {
-        "id": "q-15-1782288965859-y83q",
-        "number": 15,
-        "question": "下列选项中，关于Spring MVC页面跳转和数据回写的描述错误的是（）。",
-        "options": [
-          "A. 当Spring MVC方法的返回值为void时，没有配置视图解析器，则会报HTTP Status 500错误",
-          "B. 当Spring MVC方法的返回值为 String 类型时，处理器方法执行后，Spring MVC 会根据方法的返回值跳转到对应的视图",
-          "C. 当Spring MVC方法的返回值为String 类型时，方法返回的字符串添加了\"forward:\"或\"redirect:\"前缀，则视图解析器不再会为方法返回值会拼接后缀但是不会拼接前缀",
-          "D. ModelAndView对象主要用于存储模型数据和视图信息。"
-        ],
-        "answer": "C. 当Spring MVC方法的返回值为String 类型时，方法返回的字符串添加了\"forward:\"或\"redirect:\"前缀，则视图解析器不再会为方法返回值会拼接后缀但是不会拼接前缀",
-        "explanation": "当处理器方法返回String类型，且带有\"forward:\"或\"redirect:\"前缀时，表示这是一个逻辑视图名，但包含前缀指示了请求转发或重定向。在这种情况下，视图解析器（InternalResourceViewResolver）不会对该返回值进行任何前后缀拼接操作。Spring MVC会直接处理这个带有前缀的字符串，执行转发或重定向。选项C说\"不会拼接后缀但是不会拼接前缀\"表述不准确，实际上拼接前后缀都不会执行，因此该选项错误。正确的说法是：它既不会拼接前缀，也不会拼接后缀，因为\"forward:\"或\"redirect:\"本身不是视图路径的一部分，而是操作指令。",
-        "chapter": "第6章",
-        "type": "choice"
-      },
-      {
-        "id": "q-1-1782288965859-ue65",
-        "number": 1,
-        "question": "______注解是Spring MVC用于定义全局处理器通知的注解。",
-        "options": [],
-        "answer": "@ControllerAdvice",
-        "explanation": "@ControllerAdvice是Spring MVC提供的一个强大注解，用于定义一个全局的控制器增强类。它可以被用来全局处理控制器抛出的异常（与@ExceptionHandler结合）、全局绑定数据（@ModelAttribute）或全局绑定初始化参数（@InitBinder），作用于所有或特定的控制器。",
-        "chapter": "第7章",
-        "type": "input"
-      },
-      {
-        "id": "q-2-1782288965859-afpq",
-        "number": 2,
-        "question": "Spring MVC程序中可以使用______注解中指定需要处理的异常类型。",
-        "options": [],
-        "answer": "@ExceptionHandler",
-        "explanation": "@ExceptionHandler注解用于在控制器或@ControllerAdvice类中定义一个方法，专门用于处理特定类型的异常。通过指定其value属性，可以声明该方法能够处理哪些异常类。当控制器抛出匹配的异常时，该方法会执行并返回相应的视图或响应。",
-        "chapter": "第7章",
-        "type": "input"
-      },
-      {
-        "id": "q-3-1782288965859-k2pa",
-        "number": 3,
-        "question": "Spring MVC的______使得开发者能够在请求进入处理器之前、处理器处理完请求后以及渲染视图之后执行一些特定的操作。",
-        "options": [],
-        "answer": "拦截器",
-        "explanation": "Spring MVC的拦截器（Interceptor）是类似于Servlet Filter的一种机制，但它更精细，专门针对Spring MVC的控制器进行拦截。它提供了三个主要的拦截点：preHandle（处理器执行前）、postHandle（处理器执行后、视图渲染前）、afterCompletion（整个请求结束后），允许开发者在这些关键节点插入自定义逻辑。",
-        "chapter": "第7章",
-        "type": "input"
-      },
-      {
-        "id": "q-4-1782288965859-eg4o",
-        "number": 4,
-        "question": "自定义拦截器类可以通过实现______ 接口实现。",
-        "options": [],
-        "answer": "HandlerInterceptor",
-        "explanation": "要创建一个自定义的Spring MVC拦截器，开发者需要实现HandlerInterceptor接口，并重写其三个方法：preHandle()、postHandle()和afterCompletion()。这个接口定义了拦截器在不同执行阶段的钩子方法。",
-        "chapter": "第7章",
-        "type": "input"
-      },
-      {
-        "id": "q-5-1782288965859-3wq5",
-        "number": 5,
-        "question": "在Spring MVC的XML配置文件中，可以使用______标签配置拦截器的信息。",
-        "options": [],
-        "answer": "<mvc:interceptors>",
-        "explanation": "`<mvc:interceptors>`是Spring MVC XML配置中用于定义多个拦截器的根标签。在这个标签内部，可以使用`<bean>`直接定义拦截器，或使用`<mvc:interceptor>`标签更精细地配置拦截器及其映射路径（`<mvc:mapping>`）和排除路径（`<mvc:exclude-mapping>`）。",
-        "chapter": "第7章",
-        "type": "input"
-      },
-      {
-        "id": "q-6-1782288965859-tsx0",
-        "number": 6,
-        "question": "在使用SimpleMappingExceptionResolver时，需要配置异常与视图之间的映射关系。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "SimpleMappingExceptionResolver是Spring MVC提供的一个简单的异常解析器。它需要开发者通过其exceptionMappings属性来配置，指定当哪种异常类型抛出时，应该跳转到哪个指定的错误视图页面。因此，配置映射关系是使用它的核心步骤。",
-        "chapter": "第7章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-7-1782288965859-6fxk",
-        "number": 7,
-        "question": "HandlerExceptionResolver 接口是Spring MVC中用于全局异常处理的接口。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "HandlerExceptionResolver是Spring MVC中处理控制器执行过程中发生的异常的核心接口。它的实现类（如DefaultHandlerExceptionResolver、SimpleMappingExceptionResolver和@ControllerAdvice中基于注解的异常处理）共同构成了Spring MVC的全局异常处理机制。",
-        "chapter": "第7章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-8-1782288965859-xrzy",
-        "number": 8,
-        "question": "@ControllerAdvice注解标注的类也需要使用@Controller或@RestController注解进行标注。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "@ControllerAdvice本身已经包含了@Component注解，因此被@ControllerAdvice标注的类会被Spring容器识别为一个Bean，无需再添加@Controller或@RestController。它是一个独立的注解，专门用于定义全局增强的控制器顾问类。",
-        "chapter": "第7章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-9-1782288965859-a7q4",
-        "number": 9,
-        "question": "拦截器的preHandler()方法会在请求处理之后被调用。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "preHandler()方法是拦截器生命周期中的第一个方法，它在处理器（Controller方法）执行之前被调用。postHandle()方法是在处理器执行之后、视图渲染之前被调用。因此，preHandler()被调用的时机远早于请求处理（即处理器执行）之后。",
-        "chapter": "第7章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-10-1782288965859-6e9i",
-        "number": 10,
-        "question": "通过实现WebMvcConfigurer接口，开发者可以扩展Spring MVC的默认配置。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "在基于Java配置的Spring MVC应用中，通过实现WebMvcConfigurer接口（或继承WebMvcConfigurerAdapter），开发者可以重写其各种configure*方法，来定制Spring MVC的默认配置，如添加拦截器、配置视图解析器、配置跨域资源共享等。",
-        "chapter": "第7章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-11-1782288965859-xqvm",
-        "number": 11,
-        "question": "下列选项中，关于SimpleMappingExceptionResolver类描述错的是（ ）。",
-        "options": [
-          "A. exceptionMappings：用于配置异常与视图之间的映射关系",
-          "B. defaultErrorView：用于定义默认的异常处理视图",
-          "C. exceptionAttribute：用于指定异常信息在视图中的属性名称。",
-          "D. 上述说法都错误"
-        ],
-        "answer": "D. 上述说法都错误",
-        "explanation": "A、B、C三个选项都是对SimpleMappingExceptionResolver类中属性的正确描述。exceptionMappings用于存储异常类型和对应的视图名的映射；defaultErrorView指定当异常未在映射中定义时使用的默认视图；exceptionAttribute指定将异常对象存入Model时的属性名，以便在视图中显示异常信息。因此，选择D\"上述说法都错误\"。",
-        "chapter": "第7章",
-        "type": "choice"
-      },
-      {
-        "id": "q-12-1782288965859-pu7v",
-        "number": 12,
-        "question": "下列选项中，不是HandlerInterceptor接口中的方法的是（ ）。",
-        "options": [
-          "A. preHandler()",
-          "B. postHandle()",
-          "C. afterCompletion()",
-          "D. handler()"
-        ],
-        "answer": "D. handler()",
-        "explanation": "HandlerInterceptor接口定义了三个方法：preHandler()（处理器执行前）、postHandle()（处理器执行后视图渲染前）、afterCompletion()（整个请求完成后）。handler()方法是WebRequestInterceptor接口中定义的方法，不是HandlerInterceptor接口中的方法，因此D正确。",
-        "chapter": "第7章",
-        "type": "choice"
-      },
-      {
-        "id": "q-13-1782288965859-xy9c",
-        "number": 13,
-        "question": "下列选项中，关于Spring MVC配置文件中拦截器的配置的说法错误的是（）。",
-        "options": [
-          "A. `<mvc:interceptors>`标签中可以使用`<bean>`标签配置拦截器",
-          "B. `<mvc:mapping>`标签的path的属性值为\"/\"时，表示拦截所有路径",
-          "C. `<mvc:interceptors>`标签中可以使用`<mvc:interceptor>`标签配置拦截器",
-          "D. `<mvc:exclude-mapping>`标签的path属性用于配置不需要拦截的路径请求"
-        ],
-        "answer": "B. `<mvc:mapping>`标签的path的属性值为\"/\"时，表示拦截所有路径",
-        "explanation": "在拦截器配置中，`<mvc:mapping>`标签的path属性用于配置要拦截的URL模式。当path属性的值为\"/**\"时，表示拦截所有路径（包括子路径）。而单独的\"/\"通常表示拦截根路径，并非所有路径。因此，B选项的描述不准确，是错误的。",
-        "chapter": "第7章",
-        "type": "choice"
-      },
-      {
-        "id": "q-14-1782288965859-0p9g",
-        "number": 14,
-        "question": "下列选项中，关于拦截器的描述错误的是（）。",
-        "options": [
-          "A. 拦截器（基于动态拦截的机制对Web请求进行拦截和处理",
-          "B. preHandler()方法会在请求处理之前被调用",
-          "C. postHandle()方法会在请求处理之后，以及视图渲染之后被调用",
-          "D. afterCompletion()方法会在整个请求处理流程结束之后被调用"
-        ],
-        "answer": "C. postHandle()方法会在请求处理之后，以及视图渲染之后被调用",
-        "explanation": "拦截器的方法执行顺序为：preHandler()（处理器之前）→ 处理器执行 → postHandle()（处理器之后，视图渲染之前）→ 视图渲染 → afterCompletion()（整个请求结束）。选项C说postHandle()\"在视图渲染之后被调用\"是错误的，它是在视图渲染之前被调用的。",
-        "chapter": "第7章",
-        "type": "choice"
-      },
-      {
-        "id": "q-15-1782288965859-5uhw",
-        "number": 15,
-        "question": "下列选项中，关于文件上传表单说法错误的是（）。",
-        "options": [
-          "A. 表单提交的HTTP请求方法需要为GET",
-          "B. 表单的enctype属性的值需要设置为multipart/form-data",
-          "C. 需要提供文件上传输入框",
-          "D. 文件上传输入框中需要增加了一个multiple属性"
-        ],
-        "answer": "A. 表单提交的HTTP请求方法需要为GET",
-        "explanation": "文件上传请求通常涉及大量数据，因此必须使用HTTP POST方法（或PUT），不能使用GET方法（GET请求有长度限制且不支持请求体）。选项A说\"需要为GET\"是错误的。B、C、D选项都是实现文件上传表单的正确要求。",
-        "chapter": "第7章",
-        "type": "choice"
-      },
-      {
-        "id": "q-1-1782288965859-t9ds",
-        "number": 1,
-        "question": "MyBatis中主要负责创建SqlSession对象的接口是______。",
-        "options": [],
-        "answer": "SqlSessionFactory",
-        "explanation": "SqlSessionFactory是MyBatis框架中的核心接口，它负责创建SqlSession对象的实例。通常，一个应用只会创建一个SqlSessionFactory单例，每个数据库操作请求会从该工厂获取一个新的SqlSession。",
-        "chapter": "第8章",
-        "type": "input"
-      },
-      {
-        "id": "q-2-1782288965859-lit2",
-        "number": 2,
-        "question": "MyBatis核心配置文件通过______标签将所有的配置信息组织起来。",
-        "options": [],
-        "answer": "<configuration>",
-        "explanation": "MyBatis的核心配置文件（通常命名为mybatis-config.xml）的根元素必须是`<configuration>`标签。所有的配置信息，如数据库连接、类型别名、映射器注册、插件等，都作为其子标签组织在这个根标签下。",
-        "chapter": "第8章",
-        "type": "input"
-      },
-      {
-        "id": "q-3-1782288965859-ifwr",
-        "number": 3,
-        "question": "MyBatis核心配置文件中，`<properties>`标签可以通过______或 url属性读取指定位置的外部属性文件。",
-        "options": [],
-        "answer": "resource",
-        "explanation": "在MyBatis核心配置文件中，`<properties>`标签的resource属性用于从类路径下加载属性文件（如db.properties），而url属性用于从文件系统或网络路径加载属性文件。",
-        "chapter": "第8章",
-        "type": "input"
-      },
-      {
-        "id": "q-4-1782288965859-8r3h",
-        "number": 4,
-        "question": "MyBatis映射文件以______标签作为其根元素，用以标识一个独立的XML映射单元。",
-        "options": [],
-        "answer": "<mapper>",
-        "explanation": "每一个MyBatis的XML映射文件（如UserMapper.xml）都以`<mapper>`标签作为其根元素。该标签的namespace（命名空间）属性用于绑定一个对应的Mapper接口，使得接口和XML映射文件能够关联起来。",
-        "chapter": "第8章",
-        "type": "input"
-      },
-      {
-        "id": "q-5-1782288965859-qona",
-        "number": 5,
-        "question": "MyBatis映射文件中，`<select>`标签的______属性用于指定查询结果的映射类型。",
-        "options": [],
-        "answer": "resultType",
-        "explanation": "`<select>`标签中的resultType属性用于指定查询结果应被映射到的Java类型（如完整的类名或别名）。它适用于查询结果能够被直接映射到单一类型（如简单类型、POJO）的场景。当结果映射比较复杂时，则应使用resultMap属性。",
-        "chapter": "第8章",
-        "type": "input"
-      },
-      {
-        "id": "q-6-1782288965859-ji1w",
-        "number": 6,
-        "question": "MyBatis基于ORM技术实现数据的持久化操作。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "MyBatis是一种优秀的持久层框架，它支持自定义SQL、存储过程以及高级映射。它确实基于ORM（对象关系映射）思想，允许开发者通过XML或注解来配置Java对象与数据库表之间的映射关系，从而简化数据持久化操作。",
-        "chapter": "第8章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-7-1782288965859-8vqq",
-        "number": 7,
-        "question": "SqlSessionFactory类的主要职责是读取MyBatis的配置信息，并解析配置信息。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "负责读取和解析MyBatis配置信息、构建SqlSessionFactory的是SqlSessionFactoryBuilder类。SqlSessionFactory本身的主要职责是创建SqlSession实例，而非解析配置。因此，该说法错误。",
-        "chapter": "第8章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-8-1782288965859-ahif",
-        "number": 8,
-        "question": "SqlSession接口提供了一系列方法用于执行SQL查询、更新、插入和删除操作。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "SqlSession接口是MyBatis中执行数据库操作的核心API。它提供了众多方法，如selectOne()、selectList()用于查询，insert()、update()、delete()用于数据修改，以及commit()、rollback()用于事务管理。",
-        "chapter": "第8章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-9-1782288965859-rlrm",
-        "number": 9,
-        "question": "`<properties>` 标签内定义的属性优先级低于从外部属性文件中读取到的属性。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "在MyBatis配置中，如果通过`<properties>`标签的resource或url属性引入了外部属性文件，那么在标签内部直接定义的属性（作为子标签）的优先级是低于外部文件中同名属性的。外部文件中的值会覆盖内部定义的值。",
-        "chapter": "第8章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-10-1782288965859-ykv8",
-        "number": 10,
-        "question": "MyBatis映射文件中， `<insert>`标签的useGeneratedKeys属性用于指定是否返回生成的主键值。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "对于支持自动生成主键的数据库（如MySQL的AUTO_INCREMENT），在MyBatis的`<insert>`标签中，可以通过设置useGeneratedKeys=\"true\"并指定keyProperty属性，让MyBatis在执行插入操作后，将数据库生成的主键值回填到传入的Java对象的对应属性中。",
-        "chapter": "第8章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-11-1782288965859-9u60",
-        "number": 11,
-        "question": "下列选项中，关于SqlSession的描述错误的是（ ）。",
-        "options": [
-          "A. SqlSession接口的实例用于表示应用程序与数据库的一次会话",
-          "B. 在多线程环境下，SqlSession 的实例是线程安全的",
-          "C. 默认情况下，SqlSession对象的事务不会自动提交",
-          "D. DefaultSqlSession是MyBatis提供的SqlSession接口默认实现类"
-        ],
-        "answer": "B. 在多线程环境下，SqlSession 的实例是线程安全的",
-        "explanation": "SqlSession是非线程安全的。每个线程应该拥有自己的SqlSession实例，不能在多线程间共享。选项B说\"线程安全\"是错误的。A、C、D选项对SqlSession的描述均正确。",
-        "chapter": "第8章",
-        "type": "choice"
-      },
-      {
-        "id": "q-12-1782288965859-eznq",
-        "number": 12,
-        "question": "下列选项中，关于MyBatis核心配置文件中的标签描述错误的是（ ）。",
-        "options": [
-          "A. `<properties>`标签用于定义属性",
-          "B. `<settings>`标签用于配置数据库环境",
-          "C. `<typeAliases>`标签用于定义类型的别名",
-          "D. `<plugins>`标签用于定义插件"
-        ],
-        "answer": "B. `<settings>`标签用于配置数据库环境",
-        "explanation": "在MyBatis核心配置文件中，用于配置数据库环境（如事务管理器、数据源）的标签是`<environments>`及其子标签`<environment>`。`<settings>`标签用于配置MyBatis的全局运行时行为，如缓存、懒加载、日志等。因此B选项错误。",
-        "chapter": "第8章",
-        "type": "choice"
-      },
-      {
-        "id": "q-13-1782288965859-c868",
-        "number": 13,
-        "question": "下列选项中，关于`<mappers>`标签的描述错误的是（ ）。",
-        "options": [
-          "A. 可以通过`<mapper>`子标签和`<package>`子标签实现映射器信息的指定",
-          "B. `<mapper>`子标签可以通过资源路径指定映射文件",
-          "C. `<mapper>`子标签通过映射器接口的实现类指定映射器",
-          "D. `<package>`子标签用于指定包含映射器接口的包名。"
-        ],
-        "answer": "C. `<mapper>`子标签通过映射器接口的实现类指定映射器",
-        "explanation": "在MyBatis中注册映射器（Mapper）的方式包括：使用`<mapper resource=\"...\"/>`（指定XML文件路径）、`<mapper class=\"...\"/>`（指定接口类）、`<package name=\"...\"/>`（指定接口所在包）。选项C说通过\"映射器接口的实现类\"是错误的，MyBatis并不需要为Mapper接口编写实现类，而是通过动态代理生成代理对象。",
-        "chapter": "第8章",
-        "type": "choice"
-      },
-      {
-        "id": "q-14-1782288965859-qerk",
-        "number": 14,
-        "question": "下列选项中，关于MyBatis映射文件中`<select>`标签的属性描述错误的是（ ）。",
-        "options": [
-          "A. id属性用于定义当前查询的唯一标识，是必需的属性。",
-          "B. resultType属性用于指定查询结果的映射类型",
-          "C. resultMap属性用于指定一个结果集映射",
-          "D. 当查询结果需要复杂映射时，可以同时使用resultMap和resultType实现。"
-        ],
-        "answer": "D. 当查询结果需要复杂映射时，可以同时使用resultMap和resultType实现。",
-        "explanation": "在`<select>`标签中，resultType和resultMap属性是互斥的，不能同时使用。如果查询结果需要复杂映射（如嵌套属性、关联对象等），应使用resultMap；如果结果简单，则使用resultType。同时使用会导致配置错误。因此，D选项描述错误。",
-        "chapter": "第8章",
-        "type": "choice"
-      },
-      {
-        "id": "q-15-1782288965859-n8kq",
-        "number": 15,
-        "question": "下列选项中，对于MyBatis映射文件中的标签的描述错误的是（ ）。",
-        "options": [
-          "A. `<select>`标签用于配置 SQL 查询语句以及查询结果的映射规则",
-          "B. `<resultType>`标签为定义结果集映射的根标签",
-          "C. `<sql>`标签用于定义可重用的SQL片段",
-          "D. `<include>`标签用于在SQL语句中引用前面定义的SQL片段"
-        ],
-        "answer": "B. `<resultType>`标签为定义结果集映射的根标签",
-        "explanation": "在MyBatis映射文件中，用于定义结果集映射的根标签是`<resultMap>`，而非`<resultType>`。`<resultType>`是`<select>`标签的一个属性，用来指定返回结果的类型。因此，B选项错误。",
-        "chapter": "第8章",
-        "type": "choice"
-      },
-      {
-        "id": "q-1-1782288965859-ck41",
-        "number": 1,
-        "question": "______标签可以根据指定的条件表达式的结果动态生成SQL语句。",
-        "options": [],
-        "answer": "<if>",
-        "explanation": "`<if>`是MyBatis动态SQL中最基础的标签，它类似于Java中的if语句。通过其test属性设置条件表达式，只有当条件为true时，`<if>`标签内部的SQL片段才会被包含到最终的SQL语句中。",
-        "chapter": "第9章",
-        "type": "input"
-      },
-      {
-        "id": "q-2-1782288965859-2qgw",
-        "number": 2,
-        "question": "`<foreach>`标签的separator属性用于指定每次迭代之间插入的______。",
-        "options": [],
-        "answer": "分隔符",
-        "explanation": "在`<foreach>`标签中，用于遍历集合或数组以生成动态的IN子句或批量插入语句。separator属性定义了在每次迭代生成的文本之间插入的分隔字符，例如逗号（,），用于正确构建SQL语法。",
-        "chapter": "第9章",
-        "type": "input"
-      },
-      {
-        "id": "q-3-1782288965859-06k4",
-        "number": 3,
-        "question": "MyBatis映射文件中，通过______标签可以根据条件动态地生成SET子句。",
-        "options": [],
-        "answer": "<set>",
-        "explanation": "`<set>`标签专门用于动态更新语句。它能够智能地在UPDATE语句中生成SET关键字，并自动移除最后一个不需要的逗号，从而简化动态更新SQL的编写。",
-        "chapter": "第9章",
-        "type": "input"
-      },
-      {
-        "id": "q-4-1782288965859-wyij",
-        "number": 4,
-        "question": "`<trim>`标签的______属性用于指定给SQL语句增加的前缀字符串。",
-        "options": [],
-        "answer": "prefix",
-        "explanation": "`<trim>`标签是一个功能强大的动态SQL标签，它可以对包含的SQL片段进行定制化处理。其prefix属性用于在SQL片段的开头添加指定的字符串（如WHERE、SET等关键字）。",
-        "chapter": "第9章",
-        "type": "input"
-      },
-      {
-        "id": "q-5-1782288965859-btn2",
-        "number": 5,
-        "question": "`<foreach>`标签的______属性用于指定遍历的可迭代对象。",
-        "options": [],
-        "answer": "collection",
-        "explanation": "collection是`<foreach>`标签中最重要的属性之一，它指定了要被遍历的集合、数组或可迭代对象的名称。该名称对应传递给Mapper方法的参数名（当使用@Param注解时，就是注解的值）。",
-        "chapter": "第9章",
-        "type": "input"
-      },
-      {
-        "id": "q-6-1782288965859-6but",
-        "number": 6,
-        "question": "`<choose>`标签用于从多个备选项中选择一个满足条件的选项 。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "`<choose>`标签在MyBatis中相当于Java中的switch或if-else if-else结构。它包含多个`<when>`子标签和一个可选的`<otherwise>`标签，会从上到下依次判断`<when>`的test条件，一旦有一个满足，就包含其SQL片段并结束整个`<choose>`块。",
-        "chapter": "第9章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-7-1782288965859-w3a3",
-        "number": 7,
-        "question": "`<when>`标签用于定义`<choose>`标签中的备选条件，它包含一个test属性，用于指定条件表达式。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "这是对`<when>`标签功能的正确描述。它必须作为`<choose>`标签的子标签出现，并且其test属性是必需且不可少的，用于定义分支条件。",
-        "chapter": "第9章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-8-1782288965859-gg11",
-        "number": 8,
-        "question": "`<where>` 标签会确保只有所有条件都成立时，才会在SQL语句中添加WHERE关键字。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "`<where>`标签的逻辑是：只有当其内部的至少一个条件成立（即内部有可用的SQL片段）时，它才会在最终SQL中添加WHERE关键字，并且它会智能地去除第一个条件前的多余AND或OR。它并非要求\"所有条件都成立\"，而是\"至少有一个条件成立\"。",
-        "chapter": "第9章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-9-1782288965859-b65s",
-        "number": 9,
-        "question": "`<set>`标签会自动去掉最后一个字段更新后的多余逗号 。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "这是`<set>`标签的核心智能功能。在使用动态UPDATE语句时，如果最后一个`<if>`条件为false，可能会导致SET子句末尾留下多余的逗号，从而引起SQL语法错误。`<set>`标签会自动检测并移除这个多余的逗号。",
-        "chapter": "第9章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-10-1782288965859-tfll",
-        "number": 10,
-        "question": "`<trim>`标签可以根据条件动态地添加或者删除指定的字符。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "`<trim>`标签提供了prefix、suffix（添加前缀/后缀）以及prefixOverrides、suffixOverrides（移除前/后缀中指定的字符）四个属性，可以灵活地对内部的SQL片段进行\"修剪\"（添加或删除特定字符），因此该说法正确。",
-        "chapter": "第9章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-11-1782288965859-dguc",
-        "number": 11,
-        "question": "下列选项中，关于MyBatis映射文件中生成动态SQL的标签描述错误的是（）。",
-        "options": [
-          "A. `<if>`标签的test属性用于指定条件表达式，如果条件表达式的值为true，则包含`<if>`标签内部的SQL语句",
-          "B. `<foreach>`标签不能遍历数组",
-          "C. `<where>` 标签可以自动处理条件语句中的逻辑连接词，如AND或OR",
-          "D. `<choose>`标签类似于Java中的switch语句"
-        ],
-        "answer": "B. `<foreach>`标签不能遍历数组",
-        "explanation": "`<foreach>`标签不仅能够遍历List、Set等集合，也能够遍历数组（Array）。只需在collection属性中正确指定数组参数名即可。因此，选项B\"不能遍历数组\"的描述是错误的。",
-        "chapter": "第9章",
-        "type": "choice"
-      },
-      {
-        "id": "q-12-1782288965859-hnxh",
-        "number": 12,
-        "question": "下列选项中，关于`<choose>`标签、`<when>`标签和`<otherwise>`标签的描述错误的是（ ）。",
-        "options": [
-          "A. `<choose>`标签类可以包含零个或多个`<when>`标签",
-          "B. `<choose>`标签类可以包含一个或多个`<otherwise>`标签",
-          "C. 如果所有`<when>`子标签的条件表达式都不为true，则`<otherwise>`标签内部的SQL片段会被包含到最终生成的SQL语句中",
-          "D. 一旦某个 `<when>`标签的条件满足后，整个 `<choose>` 块的执行就结束了，后续的 `<when>` 标签和 `<otherwise>`标签将不会再执行"
-        ],
-        "answer": "B. `<choose>`标签类可以包含一个或多个`<otherwise>`标签",
-        "explanation": "`<choose>`标签可以包含零个或多个`<when>`标签，但最多只能包含一个`<otherwise>`标签。因此，选项B说\"可以包含一个或多个`<otherwise>`标签\"是错误的。",
-        "chapter": "第9章",
-        "type": "choice"
-      },
-      {
-        "id": "q-13-1782288965859-essu",
-        "number": 13,
-        "question": "下列选项中，关于`<foreach>`标签的属性描述错误的是（）。",
-        "options": [
-          "A. item属性用于指定遍历过程中每个元素的别名",
-          "B. index属性用于指定在遍历过程中当前元素的索引值",
-          "C. open属性用于指定循环开始处插入的字符串，常用于包围循环内容的起始符号",
-          "D. separator属性与open相对应，用于定义在循环结束处插入的字符串，用于包围循环内容的终止符号"
-        ],
-        "answer": "D. separator属性与open相对应，用于定义在循环结束处插入的字符串，用于包围循环内容的终止符号",
-        "explanation": "separator属性是用于设置每次迭代之间插入的分隔符（如逗号），它并不对应open属性。与open属性相对应的是close属性，close用于在循环结束处插入字符串（如右括号）来包围循环内容。因此，D选项的描述是错误的。",
-        "chapter": "第9章",
-        "type": "choice"
-      },
-      {
-        "id": "q-14-1782288965859-ojtd",
-        "number": 14,
-        "question": "`<foreach>`标签中用于指定遍历过程中每个元素的别名的属性的是（）。",
-        "options": [
-          "A. item",
-          "B. index",
-          "C. separator",
-          "D. collection"
-        ],
-        "answer": "A. item",
-        "explanation": "`<foreach>`标签的item属性用于指定在遍历过程中，代表当前迭代到的元素（集合中的单个对象）的变量名。在循环体内部可以使用该变量名来引用元素。因此，正确答案是A。",
-        "chapter": "第9章",
-        "type": "choice"
-      },
-      {
-        "id": "q-15-1782288965859-l0ya",
-        "number": 15,
-        "question": "`<trim>`标签中用于指定给SQL语句增加的后缀的属性的是（ ）。",
-        "options": [
-          "A. prefix",
-          "B. prefixOverrides",
-          "C. suffix",
-          "D. suffixOverrides"
-        ],
-        "answer": "C. suffix",
-        "explanation": "`<trim>`标签的suffix属性用于指定要添加到SQL片段末尾的字符串（如右括号、逗号等）。prefix是添加前缀，suffix是添加后缀。因此，正确答案是C。",
-        "chapter": "第9章",
-        "type": "choice"
-      },
-      {
-        "id": "q-1-1782288965859-ncef",
-        "number": 1,
-        "question": "MyBatis的______注解用于标记插入操作的方法。",
-        "options": [],
-        "answer": "@Insert",
-        "explanation": "在MyBatis注解开发中，@Insert注解用于标注在Mapper接口的方法上，表示该方法对应的SQL语句是一条插入（INSERT）语句。MyBatis会执行该SQL并将结果返回。",
-        "chapter": "第10章",
-        "type": "input"
-      },
-      {
-        "id": "q-2-1782288965859-fuej",
-        "number": 2,
-        "question": "MyBatis的______注解用于定义单个Java对象属性与数据表字段的映射关系。",
-        "options": [],
-        "answer": "@Result",
-        "explanation": "@Result注解用于在@Results注解内部，定义一条具体的映射规则。它描述了Java对象的一个属性（property）如何映射到数据表的一个字段（column）。例如，@Result(property=\"userName\", column=\"user_name\")。",
-        "chapter": "第10章",
-        "type": "input"
-      },
-      {
-        "id": "q-3-1782288965859-9jyq",
-        "number": 3,
-        "question": "MyBatis的______注解用于设置一对一关联查询时的细节信息。",
-        "options": [],
-        "answer": "@One",
-        "explanation": "@One注解（不是@OneToMany）在MyBatis中用于配置一对一关联关系（one-to-one）的查询映射。通常用在@Result注解的one属性中，指定通过一个单独的查询（select属性）来获取关联的对象。",
-        "chapter": "第10章",
-        "type": "input"
-      },
-      {
-        "id": "q-4-1782288965859-tb84",
-        "number": 4,
-        "question": "MyBatis的______注解用于描述一对多关联关系。",
-        "options": [],
-        "answer": "@Many",
-        "explanation": "@Many注解用于配置一对多（one-to-many）或集合类型的关联映射。它通常用在@Result注解的many属性中，指定通过一个单独的查询（select属性）来获取关联的集合对象。",
-        "chapter": "第10章",
-        "type": "input"
-      },
-      {
-        "id": "q-5-1782288965859-qn3b",
-        "number": 5,
-        "question": "MyBatis的______注解用于标记方法参数在SQL语句中的占位符名称。",
-        "options": [],
-        "answer": "@Param",
-        "explanation": "@Param注解用于标注在Mapper接口方法的参数上。当SQL语句中有多个参数，或者需要使用XML中引用的参数名时，使用@Param可以明确地给参数命名，以便在SQL语句中通过#{名称}来引用。",
-        "chapter": "第10章",
-        "type": "input"
-      },
-      {
-        "id": "q-6-1782288965859-z3gf",
-        "number": 6,
-        "question": "@Select注解的SQL语句中可以使用 #{} 语法来引用方法中的参数 。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "在MyBatis中，无论是注解（如@Select）还是XML映射文件，都可以使用#{}占位符来引用方法参数，这是一种预编译的、安全的参数传递方式，可以防止SQL注入。",
-        "chapter": "第10章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-7-1782288965859-2wv7",
-        "number": 7,
-        "question": "MyBatis中的@Options注解可以指定是否使用生成的键和设置超时时间 。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "@Options注解在MyBatis中用于为映射语句（如@Insert）提供配置选项。常用属性包括useGeneratedKeys、keyProperty、keyColumn、timeout等，允许细粒度地控制语句执行行为。",
-        "chapter": "第10章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-8-1782288965859-2b5k",
-        "number": 8,
-        "question": "@Results 注解用于定义多个结果映射规则，可以包含多个 @Result 注解。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "@Results注解是一个容器注解，它内部使用一个@Result数组。当查询结果需要映射到Java对象的多个属性时，可以在@Results中定义多个@Result，每个@Result描述一个属性-字段的映射关系。",
-        "chapter": "第10章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-9-1782288965859-we3m",
-        "number": 9,
-        "question": "@One注解可以通过select属性指定关联查询的SQL语句或方法。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "这是@One注解的核心功能。其select属性用于指定一个已经定义的查询方法（可以是XML中的`<select>`的id，也可以是@Select注解的方法全限定名），该查询会返回关联的对象。",
-        "chapter": "第10章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-10-1782288965859-rhx8",
-        "number": 10,
-        "question": "MyBatis中的@Many 注解是直接提供多对多关联查询的注解。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "@Many注解用于处理一对多（One-to-Many）关系，它在映射中代表一个集合类型的属性。虽然它可以用于多对多关系（通过中间表），但它的直接用途是描述一对多关联。更准确地说，@Many是用于处理集合类型（List、Set）的关联，而不仅仅是\"多对多\"。",
-        "chapter": "第10章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-11-1782288965859-jscr",
-        "number": 11,
-        "question": "下列选项中，用于标记方法参数在SQL语句中的占位符名称的注解是（ ）。",
-        "options": [
-          "A. @Insert",
-          "B. @Param",
-          "C. @Results",
-          "D. @Result"
-        ],
-        "answer": "B. @Param",
-        "explanation": "@Param注解专门用于给Mapper方法参数命名，使得SQL语句中的#{}占位符可以准确引用该参数。@Insert是插入方法标记，@Results和@Result是结果映射相关注解。因此，正确答案是B。",
-        "chapter": "第10章",
-        "type": "choice"
-      },
-      {
-        "id": "q-12-1782288965859-auvq",
-        "number": 12,
-        "question": "下列选项中，关于MyBatis中@Result注解的属性描述错误的是（ ）。",
-        "options": [
-          "A. property属性用于指定实体类的类型",
-          "B. column属性用于指定查询结果集中对应的字段名",
-          "C. one属性用于指定描述一对一关联关系的@One注解",
-          "D. many属性用于指定描述一对多关联关系的@Many 注解"
-        ],
-        "answer": "A. property属性用于指定实体类的类型",
-        "explanation": "在@Result注解中，property属性用于指定Java实体类中的属性名（字段名），而非实体类的类型。实体类的类型是在@Results的id属性或其他地方指定的。因此，选项A描述错误。",
-        "chapter": "第10章",
-        "type": "choice"
-      },
-      {
-        "id": "q-13-1782288965859-zky5",
-        "number": 13,
-        "question": "下列选项中，关于MyBatis中@one注解描述错误的是（ ）。",
-        "options": [
-          "A. 用于标记插入一条记录的方法",
-          "B. 提供了fetchType属性用于指定控制关联对象的加载策略",
-          "C. 提供了select用于指定关联查询的SQL语句或方法",
-          "D. 通常与@Results注解一起使用"
-        ],
-        "answer": "A. 用于标记插入一条记录的方法",
-        "explanation": "@One注解用于配置一对一关联查询，而不是\"标记插入一条记录的方法\"。标记插入操作使用的是@Insert注解。因此，选项A错误。B、C、D选项均是对@One注解的正确描述。",
-        "chapter": "第10章",
-        "type": "choice"
-      },
-      {
-        "id": "q-14-1782288965859-qjag",
-        "number": 14,
-        "question": "下列选项中，关于MyBatis中@Many 注解描述错误的是（ ）。",
-        "options": [
-          "A. 用于标记插入多条记录的方法",
-          "B. 通常与@Results注解一起使用",
-          "C. 常用于在查询结果中嵌套加载一组关联对象的集合",
-          "D. @Many注解的属性和@One注解的属性一致"
-        ],
-        "answer": "A. 用于标记插入多条记录的方法",
-        "explanation": "@Many注解用于配置一对多的关联查询，而不是\"标记插入多条记录的方法\"。标记插入操作仍然使用@Insert注解。因此，选项A描述错误。@Many通常在@Results中使用，用于加载集合，且其属性（select、fetchType等）与@One一致。",
-        "chapter": "第10章",
-        "type": "choice"
-      },
-      {
-        "id": "q-15-1782288965859-au1v",
-        "number": 15,
-        "question": "MyBatis中@Result注解用于指定查询结果集中对应的字段名的属性是（ ）。",
-        "options": [
-          "A. property",
-          "B. column",
-          "C. one",
-          "D. many"
-        ],
-        "answer": "B. column",
-        "explanation": "在@Result注解中，column属性用于指定查询结果集中对应的数据库列名（字段名）。property是Java对象属性名。因此，正确答案是B。",
-        "chapter": "第10章",
-        "type": "choice"
-      },
-      {
-        "id": "q-1-1782288965859-gcji",
-        "number": 1,
-        "question": "MyBatis的一级缓存是在______级别上进行管理的。",
-        "options": [],
-        "answer": "SqlSession",
-        "explanation": "一级缓存是MyBatis默认开启的缓存，其作用域是单个SqlSession对象。同一个SqlSession内执行的相同SQL会命中一级缓存，而不同的SqlSession之间的缓存是相互隔离的。",
-        "chapter": "第11章",
-        "type": "input"
-      },
-      {
-        "id": "q-2-1782288965859-ta62",
-        "number": 2,
-        "question": "MyBatis二级缓存是______级别的缓存。",
-        "options": [],
-        "answer": "Mapper",
-        "explanation": "二级缓存的作用范围超出了单个SqlSession，它是在Mapper（命名空间）级别共享的。同一个Mapper接口的多个SqlSession可以共享二级缓存中的数据。",
-        "chapter": "第11章",
-        "type": "input"
-      },
-      {
-        "id": "q-3-1782288965859-shyl",
-        "number": 3,
-        "question": "从数据库表结构反向生成对应的Java实体类、Mapper接口、XML映射文件的工程化实现通常称为______。",
-        "options": [],
-        "answer": "逆向工程",
-        "explanation": "逆向工程（Reverse Engineering）是MyBatis Generator等工具提供的功能，能够根据已有的数据库表结构，自动生成对应的Java POJO类、操作数据库的Mapper接口以及SQL映射XML文件，极大地减少了手动编写重复代码的工作量。",
-        "chapter": "第11章",
-        "type": "input"
-      },
-      {
-        "id": "q-4-1782288965859-ipcx",
-        "number": 4,
-        "question": "开启当前Mapper的namespace下的二级缓存，可以通过MyBatis映射文件中的______标签完成。",
-        "options": [],
-        "answer": "<cache>",
-        "explanation": "要在某个Mapper映射文件中启用二级缓存，只需在该文件的根`<mapper>`标签下添加一个`<cache>`标签即可。该标签可以配置缓存的各种属性，如淘汰策略、刷新间隔、大小等。",
-        "chapter": "第11章",
-        "type": "input"
-      },
-      {
-        "id": "q-5-1782288965859-v5ti",
-        "number": 5,
-        "question": "当MyBatis开启二级缓存后，首次查询数据时，缓存命中率为______。",
-        "options": [],
-        "answer": "0",
-        "explanation": "缓存命中率是指从缓存中成功获取数据的次数占总查询次数的比例。在二级缓存开启后，首次执行查询操作时，缓存中并无数据，因此数据必须从数据库中查询，此时缓存命中率为0。命中率从第二次查询相同数据时开始计算。",
-        "chapter": "第11章",
-        "type": "input"
-      },
-      {
-        "id": "q-6-1782288965859-7kyu",
-        "number": 6,
-        "question": "MyBatis Generator是MyBatis逆向工程的核心工具之一 。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "MyBatis Generator（简称MBG）是MyBatis官方提供的逆向工程工具，它可以通过配置生成Java实体类、Mapper接口和XML映射文件，是进行MyBatis逆向工程开发的核心工具。",
-        "chapter": "第11章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-7-1782288965859-e64t",
-        "number": 7,
-        "question": "MyBatis Generator会默认加载名称为generatorConfig.xml 的配置文件 。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "MyBatis Generator在运行时需要通过命令行参数或指定配置文件路径来加载配置文件。它并不会\"默认加载\"名为generatorConfig.xml的文件。需要通过-configfile参数显式指定。",
-        "chapter": "第11章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-8-1782288965859-5pgw",
-        "number": 8,
-        "question": "在MyBatis应用程序中执行查询时，如果缓存中没有对应的结果，程序会出错。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "缓存机制是为了提高性能而设计的。当查询数据时，MyBatis会首先检查一级缓存和二级缓存。如果缓存中没有数据，MyBatis会正常地执行SQL查询数据库，并将查询结果存入缓存后返回，程序不会出错。",
-        "chapter": "第11章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-9-1782288965859-orux",
-        "number": 9,
-        "question": "MyBatis的二级缓存中，同一SqlSessionFactory创建的SqlSession之间，其缓存是共享的。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "二级缓存是基于Mapper命名空间进行共享的，而Mapper命名空间是全局的，与SqlSessionFactory相关。因此，从同一个SqlSessionFactory创建的所有SqlSession实例，在开启了二级缓存的情况下，是可以共享同一个Mapper的缓存数据的。",
-        "chapter": "第11章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-10-1782288965859-ketm",
-        "number": 10,
-        "question": "MyBatis的一级缓存和二级缓存都需要手动开启。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "一级缓存是MyBatis默认开启的，无需手动配置。二级缓存默认是关闭的，需要开发者通过配置（如添加`<cache>`标签）手动开启。因此，该说法错误。",
-        "chapter": "第11章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-11-1782288965859-glhs",
-        "number": 11,
-        "question": "下列选项中，关于MyBatis的一级缓存的描述错误的是（）。",
-        "options": [
-          "A. 为每个SqlSession提供了一个私有的缓存区域",
-          "B. MyBatis一级缓存中的数据只有在SqlSession关闭时候才会被清除",
-          "C. MyBatis的一级缓存是默认开启的",
-          "D. 只有当同一个SqlSession对象多次执行完全相同的SQL语句时，才会到缓存中查询"
-        ],
-        "answer": "B. MyBatis一级缓存中的数据只有在SqlSession关闭时候才会被清除",
-        "explanation": "MyBatis一级缓存中的数据在SqlSession关闭时确实会被清除，但并非只有在这个时候才会被清除。在执行了INSERT、UPDATE、DELETE等会修改数据的操作后，或者调用了SqlSession的clearCache()方法时，一级缓存也会被清除。因此，选项B的说法过于绝对且不完整，是错误的。",
-        "chapter": "第11章",
-        "type": "choice"
-      },
-      {
-        "id": "q-12-1782288965859-cv4w",
-        "number": 12,
-        "question": "下列选项中，关于MyBatis的二级缓存的描述错误的是（）。",
-        "options": [
-          "A. MyBatis二级缓存基于Mapper的名称空间进行划分",
-          "B. MyBatis二级缓存可以实现SqlSession之间的缓存共享",
-          "C. MyBatis的二级缓存是默认开启的",
-          "D. 执行插入操作后，二级缓存中的数据会被清楚"
-        ],
-        "answer": "C. MyBatis的二级缓存是默认开启的",
-        "explanation": "在MyBatis中，二级缓存默认是关闭的，需要开发者进行配置（在MyBatis核心配置文件中设置全局开关，并在具体Mapper中添加`<cache>`标签）才能启用。因此，选项C\"默认开启\"是错误的。",
-        "chapter": "第11章",
-        "type": "choice"
-      },
-      {
-        "id": "q-13-1782288965859-3uea",
-        "number": 13,
-        "question": "下列选项中，关于MyBatis中`<cache>`标签的属性描述错误的是（）。",
-        "options": [
-          "A. type属性用于指定需要缓存的Mapper的全限定类名",
-          "B. eviction属性用于指定缓存的淘汰策略",
-          "C. flushInterval属性用于指定缓存的刷新间隔",
-          "D. size属性用于指定缓存的最大容量"
-        ],
-        "answer": "A. type属性用于指定需要缓存的Mapper的全限定类名",
-        "explanation": "在`<cache>`标签中，type属性用于指定自定义缓存实现类的全限定类名，而不是\"需要缓存的Mapper的全限定类名\"。`<cache>`标签本身就是用在Mapper文件中的，因此不需要再指定Mapper名称。选项A的描述是错误的。",
-        "chapter": "第11章",
-        "type": "choice"
-      },
-      {
-        "id": "q-14-1782288965859-b0am",
-        "number": 14,
-        "question": "下列选项中，用于开启当前Mapper的命名空间下的二级缓存的标签（）。",
-        "options": [
-          "A. `<settings>`",
-          "B. `<cache>`",
-          "C. `<setting>`",
-          "D. `<environment>`"
-        ],
-        "answer": "B. `<cache>`",
-        "explanation": "要为一个特定的Mapper映射文件启用二级缓存，需要在该文件的`<mapper>`标签内添加`<cache>`标签。因此，正确答案是B。",
-        "chapter": "第11章",
-        "type": "choice"
-      },
-      {
-        "id": "q-15-1782288965859-lsuu",
-        "number": 15,
-        "question": "下列选项中，关于MyBatis缓存的描述错误的是（）。",
-        "options": [
-          "A. 当MyBatis开启二级缓存后，首次查询数据时，缓存命中率为1",
-          "B. MyBatis的缓存机制旨在减少数据库的负载和提高系统的响应速",
-          "C. 当终端用户访问缓存时，如果在缓存中找到了要访问的数据，称为缓存命中",
-          "D. SqlSession关闭时，MyBatis会将一级缓存中的数据清除"
-        ],
-        "answer": "A. 当MyBatis开启二级缓存后，首次查询数据时，缓存命中率为1",
-        "explanation": "当MyBatis开启二级缓存后，首次执行查询时，因为缓存中还没有数据，所以会查询数据库，缓存不会命中，命中率应为0，而不是1。只有在后续的查询中才可能命中缓存。因此，选项A错误。",
-        "chapter": "第11章",
-        "type": "choice"
-      },
-      {
-        "id": "q-1-1782288965859-fkdc",
-        "number": 1,
-        "question": "MyBatis-Plus的______注解用于指定这个实体类所对应数据表的名称。",
-        "options": [],
-        "answer": "@TableName",
-        "explanation": "MyBatis-Plus通过注解来映射实体类和数据表。@TableName注解用于指定当前实体类对应数据库中的哪一张表。当实体类名与表名不一致时，必须使用该注解进行配置。",
-        "chapter": "第12章",
-        "type": "input"
-      },
-      {
-        "id": "q-2-1782288965859-1hob",
-        "number": 2,
-        "question": "MyBatis-Plus的______注解用于标识实体类中和数据表主键字段对应的属性。",
-        "options": [],
-        "answer": "@TableId",
-        "explanation": "在MyBatis-Plus中，@TableId注解用于标记实体类中的某个属性为数据表的主键字段。它还可以配合type属性来指定主键生成策略（如AUTO、INPUT、ID_WORKER等）。",
-        "chapter": "第12章",
-        "type": "input"
-      },
-      {
-        "id": "q-3-1782288965859-jwz2",
-        "number": 3,
-        "question": "______接口是MyBatis-Plus中定义的一个基础映射器接口。",
-        "options": [],
-        "answer": "BaseMapper",
-        "explanation": "BaseMapper是MyBatis-Plus提供的通用Mapper接口，它定义了一系列的CRUD方法（如insert、deleteById、updateById、selectList等）。开发者自定义的Mapper接口只需继承BaseMapper<T>，即可获得这些通用的数据访问能力，无需编写XML或SQL。",
-        "chapter": "第12章",
-        "type": "input"
-      },
-      {
-        "id": "q-4-1782288965859-2g5r",
-        "number": 4,
-        "question": "条件构造器的______方法用于匹配字段中值等于某个值的记录。",
-        "options": [],
-        "answer": "eq()",
-        "explanation": "在MyBatis-Plus的条件构造器（如QueryWrapper）中，eq方法用于构建\"等于\"（=）条件。例如，queryWrapper.eq(\"age\", 18)会生成SQL条件 age = 18。",
-        "chapter": "第12章",
-        "type": "input"
-      },
-      {
-        "id": "q-5-1782288965859-xdku",
-        "number": 5,
-        "question": "______接口是MyBatis-Plus服务层的通用接口。",
-        "options": [],
-        "answer": "IService",
-        "explanation": "IService是MyBatis-Plus为Service层提供的通用接口，它定义了一系列通用的业务方法，如批量操作、分页查询等。配合ServiceImpl类，开发者可以快速实现Service层。",
-        "chapter": "第12章",
-        "type": "input"
-      },
-      {
-        "id": "q-6-1782288965859-sar7",
-        "number": 6,
-        "question": "MyBatis-Plus在MyBatis的基础上只做增强不做改变。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "这是MyBatis-Plus的设计哲学。它完全兼容MyBatis，并且在其之上提供了更丰富的功能（如通用CRUD、代码生成器、分页插件、条件构造器等），但并不会改变MyBatis已有的核心行为，开发者可以自由混合使用MyBatis和MyBatis-Plus的特性。",
-        "chapter": "第12章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-7-1782288965859-1ovi",
-        "number": 7,
-        "question": "Lombok的@Data注解在编译时会自动为类生成常用的方法，如getter、setter、toString()等。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "Lombok是一个编译时注解处理框架。@Data注解是一个组合注解，它会为标注的类在编译时自动生成所有字段的getter和setter、equals、hashCode、toString等方法，显著减少了样板代码。",
-        "chapter": "第12章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-8-1782288965859-4j5h",
-        "number": 8,
-        "question": "MyBatis-Plus的条件构造器允许开发者以链式调用的方式构建SQL查询条件。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "MyBatis-Plus的条件构造器（如QueryWrapper、LambdaQueryWrapper）的方法都返回当前对象本身，因此支持链式编程风格，使得构建复杂查询条件的代码更流畅、易读。",
-        "chapter": "第12章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-9-1782288965859-o0o6",
-        "number": 9,
-        "question": "@TableField注解用于标识实体类中和数据表主键字段对应的属性 。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "@TableField注解用于标识实体类中非主键字段与数据表字段的映射关系。它可以处理字段名不一致、字段不存在、自动填充等情况。而用于标识主键字段的注解是@TableId。",
-        "chapter": "第12章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-10-1782288965859-xjie",
-        "number": 10,
-        "question": "AbstractWrapper是所有条件构造器的基类。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "MyBatis-Plus的条件构造器类层次结构为：AbstractWrapper提供了所有条件构造器的公共方法（如eq、gt、like、orderBy等），QueryWrapper、UpdateWrapper、LambdaQueryWrapper等都继承自AbstractWrapper。",
-        "chapter": "第12章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-11-1782288965859-mwdn",
-        "number": 11,
-        "question": "下列选项中，关于MyBatis-Plus的特性描述错误的是（ ）。",
-        "options": [
-          "A. 侵入性强",
-          "B. 支持主键自动生成",
-          "C. 内置代码生成器",
-          "D. 支持自定义全局通用操作"
-        ],
-        "answer": "A. 侵入性强",
-        "explanation": "MyBatis-Plus的设计目标是\"只做增强不做改变\"，它的特性之一就是\"无侵入\"，即对已有代码的侵入性非常低。选项A说\"侵入性强\"是错误的。B、C、D选项都是MyBatis-Plus的显著特性。",
-        "chapter": "第12章",
-        "type": "choice"
-      },
-      {
-        "id": "q-12-1782288965859-mau2",
-        "number": 12,
-        "question": "下列选项中，关于@TableField注解的属性描述错误的是（ ）。",
-        "options": [
-          "A. value属性用于指定属性默认的属性值",
-          "B. exist属性用于标识该属性在数据库是否有对应的字段",
-          "C. fill属性用于指定该字段的自动填充策略",
-          "D. update属性用于标识该字段是否参与UPDATE操作"
-        ],
-        "answer": "A. value属性用于指定属性默认的属性值",
-        "explanation": "在@TableField注解中，value属性用于指定当前实体属性映射到数据库表的哪个字段名，而不是\"指定属性默认的属性值\"。指定默认值通常是Java代码层面的初始化，或使用数据库默认值。因此，选项A描述错误。",
-        "chapter": "第12章",
-        "type": "choice"
-      },
-      {
-        "id": "q-13-1782288965859-wdw7",
-        "number": 13,
-        "question": "下列选项中，关于MyBatis-Plus的条件构造器描述错误的是（）。",
-        "options": [
-          "A. AbstractWrapper是QueryWrapper的子类，用于构建查询条件",
-          "B. AbstractWrapper它定义了一系列条件构造器的通用方法，这些方法构成了构建SQL条件的基础",
-          "C. LambdaQueryWrapper可以使用Lambda表达式代替字符串形式的字段名",
-          "D. MyBatis-Plus的条件构造器是一个强大的查询条件构建工具"
-        ],
-        "answer": "A. AbstractWrapper是QueryWrapper的子类，用于构建查询条件",
-        "explanation": "在MyBatis-Plus的条件构造器体系中，AbstractWrapper是所有Wrapper类的父类，它定义了所有通用的条件方法。而QueryWrapper是AbstractWrapper的子类，用于普通字段名的查询条件构建。选项A说\"AbstractWrapper是QueryWrapper的子类\"颠倒了继承关系，是错误的。",
-        "chapter": "第12章",
-        "type": "choice"
-      },
-      {
-        "id": "q-14-1782288965859-kdo9",
-        "number": 14,
-        "question": "下列选项中，关于MyBatis-Plus的条件构造器的方法描述错误的是（）。",
-        "options": [
-          "A. ne()方法用于匹配字段中值不等于某个值的记录",
-          "B. gt()方法用于匹配字段中值大于某个值的记录",
-          "C. ge()方法用于匹配字段中值大于或等于某个值的记录",
-          "D. lt()方法用于匹配字段中值小于或等于某个值的记录"
-        ],
-        "answer": "D. lt()方法用于匹配字段中值小于或等于某个值的记录",
-        "explanation": "lt()方法是\"小于\"（less than）的缩写，它表示匹配字段值小于（<）某个值的记录，不包括等于。而小于或等于（<=）对应的方法是le()（less than or equal to）。因此，选项D描述错误。",
-        "chapter": "第12章",
-        "type": "choice"
-      },
-      {
-        "id": "q-15-1782288965859-zb2o",
-        "number": 15,
-        "question": "下列选项中，对于 between(\"age\", 18, 30)的解释正确的是（ ）。",
-        "options": [
-          "A. 用于匹配age字段中值等于18或者等于30的记录",
-          "B. 用于匹配age字段中值大于18并且小于30的记录",
-          "C. 用于匹配age字段中值小于18或者大于30的记录",
-          "D. 用于匹配age字段中值不等于18并且不等于30的记录"
-        ],
-        "answer": "B. 用于匹配age字段中值大于18并且小于30的记录",
-        "explanation": "在MyBatis-Plus条件构造器中，between方法用于构建BETWEEN SQL子句。between(\"age\", 18, 30)会生成SQL片段 age BETWEEN 18 AND 30，含义是age字段的值在18和30之间（包含18和30）。这四个选项中，最接近的B选项（大于18并且小于30）描述的是开区间（不包含边界），虽然不完全准确（BETWEEN包含边界），但在给定的选项中，B是语义上最接近\"在两者之间\"的描述，其他选项完全不相关。因此，本题答案为B。更精确地说，between(\"age\", 18, 30)匹配的是 age >= 18 AND age <= 30。",
-        "chapter": "第12章",
-        "type": "choice"
-      },
-      {
-        "id": "q-1-1782288965859-7yw9",
-        "number": 1,
-        "question": "Spring Boot通过自动配置和______的原则，与Spring框架紧密结合。",
-        "options": [],
-        "answer": "约定优于配置",
-        "explanation": "Spring Boot的核心设计哲学之一就是\"约定优于配置\"（Convention over Configuration）。它基于大量的默认约定来减少项目的配置工作，开发者只需遵循这些约定，即可快速启动和运行一个Spring应用。",
-        "chapter": "第13章",
-        "type": "input"
-      },
-      {
-        "id": "q-2-1782288965859-g9ee",
-        "number": 2,
-        "question": "YAML文件的后缀名为______或.yaml。",
-        "options": [],
-        "answer": ".yml",
-        "explanation": "YAML（YAML Ain't Markup Language）是一种数据序列化格式，常用于Spring Boot的配置文件。其标准的文件扩展名是.yml或.yaml。",
-        "chapter": "第13章",
-        "type": "input"
-      },
-      {
-        "id": "q-3-1782288965859-yhci",
-        "number": 3,
-        "question": "application.properties文件中属性通过______格式进行设置。",
-        "options": [],
-        "answer": "键值对",
-        "explanation": "传统的Spring Boot属性配置文件application.properties使用Key=Value的格式来配置每一个属性，例如spring.application.name=myapp。",
-        "chapter": "第13章",
-        "type": "input"
-      },
-      {
-        "id": "q-4-1782288965859-o2fc",
-        "number": 4,
-        "question": "Spring Boot将用于实现特定功能的一系列依赖及其配置封装到一个特色的组件中，这种特色的组件称为______。",
-        "options": [],
-        "answer": "启动器",
-        "explanation": "Spring Boot的\"启动器\"（Starter）是一组预定义的Maven/Gradle依赖集合，它包含了运行特定功能所需的所有jar包和自动配置。例如spring-boot-starter-web包含了Spring MVC、Tomcat等依赖。",
-        "chapter": "第13章",
-        "type": "input"
-      },
-      {
-        "id": "q-5-1782288965859-mj2c",
-        "number": 5,
-        "question": "YAML中，使用\"Key: Value\"的形式表示一对键值对，其中Value之前包含一个英文______。",
-        "options": [],
-        "answer": "空格",
-        "explanation": "在YAML语法中，冒号（:）后面必须跟一个英文空格，才能正确表示一个键值对。这是YAML格式的强制要求，用于区分键值对和普通文本。",
-        "chapter": "第13章",
-        "type": "input"
-      },
-      {
-        "id": "q-6-1782288965859-qsxd",
-        "number": 6,
-        "question": "Spring Boot是替代Spring框架的解决方案。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "Spring Boot并不是要替代Spring框架，而是建立在Spring框架之上的一个快速开发脚手架。它通过自动配置和启动器来简化Spring应用的构建和部署，底层依然依赖于Spring框架的核心功能（IoC、AOP等）。",
-        "chapter": "第13章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-7-1782288965859-c03q",
-        "number": 7,
-        "question": "使用Maven方式构建Spring Boot项目必须处于联网状态，否则会创建失败。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "首次创建Spring Boot项目时，Maven需要从中央仓库或私服下载所需的依赖包，因此需要网络。但如果本地仓库已经缓存了所有必要的依赖，则即使离线也可以成功构建。选项说\"必须处于联网状态\"过于绝对。",
-        "chapter": "第13章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-8-1782288965859-ldak",
-        "number": 8,
-        "question": "Spring Boot官方针对所有场景开发的技术框架都提供了启动器。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "Spring Boot官方提供了大量的常用启动器，但并非针对所有场景和技术框架都提供了官方启动器。对于一些非主流或第三方的技术，可能需要开发者自定义启动器或手动配置。",
-        "chapter": "第13章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-9-1782288965859-b9qy",
-        "number": 9,
-        "question": "默认情况下，application.yml文件中配置的字符串必须使用单引号或双引号进行修饰。 （ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "B. 错",
-        "explanation": "在YAML文件中，字符串通常可以省略引号，直接写文本即可，除非字符串中包含特殊字符（如冒号、井号、空格等）可能导致解析歧义。默认情况下，字符串不需要引号修饰。",
-        "chapter": "第13章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-10-1782288965859-pe3g",
-        "number": 10,
-        "question": "Spring Boot直接内嵌了Tomcat、Jetty或Undertow等Web容器。（ ）",
-        "options": [
-          "A. 对",
-          "B. 错"
-        ],
-        "answer": "A. 对",
-        "explanation": "Spring Boot在添加了spring-boot-starter-web依赖后，会默认内嵌一个Tomcat容器作为Web服务器。开发者也可以通过配置切换到Jetty或Undertow。这使得Spring Boot应用可以打包为可执行的Jar文件，无需外部部署到Web容器。",
-        "chapter": "第13章",
-        "type": "truefalse"
-      },
-      {
-        "id": "q-11-1782288965859-eojq",
-        "number": 11,
-        "question": "下列选项中，关于Spring Boot概述错误的是（ ）。",
-        "options": [
-          "A. 使用Spring Boot开发程序时，几乎可以实现开箱即用",
-          "B. Spring Boot框架本身并不提供Spring框架的核心特性以及扩展功能",
-          "C. Spring Boot是替代Spring框架的解决方案",
-          "D. Spring Boot集成了大量常用的第三方库配置"
-        ],
-        "answer": "C. Spring Boot是替代Spring框架的解决方案",
-        "explanation": "Spring Boot是基于Spring框架的，它增强并简化了Spring的应用开发，但并非替代Spring框架。选项C说\"替代Spring框架\"是错误的。A、B、D选项是对Spring Boot的正确描述。",
-        "chapter": "第13章",
-        "type": "choice"
-      },
-      {
-        "id": "q-12-1782288965859-3pga",
-        "number": 12,
-        "question": "下列选项中，对于application.yml中配置属性的规则描述错误的是（ ）。",
-        "options": [
-          "A. 使用缩进表示层级关系",
-          "B. 可以使用Tab键进行缩进",
-          "C. 同级元素必须左侧对齐",
-          "D. 大小写敏感"
-        ],
-        "answer": "B. 可以使用Tab键进行缩进",
-        "explanation": "在YAML语法规范中，缩进必须使用空格，不能使用Tab键（制表符）。这是YAML的硬性规定，使用Tab会导致解析错误。因此，选项B错误。A、C、D选项都是YAML的正确规则。",
-        "chapter": "第13章",
-        "type": "choice"
-      },
-      {
-        "id": "q-13-1782288965859-ms1g",
-        "number": 13,
-        "question": "下列选项中，关于Spring Boot的全局配置文件描述错误的是（ ）。",
-        "options": [
-          "A. Spring Boot默认支持application.properties、application.yaml作为全局配置文件",
-          "B. Spring Boot项目中可以存在多个全局配置文件",
-          "C. 位于相同位置的application.properties的优先级低于application.yml",
-          "D. 如果存在相同的配置内容时，高优先级的内容会覆盖低优先级的内容"
-        ],
-        "answer": "C. 位于相同位置的application.properties的优先级低于application.yml",
-        "explanation": "在Spring Boot中，当application.properties和application.yml同时存在于相同位置时，application.properties的优先级高于application.yml。也就是说，如果两个文件中存在相同配置项，properties文件中的值会覆盖yml文件中的值。因此，C选项说\"优先级低于\"是错误的。",
-        "chapter": "第13章",
-        "type": "choice"
-      },
-      {
-        "id": "q-14-1782288965859-641c",
-        "number": 14,
-        "question": "下列选项中，关于Spring Boot的application.yml文件描述错误的是（）。",
-        "options": [
-          "A. 通常用于表示数据结构和配置信息，使用缩进和外观依赖的方式表示层级关系",
-          "B. 使用Key: Value的形式表示一对键值对",
-          "C. 缩进时可以使用制表符和空格",
-          "D. 在配置字面量类型的属性时，默认情况下字符串是不需要使用单引号或双引号"
-        ],
-        "answer": "C. 缩进时可以使用制表符和空格",
-        "explanation": "YAML文件的缩进必须使用空格，不能使用制表符。选项C说\"可以使用制表符和空格\"是错误的。A、B、D选项都是对application.yml文件的正确描述。",
-        "chapter": "第13章",
-        "type": "choice"
-      },
-      {
-        "id": "q-15-1782288965859-zofw",
-        "number": 15,
-        "question": "下列选项中，关于application.properties文件中的配置描述错误的是（）。",
-        "options": [
-          "A. 属性的表示形式为Key=Value",
-          "B. 在application.properties文件中配置字面量的属性时，直接将字面量作为Value直接写在键值对中即可",
-          "C. 默认情况下字符串是需要使用单引号或双引号进行修饰",
-          "D. 在application.properties文件中配置数组类型属性时，元素值之间使用逗号间隔。"
-        ],
-        "answer": "C. 默认情况下字符串是需要使用单引号或双引号进行修饰",
-        "explanation": "在application.properties文件中，配置字符串类型的属性值时，默认情况下不需要使用单引号或双引号修饰，直接写值即可。只有特殊字符（如逗号、等号、中文空格等）才可能需要转义或引号。因此，选项C描述错误。",
-        "chapter": "第13章",
-        "type": "choice"
-      }
+  "quiz-sound-muted": false,
+  "quiz-progress-subj-1782028018297-1": {
+    "currentIndex": 0,
+    "answers": {
+      "q-1-1782028289292-8roy": "C. 程序及其文档"
+    },
+    "submittedIds": [
+      "q-1-1782028289292-8roy"
     ],
-    "wrongIds": []
+    "quizMode": "sequential",
+    "shuffledQuestions": null,
+    "selectedChapters": [],
+    "selectedTypes": [],
+    "isFinished": false
   }
 }
