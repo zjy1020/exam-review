@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback } from "react"
 import { motion } from "framer-motion"
-import { Upload, Wand2, FileText, ExternalLink, Check, Sparkles, Trash2, Download, FileUp } from "lucide-react"
+import { Upload, Wand2, FileText, ExternalLink, Check, Sparkles, Trash2, Download, FileUp, Plus } from "lucide-react"
 import { buildFormatPrompt, buildFillPrompt, parseQuestions } from "@/lib/parse-questions"
 import type { Question } from "@/lib/types"
 import {
@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import * as mammoth from "mammoth"
 
@@ -44,6 +46,14 @@ export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOp
   const [fileName, setFileName] = useState("")
   const [showAiDialog, setShowAiDialog] = useState(false)
   const [showFillDialog, setShowFillDialog] = useState(false)
+  const [showManualDialog, setShowManualDialog] = useState(false)
+  const [manualType, setManualType] = useState<Question["type"]>("choice")
+  const [manualQuestion, setManualQuestion] = useState("")
+  const [manualOptions, setManualOptions] = useState<string[]>(["", "", "", ""])
+  const [manualAnswer, setManualAnswer] = useState("")
+  const [manualExplanation, setManualExplanation] = useState("")
+  const [manualChapter, setManualChapter] = useState("")
+  const [manualNewChapter, setManualNewChapter] = useState(false)
   const [isDragOver, setIsDragOver] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
   const importFileRef = useRef<HTMLInputElement>(null)
@@ -249,6 +259,19 @@ export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOp
         placeholder="在此粘贴题目内容..."
         className="w-full min-h-[300px] glass bg-transparent text-sm font-mono placeholder:text-muted-foreground/50 resize-y focus-visible:border-accent/50 focus-visible:ring-0 rounded-xl p-6"
       />
+
+      {/* Manual add button */}
+      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setShowManualDialog(true)}
+          className="w-full gap-2 text-[10px] font-mono tracking-wider uppercase h-auto py-2 mt-3 border border-dashed border-border/40 hover:border-accent/30 text-muted-foreground hover:text-accent"
+        >
+          <Plus size={12} strokeWidth={1.5} />
+          手动添加题目
+        </Button>
+      </motion.div>
 
       {/* Action buttons */}
       <div className="flex flex-col sm:flex-row gap-3 mt-4">
@@ -476,6 +499,258 @@ export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOp
           <p className="text-[9px] font-mono text-accent text-center mt-1">
             推荐 DeepSeek，豆包可能出现输出截断
           </p>
+        </DialogContent>
+      </Dialog>
+
+      {/* Manual Add Dialog */}
+      <Dialog open={showManualDialog} onOpenChange={(open) => {
+        setShowManualDialog(open)
+        if (!open) {
+          setManualQuestion("")
+          setManualOptions(["", "", "", ""])
+          setManualAnswer("")
+          setManualExplanation("")
+          setManualChapter("")
+          setManualType("choice")
+        }
+      }}>
+        <DialogContent className="glass-dialog max-w-lg max-h-[85vh] overflow-y-auto rounded-xl">
+          <DialogTitle className="text-xs font-mono tracking-wider uppercase text-foreground text-center">
+            手动添加题目
+          </DialogTitle>
+          <div className="space-y-4 mt-4">
+            <div>
+              <Label className="text-[10px] font-mono text-muted-foreground">题型</Label>
+              <div className="flex gap-2 mt-1.5 flex-wrap">
+                {([["choice", "选择题"], ["multiple", "多选题"], ["truefalse", "判断题"], ["input", "填空题"], ["essay", "简答题"]] as const).map(([val, label]) => (
+                  <button
+                    key={val}
+                    onClick={() => {
+                      setManualType(val)
+                      setManualAnswer("")
+                      if (val === "truefalse") setManualOptions(["对", "错"])
+                      else if (val === "choice" && manualOptions.filter(Boolean).length < 2) setManualOptions(["", "", "", ""])
+                      else if (val === "multiple" && manualOptions.filter(Boolean).length < 2) setManualOptions(["", "", "", ""])
+                      else if (val !== "choice" && val !== "multiple") setManualOptions([])
+                    }}
+                    className={`px-3 py-1.5 text-[10px] font-mono rounded-lg border transition-colors ${
+                      manualType === val
+                        ? "bg-accent text-accent-foreground border-accent"
+                        : "border-border/40 text-muted-foreground hover:border-accent/30 hover:text-accent"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <Label className="text-[10px] font-mono text-muted-foreground">题目</Label>
+              <textarea
+                value={manualQuestion}
+                onChange={(e) => setManualQuestion(e.target.value)}
+                placeholder="输入题目内容..."
+                className="w-full mt-1.5 px-3 py-2 text-xs font-mono bg-transparent border border-border/40 rounded-lg resize-y focus:outline-none focus:border-accent/50 min-h-[60px]"
+              />
+            </div>
+
+            {(manualType === "choice" || manualType === "multiple") && (
+              <div>
+                <Label className="text-[10px] font-mono text-muted-foreground">选项</Label>
+                <div className="space-y-1.5 mt-1.5">
+                  {manualOptions.map((opt, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <span className="text-[10px] font-mono text-muted-foreground w-4 shrink-0">
+                        {String.fromCharCode(65 + i)}.
+                      </span>
+                      <input
+                        value={opt}
+                        onChange={(e) => {
+                          const next = [...manualOptions]
+                          next[i] = e.target.value
+                          setManualOptions(next)
+                        }}
+                        placeholder={`选项 ${String.fromCharCode(65 + i)}`}
+                        className="flex-1 px-2 py-1.5 text-[11px] font-mono bg-transparent border border-border/40 rounded-md focus:outline-none focus:border-accent/50"
+                      />
+                      {manualOptions.length > 2 && (
+                        <button
+                          onClick={() => setManualOptions(manualOptions.filter((_, j) => j !== i))}
+                          className="text-muted-foreground hover:text-destructive text-[10px]"
+                        >
+                          ×
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => setManualOptions([...manualOptions, ""])}
+                    className="text-[10px] font-mono text-accent hover:text-accent/80 mt-1"
+                  >
+                    + 添加选项
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <div>
+              <Label className="text-[10px] font-mono text-muted-foreground">答案</Label>
+              {manualType === "truefalse" ? (
+                <div className="flex gap-2 mt-1.5">
+                  {["对", "错"].map((v) => (
+                    <button
+                      key={v}
+                      onClick={() => setManualAnswer(v)}
+                      className={`px-4 py-2 text-[11px] font-mono rounded-lg border transition-colors ${
+                        manualAnswer === v
+                          ? "bg-accent text-accent-foreground border-accent"
+                          : "border-border/40 text-muted-foreground hover:border-accent/30"
+                      }`}
+                    >
+                      {v}
+                    </button>
+                  ))}
+                </div>
+              ) : manualType === "choice" ? (
+                <div className="flex gap-1.5 mt-1.5 flex-wrap">
+                  {manualOptions.filter(Boolean).map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setManualAnswer(String.fromCharCode(65 + i))}
+                      className={`px-3 py-1.5 text-[10px] font-mono rounded-lg border transition-colors ${
+                        manualAnswer === String.fromCharCode(65 + i)
+                          ? "bg-accent text-accent-foreground border-accent"
+                          : "border-border/40 text-muted-foreground hover:border-accent/30"
+                      }`}
+                    >
+                      {String.fromCharCode(65 + i)}
+                    </button>
+                  ))}
+                </div>
+              ) : manualType === "multiple" ? (
+                <div className="flex gap-1.5 mt-1.5 flex-wrap">
+                  {manualOptions.filter(Boolean).map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => {
+                        const letter = String.fromCharCode(65 + i)
+                        const current = manualAnswer.split("")
+                        const next = current.includes(letter)
+                          ? current.filter(c => c !== letter).join("")
+                          : [...current, letter].sort().join("")
+                        setManualAnswer(next)
+                      }}
+                      className={`px-3 py-1.5 text-[10px] font-mono rounded-lg border transition-colors ${
+                        manualAnswer.includes(String.fromCharCode(65 + i))
+                          ? "bg-accent text-accent-foreground border-accent"
+                          : "border-border/40 text-muted-foreground hover:border-accent/30"
+                      }`}
+                    >
+                      {String.fromCharCode(65 + i)}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <textarea
+                  value={manualAnswer}
+                  onChange={(e) => setManualAnswer(e.target.value)}
+                  placeholder="输入答案..."
+                  rows={5}
+                  className="w-full mt-1.5 px-3 py-2 text-xs font-mono bg-transparent border border-border/40 rounded-lg resize-y focus:outline-none focus:border-accent/50"
+                />
+              )}
+            </div>
+
+            <div>
+              <Label className="text-[10px] font-mono text-muted-foreground">解析（可选）</Label>
+              <textarea
+                value={manualExplanation}
+                onChange={(e) => setManualExplanation(e.target.value)}
+                placeholder="输入解析..."
+                className="w-full mt-1.5 px-3 py-2 text-xs font-mono bg-transparent border border-border/40 rounded-lg resize-y focus:outline-none focus:border-accent/50 min-h-[40px]"
+              />
+            </div>
+
+            <div>
+              <Label className="text-[10px] font-mono text-muted-foreground">章节（可选）</Label>
+              {!manualNewChapter ? (
+                <select
+                  value={manualChapter}
+                  onChange={(e) => {
+                    if (e.target.value === "__new__") {
+                      setManualNewChapter(true)
+                      setManualChapter("")
+                    } else {
+                      setManualChapter(e.target.value)
+                    }
+                  }}
+                  className="w-full mt-1.5 px-3 py-2 text-xs font-mono bg-transparent border border-border/40 rounded-lg focus:outline-none focus:border-accent/50 [&>option]:bg-background"
+                >
+                  <option value="">不选择</option>
+                  {Array.from(new Set(questions.map((q) => q.chapter).filter(Boolean))).map((ch) => (
+                    <option key={ch} value={ch}>{ch}</option>
+                  ))}
+                  <option value="__new__">新建章节...</option>
+                </select>
+              ) : (
+                <div className="flex gap-2 items-center mt-1.5">
+                  <input
+                    value={manualChapter}
+                    onChange={(e) => setManualChapter(e.target.value)}
+                    placeholder="输入新章节名称"
+                    autoFocus
+                    className="flex-1 px-3 py-2 text-xs font-mono bg-transparent border border-border/40 rounded-lg focus:outline-none focus:border-accent/50"
+                  />
+                  <button
+                    onClick={() => { setManualNewChapter(false); setManualChapter("") }}
+                    className="text-[10px] font-mono text-muted-foreground hover:text-foreground shrink-0"
+                  >
+                    取消
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <Button
+              size="lg"
+              onClick={() => {
+                if (!manualQuestion.trim()) return
+                if ((manualType === "choice" || manualType === "multiple") && manualOptions.filter(Boolean).length < 2) return
+                if (!manualAnswer.trim() && manualType !== "multiple") return
+                if (manualType === "multiple" && !manualAnswer.trim()) return
+
+                const maxNum = questions.reduce((m, q) => Math.max(m, q.number), 0)
+                const newQuestion: Question = {
+                  id: `q-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+                  number: maxNum + 1,
+                  question: manualQuestion.trim(),
+                  options: (manualType === "choice" || manualType === "multiple") ? manualOptions.filter(Boolean) : [],
+                  answer: manualAnswer.trim(),
+                  explanation: manualExplanation.trim(),
+                  chapter: manualChapter.trim() || undefined,
+                  type: manualType,
+                }
+                onImport([...questions, newQuestion])
+                setShowManualDialog(false)
+                setManualQuestion("")
+                setManualOptions(["", "", "", ""])
+                setManualAnswer("")
+                setManualExplanation("")
+                setManualChapter("")
+                setManualType("choice")
+              }}
+              disabled={
+                !manualQuestion.trim() ||
+                ((manualType === "choice" || manualType === "multiple") && manualOptions.filter(Boolean).length < 2) ||
+                !manualAnswer.trim()
+              }
+              className="w-full gap-2 text-xs font-mono tracking-wider uppercase h-auto py-4"
+            >
+              <Plus size={14} strokeWidth={1.5} />
+              添加题目
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </motion.div>

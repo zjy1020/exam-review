@@ -198,6 +198,30 @@ export default function Page() {
     })
   }, [activeSubjectId, questions])
 
+  const handleUpdateQuestion = useCallback((updated: Question) => {
+    const newQuestions = questions.map((q) => q.id === updated.id ? updated : q)
+    setQuestions(newQuestions)
+    if (activeSubjectId) {
+      saveSubjectData(activeSubjectId, { questions: newQuestions, wrongIds })
+    }
+  }, [activeSubjectId, questions, wrongIds])
+
+  const handleAddQuestion = useCallback((q: Question) => {
+    const newQuestions = [...questions, q]
+    setQuestions(newQuestions)
+    if (activeSubjectId) {
+      saveSubjectData(activeSubjectId, { questions: newQuestions, wrongIds })
+    }
+  }, [activeSubjectId, questions, wrongIds])
+
+  const handleDeleteQuestion = useCallback((id: string) => {
+    const newQuestions = questions.filter((q) => q.id !== id)
+    setQuestions(newQuestions)
+    if (activeSubjectId) {
+      saveSubjectData(activeSubjectId, { questions: newQuestions, wrongIds })
+    }
+  }, [activeSubjectId, questions, wrongIds])
+
   const handleOpenWrongBook = useCallback(() => {
     if (wrongIds.length > 0) {
       setView("wrong-book")
@@ -306,6 +330,9 @@ export default function Page() {
                 onUpdateWrong={handleUpdateWrong}
                 onClearWrong={handleClearWrong}
                 onRemoveWrong={handleRemoveWrong}
+                onUpdateQuestion={handleUpdateQuestion}
+                onAddQuestion={handleAddQuestion}
+                onDeleteQuestion={handleDeleteQuestion}
                 wrongIds={wrongIds}
                 initialMode={view === "wrong-book" ? "wrong-book" : "normal"}
                 focusMode={focusMode}

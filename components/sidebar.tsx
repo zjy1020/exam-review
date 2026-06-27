@@ -223,6 +223,11 @@ export function Sidebar({
             variant="outline"
             size="sm"
             onClick={() => {
+              const input = prompt("请输入暗号")
+              if (!input || input.trim() !== AUTHOR_BIRTHDAY) {
+                if (input) alert("暗号错误")
+                return
+              }
               const data: Record<string, unknown> = {}
               for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i)
@@ -291,7 +296,7 @@ export function Sidebar({
           variant="outline"
           size="sm"
           onClick={() => {
-            const input = prompt("请输入暗号 1020")
+            const input = prompt("请输入暗号")
             if (!input || input.trim() !== AUTHOR_BIRTHDAY) {
               if (input) alert("暗号错误")
               return

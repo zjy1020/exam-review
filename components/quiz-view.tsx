@@ -2,13 +2,14 @@
 
 import { useState, useEffect, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ChevronLeft, ChevronRight, RotateCcw, BookX, CheckCircle2, XCircle, ArrowLeft, ListTree, Filter, MoreHorizontal } from "lucide-react"
+import { ChevronLeft, ChevronRight, RotateCcw, BookX, CheckCircle2, XCircle, ArrowLeft, ListTree, Filter, MoreHorizontal, Pencil, Plus, Trash2 } from "lucide-react"
 import type { Question } from "@/lib/types"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import {
   Dialog,
@@ -40,6 +41,9 @@ interface QuizViewProps {
   onUpdateWrong: (ids: string[]) => void
   onClearWrong: () => void
   onRemoveWrong?: (id: string) => void
+  onUpdateQuestion?: (q: Question) => void
+  onAddQuestion?: (q: Question) => void
+  onDeleteQuestion?: (id: string) => void
   wrongIds: string[]
   initialMode?: "normal" | "wrong-book"
   focusMode?: boolean
@@ -104,10 +108,12 @@ function matchAnswer(userAnswer: string | undefined, correctAnswer: string | und
   if (!userAnswer || !correctAnswer) return false
   const normalize = (s: string) => {
     let r = s.trim()
+    r = r.replace(/<!--.*?-->/gs, '')
     r = r.replace(/^[`'""'´ˋ]|[`'""'´ˋ]$/g, '')
     r = r.replace(/[Ａ-Ｚａ-ｚ０-９]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
     r = r.replace(/[＜]/g, '<').replace(/[＞]/g, '>').replace(/[：]/g, ':').replace(/[；]/g, ';')
     r = r.toLowerCase()
+    r = r.replace(/\s+/g, ' ')
     r = r.replace(/[（(].*?[）)]/g, '').trim()
     r = r.replace(/^[a-d][.、．）)\s]\s*/, '')
     if (r === '对' || r === '正确') return 'true'
@@ -156,7 +162,7 @@ function getQuestionType(q: Question): "choice" | "truefalse" | "input" | "essay
   return "input"
 }
 
-export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRemoveWrong, wrongIds, initialMode, focusMode, onToggleFocus, filterKey, subjectId }: QuizViewProps) {
+export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRemoveWrong, onUpdateQuestion, onAddQuestion, onDeleteQuestion, wrongIds, initialMode, focusMode, onToggleFocus, filterKey, subjectId }: QuizViewProps) {
   const [mode, setMode] = useState<QuizMode>(initialMode || "normal")
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
@@ -172,6 +178,14 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
   const [selectedChapters, setSelectedChapters] = useState<string[]>([])
   const [selectedTypes, setSelectedTypes] = useState<("choice" | "truefalse" | "input" | "essay" | "multiple")[]>([])
   const [showFilter, setShowFilter] = useState(false)
+  const [showAddQuestion, setShowAddQuestion] = useState(false)
+  const [addType, setAddType] = useState<Question["type"]>("essay")
+  const [addQuestion, setAddQuestion] = useState("")
+  const [addOptions, setAddOptions] = useState<string[]>(["", "", "", ""])
+  const [addAnswer, setAddAnswer] = useState("")
+  const [addExplanation, setAddExplanation] = useState("")
+  const [addChapter, setAddChapter] = useState("")
+  const [addNewChapter, setAddNewChapter] = useState(false)
   const savedFilterIndexRef = useRef<number | null>(null)
   const returningFromEmptyRef = useRef(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -188,6 +202,11 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
   const [lastCorrect, setLastCorrect] = useState<boolean | null>(null)
   const [correctGlow, setCorrectGlow] = useState(false)
   const [wrongShake, setWrongShake] = useState(false)
+  const [editingQuestion, setEditingQuestion] = useState<Question | null>(null)
+  const [editForm, setEditForm] = useState({ question: "", options: [""], answer: "", explanation: "", number: 0 })
+
+  // Close edit dialog when switching modes
+  useEffect(() => { setEditingQuestion(null) }, [mode])
 
   // Block horizontal edge swipes that trigger Android WebView back/forward
   const touchStartXRef = useRef<number | null>(null)
@@ -829,6 +848,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
   if (mode === "review") {
     const reviewQuestions = displayQuestions.length > 0 ? displayQuestions : activeQuestions
     return (
+      <>
       <div ref={containerRef} className={`w-full max-w-4xl mx-auto px-4 h-full flex flex-col min-h-0 ${focusMode ? "pt-[env(safe-area-inset-top)]" : ""}`}>
         {/* Header */}
         <div className="flex items-center justify-between mb-4 shrink-0">
@@ -851,6 +871,16 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                   ({selectedChapters.length || "全"}/{selectedTypes.length || "全"})
                 </span>
               )}
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowAddQuestion(true)}
+              className="text-xs font-mono gap-1"
+              title="添加题目"
+            >
+              <Plus size={14} strokeWidth={1.5} />
+              <span className="hidden sm:inline">添加</span>
             </Button>
             <Button
               variant="ghost"
@@ -905,10 +935,29 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                         {qt === "choice" ? "选择题" : qt === "multiple" ? "多选题" : qt === "truefalse" ? "判断题" : qt === "essay" ? "简答题" : "填空题"}
                       </Badge>
                     </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditForm({ question: q.question, options: q.options ? [...q.options] : [], answer: q.answer || "", explanation: q.explanation || "", number: q.number })
+                        setEditingQuestion(q)
+                      }}
+                      className="text-muted-foreground/50 hover:text-foreground transition-colors"
+                      title="编辑题目"
+                    >
+                      <Pencil size={12} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onDeleteQuestion?.(q.id)}
+                      className="text-muted-foreground/30 hover:text-destructive transition-colors"
+                      title="删除题目"
+                    >
+                      <Trash2 size={12} />
+                    </button>
                   </div>
 
                   {/* Question text */}
-                  <h3 className="text-sm font-mono text-foreground leading-relaxed mb-4">
+                  <h3 className="text-sm font-mono text-foreground leading-relaxed mb-4 whitespace-pre-wrap">
                     <span className="text-accent font-bold mr-2">{q.number}.</span>
                     {q.question}
                   </h3>
@@ -950,7 +999,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                   {q.answer && (
                     <div className="mb-3 px-3 py-2 text-xs font-mono border border-accent/30 bg-accent/[0.07] rounded-lg">
                       <span className="text-accent font-bold">答案：</span>
-                      <span className="text-foreground">{qt === "multiple" ? normalizeMultiLetters(q.answer) : q.answer}</span>
+                      <div className="text-foreground whitespace-pre-wrap mt-1">{qt === "multiple" ? normalizeMultiLetters(q.answer) : q.answer}</div>
                     </div>
                   )}
 
@@ -1064,7 +1113,339 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           </DialogContent>
         </Dialog>
       </div>
-    )
+
+      <Dialog open={editingQuestion !== null} onOpenChange={(open) => { if (!open) setEditingQuestion(null) }}>
+        <DialogContent className="glass-dialog max-w-lg max-h-[85vh] overflow-y-auto rounded-xl">
+          <DialogTitle className="text-xs font-mono tracking-wider uppercase text-foreground">
+            编辑题目
+          </DialogTitle>
+          <div className="space-y-4 mt-4">
+            <div>
+              <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1 block">题号</label>
+              <Input
+                type="number"
+                value={editForm.number}
+                onChange={(e) => setEditForm((f) => ({ ...f, number: Number(e.target.value) }))}
+                className="text-xs font-mono"
+              />
+            </div>
+            <div>
+              <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1 block">题目</label>
+              <Textarea
+                value={editForm.question}
+                onChange={(e) => setEditForm((f) => ({ ...f, question: e.target.value }))}
+                rows={3}
+                className="text-xs font-mono resize-none"
+              />
+            </div>
+            <div>
+              <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1 block">选项（每行一个）</label>
+              <Textarea
+                value={editForm.options.join("\n")}
+                onChange={(e) => setEditForm((f) => ({ ...f, options: e.target.value.split("\n") }))}
+                rows={4}
+                className="text-xs font-mono resize-none"
+              />
+            </div>
+            <div>
+              <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1 block">答案</label>
+              <Textarea
+                value={editForm.answer}
+                onChange={(e) => setEditForm((f) => ({ ...f, answer: e.target.value }))}
+                rows={5}
+                className="text-xs font-mono resize-y"
+              />
+            </div>
+            <div>
+              <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1 block">解析</label>
+              <Textarea
+                value={editForm.explanation}
+                onChange={(e) => setEditForm((f) => ({ ...f, explanation: e.target.value }))}
+                rows={4}
+                className="text-xs font-mono resize-none"
+              />
+            </div>
+            <div className="flex gap-2 justify-end pt-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setEditingQuestion(null)}
+                className="text-xs font-mono"
+              >
+                取消
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => {
+                  if (!onUpdateQuestion || !editingQuestion) return
+                  onUpdateQuestion({
+                    ...editingQuestion,
+                    question: editForm.question,
+                    options: editForm.options,
+                    answer: editForm.answer,
+                    explanation: editForm.explanation,
+                    number: editForm.number,
+                  })
+                  setEditingQuestion(null)
+                }}
+                className="text-xs font-mono"
+              >
+                保存
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Question Dialog */}
+      <Dialog open={showAddQuestion} onOpenChange={(open) => {
+        setShowAddQuestion(open)
+        if (!open) {
+          setAddQuestion("")
+          setAddOptions(["", "", "", ""])
+          setAddAnswer("")
+          setAddExplanation("")
+          setAddChapter("")
+          setAddType("essay")
+        }
+      }}>
+        <DialogContent className="glass-dialog max-w-lg max-h-[85vh] overflow-y-auto rounded-xl">
+          <DialogTitle className="text-xs font-mono tracking-wider uppercase text-foreground text-center">
+            添加题目
+          </DialogTitle>
+          <div className="space-y-4 mt-4">
+            <div>
+              <Label className="text-[10px] font-mono text-muted-foreground">题型</Label>
+              <div className="flex gap-2 mt-1.5 flex-wrap">
+                {([["choice", "选择题"], ["multiple", "多选题"], ["truefalse", "判断题"], ["input", "填空题"], ["essay", "简答题"]] as const).map(([val, label]) => (
+                  <button
+                    key={val}
+                    onClick={() => {
+                      setAddType(val)
+                      setAddAnswer("")
+                      if (val === "truefalse") setAddOptions(["对", "错"])
+                      else if (val === "choice" && addOptions.filter(Boolean).length < 2) setAddOptions(["", "", "", ""])
+                      else if (val === "multiple" && addOptions.filter(Boolean).length < 2) setAddOptions(["", "", "", ""])
+                      else if (val !== "choice" && val !== "multiple") setAddOptions([])
+                    }}
+                    className={`px-3 py-1.5 text-[10px] font-mono rounded-lg border transition-colors ${
+                      addType === val
+                        ? "bg-accent text-accent-foreground border-accent"
+                        : "border-border/40 text-muted-foreground hover:border-accent/30 hover:text-accent"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <Label className="text-[10px] font-mono text-muted-foreground">题目</Label>
+              <textarea
+                value={addQuestion}
+                onChange={(e) => setAddQuestion(e.target.value)}
+                placeholder="输入题目内容..."
+                className="w-full mt-1.5 px-3 py-2 text-xs font-mono bg-transparent border border-border/40 rounded-lg resize-y focus:outline-none focus:border-accent/50 min-h-[60px]"
+              />
+            </div>
+
+            {(addType === "choice" || addType === "multiple") && (
+              <div>
+                <Label className="text-[10px] font-mono text-muted-foreground">选项</Label>
+                <div className="space-y-1.5 mt-1.5">
+                  {addOptions.map((opt, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <span className="text-[10px] font-mono text-muted-foreground w-4 shrink-0">
+                        {String.fromCharCode(65 + i)}.
+                      </span>
+                      <input
+                        value={opt}
+                        onChange={(e) => {
+                          const next = [...addOptions]
+                          next[i] = e.target.value
+                          setAddOptions(next)
+                        }}
+                        placeholder={`选项 ${String.fromCharCode(65 + i)}`}
+                        className="flex-1 px-2 py-1.5 text-[11px] font-mono bg-transparent border border-border/40 rounded-md focus:outline-none focus:border-accent/50"
+                      />
+                      {addOptions.length > 2 && (
+                        <button
+                          onClick={() => setAddOptions(addOptions.filter((_, j) => j !== i))}
+                          className="text-muted-foreground hover:text-destructive text-[10px]"
+                        >
+                          ×
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => setAddOptions([...addOptions, ""])}
+                    className="text-[10px] font-mono text-accent hover:text-accent/80 mt-1"
+                  >
+                    + 添加选项
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <div>
+              <Label className="text-[10px] font-mono text-muted-foreground">答案</Label>
+              {addType === "truefalse" ? (
+                <div className="flex gap-2 mt-1.5">
+                  {["对", "错"].map((v) => (
+                    <button
+                      key={v}
+                      onClick={() => setAddAnswer(v)}
+                      className={`px-4 py-2 text-[11px] font-mono rounded-lg border transition-colors ${
+                        addAnswer === v
+                          ? "bg-accent text-accent-foreground border-accent"
+                          : "border-border/40 text-muted-foreground hover:border-accent/30"
+                      }`}
+                    >
+                      {v}
+                    </button>
+                  ))}
+                </div>
+              ) : addType === "choice" ? (
+                <div className="flex gap-1.5 mt-1.5 flex-wrap">
+                  {addOptions.filter(Boolean).map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setAddAnswer(String.fromCharCode(65 + i))}
+                      className={`px-3 py-1.5 text-[10px] font-mono rounded-lg border transition-colors ${
+                        addAnswer === String.fromCharCode(65 + i)
+                          ? "bg-accent text-accent-foreground border-accent"
+                          : "border-border/40 text-muted-foreground hover:border-accent/30"
+                      }`}
+                    >
+                      {String.fromCharCode(65 + i)}
+                    </button>
+                  ))}
+                </div>
+              ) : addType === "multiple" ? (
+                <div className="flex gap-1.5 mt-1.5 flex-wrap">
+                  {addOptions.filter(Boolean).map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => {
+                        const letter = String.fromCharCode(65 + i)
+                        const current = addAnswer.split("")
+                        const next = current.includes(letter)
+                          ? current.filter(c => c !== letter).join("")
+                          : [...current, letter].sort().join("")
+                        setAddAnswer(next)
+                      }}
+                      className={`px-3 py-1.5 text-[10px] font-mono rounded-lg border transition-colors ${
+                        addAnswer.includes(String.fromCharCode(65 + i))
+                          ? "bg-accent text-accent-foreground border-accent"
+                          : "border-border/40 text-muted-foreground hover:border-accent/30"
+                      }`}
+                    >
+                      {String.fromCharCode(65 + i)}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <textarea
+                  value={addAnswer}
+                  onChange={(e) => setAddAnswer(e.target.value)}
+                  placeholder="输入答案..."
+                  rows={5}
+                  className="w-full mt-1.5 px-3 py-2 text-xs font-mono bg-transparent border border-border/40 rounded-lg resize-y focus:outline-none focus:border-accent/50"
+                />
+              )}
+            </div>
+
+            <div>
+              <Label className="text-[10px] font-mono text-muted-foreground">解析（可选）</Label>
+              <textarea
+                value={addExplanation}
+                onChange={(e) => setAddExplanation(e.target.value)}
+                placeholder="输入解析..."
+                className="w-full mt-1.5 px-3 py-2 text-xs font-mono bg-transparent border border-border/40 rounded-lg resize-y focus:outline-none focus:border-accent/50 min-h-[40px]"
+              />
+            </div>
+
+            <div>
+              <Label className="text-[10px] font-mono text-muted-foreground">章节（可选）</Label>
+              {!addNewChapter ? (
+                <div className="flex gap-2">
+                  <select
+                    value={addChapter}
+                    onChange={(e) => {
+                      if (e.target.value === "__new__") {
+                        setAddNewChapter(true)
+                        setAddChapter("")
+                      } else {
+                        setAddChapter(e.target.value)
+                      }
+                    }}
+                    className="flex-1 mt-1.5 px-3 py-2 text-xs font-mono bg-transparent border border-border/40 rounded-lg focus:outline-none focus:border-accent/50 [&>option]:bg-background"
+                  >
+                    <option value="">不选择</option>
+                    {Array.from(new Set(questions.map((q) => q.chapter).filter(Boolean))).map((ch) => (
+                      <option key={ch} value={ch}>{ch}</option>
+                    ))}
+                    <option value="__new__">新建章节...</option>
+                  </select>
+                </div>
+              ) : (
+                <div className="flex gap-2 items-center mt-1.5">
+                  <input
+                    value={addChapter}
+                    onChange={(e) => setAddChapter(e.target.value)}
+                    placeholder="输入新章节名称"
+                    autoFocus
+                    className="flex-1 px-3 py-2 text-xs font-mono bg-transparent border border-border/40 rounded-lg focus:outline-none focus:border-accent/50"
+                  />
+                  <button
+                    onClick={() => { setAddNewChapter(false); setAddChapter("") }}
+                    className="text-[10px] font-mono text-muted-foreground hover:text-foreground shrink-0"
+                  >
+                    取消
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <Button
+              size="lg"
+              onClick={() => {
+                if (!addQuestion.trim() || !addAnswer.trim()) return
+                if ((addType === "choice" || addType === "multiple") && addOptions.filter(Boolean).length < 2) return
+                const ch = addChapter.trim() || "未分类"
+                const chapterQ = questions.filter((q) => (q.chapter || "未分类") === ch)
+                const maxNum = chapterQ.length > 0 ? Math.max(...chapterQ.map((q) => q.number)) : 0
+                const newQ: Question = {
+                  id: `q-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+                  number: maxNum + 1,
+                  question: addQuestion.trim(),
+                  options: (addType === "choice" || addType === "multiple") ? addOptions.filter(Boolean) : [],
+                  answer: addAnswer.trim(),
+                  explanation: addExplanation.trim(),
+                  chapter: addChapter.trim() || undefined,
+                  type: addType,
+                }
+                onAddQuestion?.(newQ)
+                setShowAddQuestion(false)
+                setAddQuestion("")
+                setAddOptions(["", "", "", ""])
+                setAddAnswer("")
+                setAddExplanation("")
+                setAddChapter("")
+                setAddType("essay")
+              }}
+              disabled={!addQuestion.trim() || !addAnswer.trim() || ((addType === "choice" || addType === "multiple") && addOptions.filter(Boolean).length < 2)}
+              className="w-full gap-2 text-xs font-mono tracking-wider uppercase h-auto py-4"
+            >
+              <Plus size={14} strokeWidth={1.5} />
+              添加题目
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>)
   }
 
   return (
@@ -1275,11 +1656,11 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                 <div className="px-4 py-3 space-y-1.5 bg-background/50">
                   <div className="text-xs font-mono">
                     <span className="text-muted-foreground">你的答案：</span>
-                    <span className="text-destructive font-bold">{qType === "multiple" ? selectedAnswer : selectedAnswer}</span>
+                    <div className="text-destructive font-bold whitespace-pre-wrap">{qType === "multiple" ? selectedAnswer : selectedAnswer}</div>
                   </div>
                   <div className="text-xs font-mono">
                     <span className="text-muted-foreground">正确答案：</span>
-                    <span className="text-accent font-bold">{qType === "multiple" ? normalizeMultiLetters(current.answer) : current.answer}</span>
+                    <div className="text-accent font-bold whitespace-pre-wrap">{qType === "multiple" ? normalizeMultiLetters(current.answer) : current.answer}</div>
                   </div>
                 </div>
               )}
@@ -1463,7 +1844,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                   />
                 )
               ) : (
-                <div className="px-3 py-2.5 text-xs font-mono text-muted-foreground border border-border/40 rounded-lg">
+                <div className="px-3 py-2.5 text-xs font-mono text-muted-foreground border border-border/40 rounded-lg whitespace-pre-wrap">
                   你的答案：{selectedAnswer}
                 </div>
               )}
@@ -1493,11 +1874,26 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                     <span className="text-xs font-mono text-accent font-bold tracking-wider uppercase block mb-1.5">
                       详细解析
                     </span>
-                    <p className="text-sm font-mono text-foreground leading-relaxed">
+                    <p className="text-sm font-mono text-foreground leading-relaxed whitespace-pre-wrap">
                       {current.explanation}
                     </p>
                   </motion.div>
                 )}
+
+                <div className="flex gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    type="button"
+                    onClick={() => {
+                      setEditForm({ question: current.question, options: current.options ? [...current.options] : [], answer: current.answer || "", explanation: current.explanation || "", number: current.number })
+                      setEditingQuestion(current)
+                    }}
+                    className="text-xs font-mono text-muted-foreground hover:text-foreground"
+                  >
+                    <Pencil size={12} className="mr-1" /> 编辑
+                  </Button>
+                </div>
 
                 <Button
                   size="lg"
@@ -1752,6 +2148,90 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
               <div className="text-xs font-mono text-muted-foreground mt-0.5">
                 {displayQuestions.length} 题 | 已答 {submittedIds.size} 题 | 未答 {unanswered} 题
               </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Question edit dialog */}
+      <Dialog open={editingQuestion !== null} onOpenChange={(open) => { if (!open) setEditingQuestion(null) }}>
+        <DialogContent className="glass-dialog max-w-lg max-h-[85vh] overflow-y-auto rounded-xl">
+          <DialogTitle className="text-xs font-mono tracking-wider uppercase text-foreground">
+            编辑题目
+          </DialogTitle>
+          <div className="space-y-4 mt-4">
+            <div>
+              <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1 block">题号</label>
+              <Input
+                type="number"
+                value={editForm.number}
+                onChange={(e) => setEditForm((f) => ({ ...f, number: Number(e.target.value) }))}
+                className="text-xs font-mono"
+              />
+            </div>
+            <div>
+              <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1 block">题目</label>
+              <Textarea
+                value={editForm.question}
+                onChange={(e) => setEditForm((f) => ({ ...f, question: e.target.value }))}
+                rows={3}
+                className="text-xs font-mono resize-none"
+              />
+            </div>
+            <div>
+              <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1 block">选项（每行一个）</label>
+              <Textarea
+                value={editForm.options.join("\n")}
+                onChange={(e) => setEditForm((f) => ({ ...f, options: e.target.value.split("\n") }))}
+                rows={4}
+                className="text-xs font-mono resize-none"
+              />
+            </div>
+            <div>
+              <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1 block">答案</label>
+              <Textarea
+                value={editForm.answer}
+                onChange={(e) => setEditForm((f) => ({ ...f, answer: e.target.value }))}
+                rows={5}
+                className="text-xs font-mono resize-y"
+              />
+            </div>
+            <div>
+              <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1 block">解析</label>
+              <Textarea
+                value={editForm.explanation}
+                onChange={(e) => setEditForm((f) => ({ ...f, explanation: e.target.value }))}
+                rows={4}
+                className="text-xs font-mono resize-none"
+              />
+            </div>
+            <div className="flex gap-2 justify-end pt-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setEditingQuestion(null)}
+                className="text-xs font-mono"
+              >
+                取消
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => {
+                  if (!onUpdateQuestion || !editingQuestion) return
+                  onUpdateQuestion({
+                    ...editingQuestion,
+                    question: editForm.question,
+                    options: editForm.options,
+                    answer: editForm.answer,
+                    explanation: editForm.explanation,
+                    number: editForm.number,
+                  })
+                  setEditingQuestion(null)
+                }}
+                className="text-xs font-mono"
+              >
+                保存
+              </Button>
             </div>
           </div>
         </DialogContent>
