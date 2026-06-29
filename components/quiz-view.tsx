@@ -104,6 +104,14 @@ function isTrueFalse(q: Question) {
 }
 
 // Normalize answer for fuzzy matching
+function getResolvedAnswer(q: Question): string {
+  const ans = q.answer?.trim() || ''
+  if (/^[A-Da-d]$/.test(ans) && q.options?.length) {
+    return q.options[ans.toUpperCase().charCodeAt(0) - 65] || ans
+  }
+  return q.answer || ''
+}
+
 function matchAnswer(userAnswer: string | undefined, correctAnswer: string | undefined): boolean {
   if (!userAnswer || !correctAnswer) return false
   const normalize = (s: string) => {
@@ -498,7 +506,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     const newSubmitted = new Set(submittedIds)
     newSubmitted.add(current.id)
     setSubmittedIds(newSubmitted)
-    const isCorrect = matchAnswer(textInput.trim(), current.answer)
+    const isCorrect = matchAnswer(textInput.trim(), getResolvedAnswer(current))
     onAnswer(isCorrect)
     if (isCorrect) { playCorrect(); setCorrectGlow(true); setTimeout(() => setCorrectGlow(false), 600); setCelebrationKey(k => k + 1); setCelebrationType("confetti") }
     else { playWrong(); setWrongShake(true); setTimeout(() => setWrongShake(false), 300) }
@@ -516,7 +524,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
     newSubmitted.add(current.id)
     setSubmittedIds(newSubmitted)
 
-    const isCorrect = matchAnswer(selectedAnswer, current.answer)
+    const isCorrect = matchAnswer(selectedAnswer, getResolvedAnswer(current))
     onAnswer(isCorrect)
     if (isCorrect) { playCorrect(); setCorrectGlow(true); setTimeout(() => setCorrectGlow(false), 600); setCelebrationKey(k => k + 1); setCelebrationType("confetti") }
     else { playWrong(); setWrongShake(true); setTimeout(() => setWrongShake(false), 300) }
@@ -1450,7 +1458,14 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                   number: maxNum + 1,
                   question: addQuestion.trim(),
                   options: (addType === "choice" || addType === "multiple") ? addOptions.filter(Boolean) : [],
-                  answer: addAnswer.trim(),
+                  answer: (() => {
+                    const ans = addAnswer.trim()
+                    if (/^[A-Da-d]$/.test(ans) && addType === "choice") {
+                      const opts = addOptions.filter(Boolean)
+                      return opts[ans.toUpperCase().charCodeAt(0) - 65] || ans
+                    }
+                    return ans
+                  })(),
                   explanation: addExplanation.trim(),
                   chapter: addChapter.trim() || undefined,
                   type: addType,
@@ -1664,23 +1679,28 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           {isSubmitted && (
             <div className={`mb-4 rounded-lg overflow-hidden border ${
               (() => {
+                const ra = getResolvedAnswer(current)
                 if (qType === "multiple") return normalizeMultiLetters(selectedAnswer) === normalizeMultiLetters(current.answer) ? "border-accent/60" : "border-destructive/60"
-                return matchAnswer(selectedAnswer, current.answer) ? "border-accent/60" : "border-destructive/60"
+                return matchAnswer(selectedAnswer, ra) ? "border-accent/60" : "border-destructive/60"
               })()
             }`}>
               <div className={`px-4 py-3 text-sm font-mono font-bold tracking-wider uppercase flex items-center gap-2 ${
                 (() => {
+                  const ra = getResolvedAnswer(current)
                   if (qType === "multiple") return normalizeMultiLetters(selectedAnswer) === normalizeMultiLetters(current.answer) ? "bg-accent/10 text-accent" : "bg-destructive/10 text-destructive"
-                  return matchAnswer(selectedAnswer, current.answer) ? "bg-accent/10 text-accent" : "bg-destructive/10 text-destructive"
+                  return matchAnswer(selectedAnswer, ra) ? "bg-accent/10 text-accent" : "bg-destructive/10 text-destructive"
                 })()
               }`}>
-                {(qType === "multiple" ? normalizeMultiLetters(selectedAnswer) === normalizeMultiLetters(current.answer) : matchAnswer(selectedAnswer, current.answer)) ? (
-                  <><CheckCircle2 size={16} className="shrink-0" /> 正确</>
-                ) : (
-                  <><XCircle size={16} className="shrink-0" /> 错误</>
-                )}
+                {(() => {
+                  const ra = getResolvedAnswer(current)
+                  return (qType === "multiple" ? normalizeMultiLetters(selectedAnswer) === normalizeMultiLetters(current.answer) : matchAnswer(selectedAnswer, ra)) ? (
+                    <><CheckCircle2 size={16} className="shrink-0" /> 正确</>
+                  ) : (
+                    <><XCircle size={16} className="shrink-0" /> 错误</>
+                  )
+                })()}
               </div>
-              {(qType === "truefalse" ? !matchAnswer(selectedAnswer, current.answer) : selectedAnswer !== current.answer) && (qType !== "multiple" ? true : normalizeMultiLetters(selectedAnswer) !== normalizeMultiLetters(current.answer)) && (
+              {(qType === "truefalse" ? !matchAnswer(selectedAnswer, getResolvedAnswer(current)) : selectedAnswer !== getResolvedAnswer(current)) && (qType !== "multiple" ? true : normalizeMultiLetters(selectedAnswer) !== normalizeMultiLetters(current.answer)) && (
                 <div className="px-4 py-3 space-y-1.5 bg-background/50">
                   <div className="text-xs font-mono">
                     <span className="text-muted-foreground">你的答案：</span>
@@ -1688,7 +1708,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                   </div>
                   <div className="text-xs font-mono">
                     <span className="text-muted-foreground">正确答案：</span>
-                    <div className="text-accent font-bold whitespace-pre-wrap">{qType === "multiple" ? normalizeMultiLetters(current.answer) : current.answer}</div>
+                    <div className="text-accent font-bold whitespace-pre-wrap">{qType === "multiple" ? normalizeMultiLetters(current.answer) : getResolvedAnswer(current)}</div>
                   </div>
                 </div>
               )}
@@ -1704,7 +1724,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           {isSubmitted && (
             <div className="mb-4 px-3 py-2.5 text-xs font-mono border border-accent/30 bg-accent/[0.07] rounded-lg">
               <span className="text-accent font-bold">答案：</span>
-              <div className="text-foreground whitespace-pre-wrap mt-1">{qType === "multiple" ? normalizeMultiLetters(current.answer) : current.answer}</div>
+              <div className="text-foreground whitespace-pre-wrap mt-1">{qType === "multiple" ? normalizeMultiLetters(current.answer) : getResolvedAnswer(current)}</div>
             </div>
           )}
 
@@ -1730,8 +1750,9 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                 const displayOpts = getDisplayOptions(current)
                 return displayOpts.map(({ letter, origIndex, text, displayText }) => {
                   const isSelected = selectedAnswer === text
-                  const isAnswer = isSubmitted && text === current.answer
-                  const isWrong = isSubmitted && isSelected && text !== current.answer
+                  const ra = getResolvedAnswer(current)
+                  const isAnswer = isSubmitted && text === ra
+                  const isWrong = isSubmitted && isSelected && text !== ra
                   return (
                     <button
                       key={origIndex}
@@ -1822,8 +1843,8 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
             <div className="flex gap-3">
               {["对", "错"].map((val) => {
                 const isSelected = selectedAnswer === val
-                const isAnswer = isSubmitted && matchAnswer(val, current.answer)
-                const isWrong = isSubmitted && isSelected && !matchAnswer(val, current.answer)
+                const isAnswer = isSubmitted && matchAnswer(val, getResolvedAnswer(current))
+                const isWrong = isSubmitted && isSelected && !matchAnswer(val, getResolvedAnswer(current))
 
                 return (
                   <button

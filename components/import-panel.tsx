@@ -726,7 +726,14 @@ export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOp
                   number: maxNum + 1,
                   question: manualQuestion.trim(),
                   options: (manualType === "choice" || manualType === "multiple") ? manualOptions.filter(Boolean) : [],
-                  answer: manualAnswer.trim(),
+                  answer: (() => {
+                    const ans = manualAnswer.trim()
+                    if (/^[A-Da-d]$/.test(ans) && manualType === "choice") {
+                      const opts = manualOptions.filter(Boolean)
+                      return opts[ans.toUpperCase().charCodeAt(0) - 65] || ans
+                    }
+                    return ans
+                  })(),
                   explanation: manualExplanation.trim(),
                   chapter: manualChapter.trim() || undefined,
                   type: manualType,
