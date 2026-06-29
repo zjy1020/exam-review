@@ -203,7 +203,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
   const [correctGlow, setCorrectGlow] = useState(false)
   const [wrongShake, setWrongShake] = useState(false)
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null)
-  const [editForm, setEditForm] = useState({ question: "", options: [""], answer: "", explanation: "", number: 0 })
+  const [editForm, setEditForm] = useState({ question: "", options: [""], answer: "", explanation: "", number: 0, type: "essay" as Question["type"] })
 
   // Close edit dialog when switching modes
   useEffect(() => { setEditingQuestion(null) }, [mode])
@@ -642,7 +642,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
         }
       }
 
-      if (key === "Enter") {
+      if (key === "Enter" && !e.shiftKey) {
         if ((qType === "input" || qType === "essay") && !isSubmitted && textInput.trim()) {
           e.preventDefault()
           handleTextSubmit()
@@ -660,6 +660,15 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
             handleFinish()
           }
         }
+      }
+
+      if (key === "ArrowLeft" && currentIndex > 0) {
+        e.preventDefault()
+        goPrev()
+      }
+      if (key === "ArrowRight" && currentIndex < displayQuestions.length - 1) {
+        e.preventDefault()
+        goNext()
       }
     }
     window.addEventListener("keydown", handler)
@@ -938,7 +947,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                     <button
                       type="button"
                       onClick={() => {
-                        setEditForm({ question: q.question, options: q.options ? [...q.options] : [], answer: q.answer || "", explanation: q.explanation || "", number: q.number })
+                        setEditForm({ question: q.question, options: q.options ? [...q.options] : [], answer: q.answer || "", explanation: q.explanation || "", number: q.number, type: q.type || "essay" })
                         setEditingQuestion(q)
                       }}
                       className="text-muted-foreground/50 hover:text-foreground transition-colors"
@@ -1129,6 +1138,25 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                 className="text-xs font-mono"
               />
             </div>
+
+            <div>
+              <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1 block">题型</label>
+              <div className="flex gap-2 mt-1.5 flex-wrap">
+                {([["choice", "选择题"], ["multiple", "多选题"], ["truefalse", "判断题"], ["input", "填空题"], ["essay", "简答题"]] as const).map(([val, label]) => (
+                  <button
+                    key={val}
+                    onClick={() => setEditForm((f) => ({ ...f, type: val }))}
+                    className={`px-3 py-1.5 text-[10px] font-mono rounded-lg border transition-colors ${
+                      editForm.type === val
+                        ? "bg-accent text-accent-foreground border-accent"
+                        : "border-border/40 text-muted-foreground hover:border-accent/30 hover:text-accent"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
             <div>
               <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1 block">题目</label>
               <Textarea
@@ -1185,6 +1213,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                     answer: editForm.answer,
                     explanation: editForm.explanation,
                     number: editForm.number,
+                    type: editForm.type,
                   })
                   setEditingQuestion(null)
                 }}
@@ -1196,7 +1225,6 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           </div>
         </DialogContent>
       </Dialog>
-
       {/* Add Question Dialog */}
       <Dialog open={showAddQuestion} onOpenChange={(open) => {
         setShowAddQuestion(open)
@@ -1627,7 +1655,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           </div>
 
           {/* Question text */}
-          <h3 className="text-sm font-mono text-foreground leading-relaxed mb-5">
+          <h3 className="text-sm font-mono text-foreground leading-relaxed mb-5 whitespace-pre-wrap">
             <span className="text-accent font-bold mr-2">{current.number}.</span>
             {current.question}
           </h3>
@@ -1671,6 +1699,14 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
           <div className="mb-3">
             <QuizEncouragement streak={streak.current} lastCorrect={lastCorrect} />
           </div>
+
+          {/* Correct answer display (always shown after submit) */}
+          {isSubmitted && (
+            <div className="mb-4 px-3 py-2.5 text-xs font-mono border border-accent/30 bg-accent/[0.07] rounded-lg">
+              <span className="text-accent font-bold">答案：</span>
+              <div className="text-foreground whitespace-pre-wrap mt-1">{qType === "multiple" ? normalizeMultiLetters(current.answer) : current.answer}</div>
+            </div>
+          )}
 
           {/* Answer input area */}
           {isSubmitted && lastCorrect !== null && (
@@ -1845,7 +1881,8 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                 )
               ) : (
                 <div className="px-3 py-2.5 text-xs font-mono text-muted-foreground border border-border/40 rounded-lg whitespace-pre-wrap">
-                  你的答案：{selectedAnswer}
+                  <span className="text-muted-foreground">你的答案：</span>
+                  <div className="text-foreground mt-1">{selectedAnswer}</div>
                 </div>
               )}
             </div>
@@ -1886,7 +1923,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                     size="sm"
                     type="button"
                     onClick={() => {
-                      setEditForm({ question: current.question, options: current.options ? [...current.options] : [], answer: current.answer || "", explanation: current.explanation || "", number: current.number })
+                      setEditForm({ question: current.question, options: current.options ? [...current.options] : [], answer: current.answer || "", explanation: current.explanation || "", number: current.number, type: current.type || "essay" })
                       setEditingQuestion(current)
                     }}
                     className="text-xs font-mono text-muted-foreground hover:text-foreground"
@@ -2170,6 +2207,24 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
               />
             </div>
             <div>
+              <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1 block">题型</label>
+              <div className="flex gap-2 mt-1.5 flex-wrap">
+                {([["choice", "选择题"], ["multiple", "多选题"], ["truefalse", "判断题"], ["input", "填空题"], ["essay", "简答题"]] as const).map(([val, label]) => (
+                  <button
+                    key={val}
+                    onClick={() => setEditForm((f) => ({ ...f, type: val }))}
+                    className={`px-3 py-1.5 text-[10px] font-mono rounded-lg border transition-colors ${
+                      editForm.type === val
+                        ? "bg-accent text-accent-foreground border-accent"
+                        : "border-border/40 text-muted-foreground hover:border-accent/30 hover:text-accent"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
               <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1 block">题目</label>
               <Textarea
                 value={editForm.question}
@@ -2225,6 +2280,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
                     answer: editForm.answer,
                     explanation: editForm.explanation,
                     number: editForm.number,
+                    type: editForm.type,
                   })
                   setEditingQuestion(null)
                 }}
