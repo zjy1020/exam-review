@@ -2510,18 +2510,369 @@
         "explanation": "",
         "chapter": "大题",
         "type": "essay"
+      },
+      {
+        "id": "q-1782722498178-78lr",
+        "number": 1,
+        "question": "Spring框架最顶层基础IoC容器接口是",
+        "options": [
+          "BeanFactory",
+          "ApplicationContext",
+          "WebApplicationContext",
+          "ClassPathXmlApplicationContext"
+        ],
+        "answer": "A",
+        "explanation": "解释：BeanFactory是Spring IoC容器最顶层的根接口，定义了容器最基本的获取Bean、判断是否存在等核心方法。ApplicationContext是BeanFactory的子接口，提供了更多企业级功能（如国际化、事件发布等），但它不是最顶层接口。WebApplicationContext专门用于Web环境，ClassPathXmlApplicationContext是ApplicationContext的一个具体实现类。因此正确答案是A。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782722527426-poi2",
+        "number": 2,
+        "question": "只能基于接口生成代理的方式是",
+        "options": [
+          "JDK动态代理",
+          "CGLIB代理",
+          "静态代理",
+          "拦截器代理"
+        ],
+        "answer": "A",
+        "explanation": "解释：JDK动态代理要求目标对象必须实现至少一个接口，它基于接口生成代理类，代理类实现与目标类相同的接口。CGLIB代理通过继承目标类来生成子类作为代理，不需要接口，因此不能算\"只能基于接口\"。静态代理需要手动编写代理类，不限于接口。拦截器代理不是标准术语。所以选A。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782722558226-984f",
+        "number": 3,
+        "question": "MyBatis-Plus持久层通用基类接口是",
+        "options": [
+          "BaseMapper",
+          "IService",
+          "Mapper",
+          "SqlSession"
+        ],
+        "answer": "A",
+        "explanation": "解释：MyBatis-Plus提供了BaseMapper<T>接口，其中T是实体类型，它封装了增删改查等常用CRUD方法，开发者自定义的Mapper接口直接继承它即可获得基本数据访问能力。IService是业务层通用接口，不是持久层。Mapper是MyBatis原生的标注接口，不具备通用方法。SqlSession是MyBatis操作数据库的会话对象，不是基类接口。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782722584610-2kd5",
+        "number": 4,
+        "question": "MyBatis-Plus条件构造器中表示等于的方法是",
+        "options": [
+          "ne ()",
+          "eq ()",
+          "gt ()",
+          "lt ()"
+        ],
+        "answer": "B",
+        "explanation": "解释：eq()是\"equal\"的缩写，表示等于条件，对应SQL中的\"=\"。ne()表示不等于(not equal)，gt()表示大于(greater than)，lt()表示小于(less than)。所以等于对应的正确方法是eq()。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782722633789-3ewi",
+        "number": 5,
+        "question": "Spring MVC的核心前端控制器是",
+        "options": [
+          "HandlerMapping",
+          "DispatcherServlet",
+          "HandlerAdapter",
+          "ViewResolver"
+        ],
+        "answer": "B",
+        "explanation": "解释：DispatcherServlet是Spring MVC的前端控制器，它接收所有HTTP请求，并负责将请求分发给对应的处理器（Controller），是整个MVC框架的入口和调度中心。HandlerMapping负责映射请求到处理器，HandlerAdapter负责调用处理器，ViewResolver负责解析视图，它们都是DispatcherServlet内部使用的组件，而不是核心前端控制器本身。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782722658544-ker3",
+        "number": 6,
+        "question": "声明式事务使用的核心注解是",
+        "options": [
+          "@Transactional",
+          "@Aspect",
+          "@Scope",
+          "@Autowired"
+        ],
+        "answer": "A",
+        "explanation": "解释：@Transactional是Spring声明式事务管理的核心注解，可以标注在类或方法上，用于声明该方法或类中所有方法需要在事务上下文中执行。@Aspect用于定义切面类，@Scope用于定义Bean的作用域，@Autowired用于依赖注入，它们都与事务管理无关。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782722682349-rmqr",
+        "number": 7,
+        "question": "Spring MVC获取URL路径占位符参数使用",
+        "options": [
+          "@RequestParam",
+          "@PathVariable",
+          "@RequestBody",
+          "@ModelAttribute"
+        ],
+        "answer": "B",
+        "explanation": "解释：@PathVariable用于从URL模板路径中提取占位符变量值，例如在\"/user/{id}\"中获取id的值。@RequestParam用于获取请求参数（查询字符串或表单数据），@RequestBody用于将请求体绑定到对象，@ModelAttribute用于绑定请求参数到模型对象。因此获取路径占位符应使用@PathVariable。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782722720165-shfp",
+        "number": 8,
+        "question": "MyBatis中#{}说法正确的是",
+        "options": [
+          "字符串拼接SQL",
+          "存在SQL注入风险",
+          "预编译防SQL注入",
+          "只能传字符串"
+        ],
+        "answer": "C",
+        "explanation": "答案：C\n解释：MyBatis中的#{}会使用预编译语句（PreparedStatement），在SQL执行前用占位符\"?\"代替参数值，然后通过预编译机制安全地传入参数，能有效防止SQL注入攻击。${}才是纯字符串拼接，存在SQL注入风险。#{}可以传入任意类型的参数，不限于字符串。所以选C。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782722747952-sv0l",
+        "number": 9,
+        "question": "Spring MVC拦截器preHandle方法返回什么表示放行",
+        "options": [
+          "true",
+          "false",
+          "null",
+          "void"
+        ],
+        "answer": "A",
+        "explanation": "解释：preHandle是拦截器的前置处理方法，返回值类型为boolean。返回true表示放行，请求会继续向下执行（进入Controller或下一个拦截器）；返回false表示拦截，请求被终止，不再继续执行后续操作。因此正确答案是true。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782722778402-x9wz",
+        "number": 10,
+        "question": "MyBatis-Plus代码生成器不能生成以下哪个类",
+        "options": [
+          "实体类",
+          "Mapper接口",
+          "Servlet",
+          "Service"
+        ],
+        "answer": "C",
+        "explanation": "解释：MyBatis-Plus的代码生成器主要针对持久层和业务层，能够根据数据库表自动生成实体类（Entity）、Mapper接口、Service接口及其实现类、Controller等。但它不会生成Servlet，因为Servlet属于Java Web早期的控制器层技术，而现代Spring MVC项目中使用Controller代替Servlet，代码生成器生成的是Controller而非Servlet。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782722822161-cf29",
+        "number": 11,
+        "question": "Spring Bean默认的作用域是（ ）。",
+        "options": [
+          "singleton",
+          "prototype",
+          "request",
+          "session"
+        ],
+        "answer": "A",
+        "explanation": "解释：Spring Bean默认的作用域是singleton（单例），即在整个Spring IoC容器中，该Bean只创建一个实例，所有对该Bean的请求都返回同一个对象实例。prototype是多例，每次请求都创建新实例；request和session是Web环境下才有的作用域，分别对应一次请求和一个会话。默认单例是Spring的设计原则。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782722846124-kak3",
+        "number": 12,
+        "question": "以下不属于Spring依赖注入方式的是（ ）。",
+        "options": [
+          "Setter 注入",
+          "构造器注入",
+          "接口注入",
+          "注解注入"
+        ],
+        "answer": "C",
+        "explanation": "解释：Spring支持的依赖注入方式包括构造器注入（通过构造函数传参）、Setter注入（通过setter方法赋值）和注解注入（如@Autowired自动装配）。接口注入是指通过实现特定接口由容器调用接口方法完成注入，这种方式是较早的IoC容器（如Avalon）采用的，Spring官方并不推荐也不将其作为标准注入方式，实际上Spring本身不支持这种注入模式。因此不属于Spring依赖注入方式的是接口注入。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782722869447-2osu",
+        "number": 13,
+        "question": "MyBatis分页常用插件是（ ）。",
+        "options": [
+          "PageHelper",
+          "Log4j",
+          "Druid",
+          "Redis"
+        ],
+        "answer": "A",
+        "explanation": "解释：PageHelper是MyBatis最常用的分页插件，它通过拦截器机制在SQL执行前自动拼接分页语句（如LIMIT），无需手动编写分页逻辑。Log4j是日志组件，Druid是数据库连接池，Redis是缓存数据库，都与MyBatis分页功能无关。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782722892357-0rb8",
+        "number": 14,
+        "question": "MyBatis-Plus中lt方法表示（ ）",
+        "options": [
+          "大于",
+          "小于",
+          "大于等于",
+          "小于等于"
+        ],
+        "answer": "B",
+        "explanation": "解释：lt是\"less than\"的缩写，表示小于，对应SQL中的\"<\"操作符。gt表示大于(greater than)，ge表示大于等于(greater than or equal)，le表示小于等于(less than or equal)。所以lt表示小于。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782722915264-wd55",
+        "number": 15,
+        "question": "Spring MVC视图解析器的主要作用是（ ）。",
+        "options": [
+          "处理请求",
+          "拼接视图前后缀",
+          "解析 JSON",
+          "拦截请求"
+        ],
+        "answer": "B",
+        "explanation": "解释：视图解析器（ViewResolver）的主要作用是将Controller返回的逻辑视图名（如\"index\"）解析为实际的物理视图路径（如\"/WEB-INF/views/index.jsp\"），即拼接配置好的前缀和后缀。处理请求是DispatcherServlet和Controller的职责，解析JSON是消息转换器（如MappingJackson2HttpMessageConverter）的功能，拦截请求是拦截器（Interceptor）的工作。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782722938526-6tva",
+        "number": 16,
+        "question": "Spring声明式事务使用注解（ ）。",
+        "options": [
+          "@Transactional",
+          "@Aspect",
+          "@Bean",
+          "@Service"
+        ],
+        "answer": "A",
+        "explanation": "解释：@Transactional是Spring声明式事务管理的核心注解。通过在方法或类上添加此注解，Spring AOP会在方法执行前后自动开启、提交或回滚事务。@Aspect用于AOP切面定义，@Bean用于配置类中声明Bean，@Service用于标注业务层组件，均与事务管理无直接关系。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782722960334-a1jy",
+        "number": 17,
+        "question": "CGLIB动态代理的实现原理是（ ）。",
+        "options": [
+          "实现接口",
+          "继承子类",
+          "静态生成代理类",
+          "字节码拦截"
+        ],
+        "answer": "B",
+        "explanation": "解释：CGLIB（Code Generation Library）动态代理通过继承目标类来生成代理子类，在子类中重写父类的方法，并在重写方法中加入增强逻辑（如事务、日志等）。因此它不需要目标类实现接口，而是依赖继承机制。\"实现接口\"是JDK动态代理的特点，\"字节码拦截\"描述的是更底层的字节码增强技术（如ASM），不是CGLIB最核心的原理表述。静态生成代理类是指手动编写代理类，不属于动态代理。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782723108737-2a45",
+        "number": 18,
+        "question": "Mybatis中符号特点是",
+        "options": [
+          "预编译防注入",
+          "字符串拼接有注入风险",
+          "只能传数字",
+          "必须加引号答案"
+        ],
+        "answer": "B",
+        "explanation": "MyBatis中的{}是直接进行字符串替换，将参数值原样拼接到SQL语句中，相当于纯字符串拼接，因此存在SQL注入的安全风险。#{}则使用预编译机制防止注入。${}可以传入任何类型的值，不限于数字，也不需要用户手动加引号，但拼接后可能导致SQL语法错误，通常用于动态表名、列名等场景。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782723133104-68bz",
+        "number": 19,
+        "question": "拦截器preHandle返回false会（ ）",
+        "options": [
+          "继续执行",
+          "中断请求",
+          "只执行视图",
+          "无任何效果"
+        ],
+        "answer": "B",
+        "explanation": "解释：preHandle方法返回false表示拦截器决定中断当前请求的处理流程，后续的拦截器不会执行，目标Controller也不会被调用，响应通常直接返回给客户端（例如返回错误信息或重定向）。返回true才表示继续执行。因此返回false的作用是中断请求。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782723159712-64t4",
+        "number": 20,
+        "question": "MyBatis核心配置中设置别名的标签是（ ）。",
+        "options": [
+          "<typeAliases>",
+          "<settings>",
+          "<environments>",
+          "<mappers>"
+        ],
+        "answer": "A",
+        "explanation": "解释：在MyBatis核心配置文件（mybatis-config.xml）中，<typeAliases>标签用于为Java类型设置短别名，方便在映射文件中简化类型引用，例如将\"com.example.User\"简写为\"User\"。<settings>用于设置全局配置属性（如缓存、懒加载等），<environments>用于配置数据库连接环境，<mappers>用于注册映射文件或Mapper接口。",
+        "chapter": "补充的小题",
+        "type": "choice"
+      },
+      {
+        "id": "q-1782723176228-d5bq",
+        "number": 21,
+        "question": "<trim>标签可以给SQL添加前缀和____。",
+        "options": [],
+        "answer": "后缀",
+        "explanation": "解释：MyBatis的<trim>标签是一个动态SQL标签，用于灵活处理SQL语句的前缀和后缀。它可以通过prefix属性添加前缀，通过suffix属性添加后缀，还可以通过prefixOverrides和suffixOverrides去除多余的前缀或后缀（如多余的AND或OR）。因此空格处应填\"后缀\"。",
+        "chapter": "补充的小题",
+        "type": "input"
+      },
+      {
+        "id": "q-1782723193263-qb5g",
+        "number": 22,
+        "question": "Spring AOP五大通知包含前置、后置、环绕、返回、____。",
+        "options": [],
+        "answer": "异常通知（异常）",
+        "explanation": "解释：Spring AOP基于通知（Advice）来增强目标方法，共分为五种类型：前置通知（@Before，方法执行前执行）、后置通知（@After，方法执行后执行，无论是否异常）、环绕通知（@Around，包裹方法执行）、返回通知（@AfterReturning，方法正常返回后执行）、异常通知（@AfterThrowing，方法抛出异常后执行）。所以空缺处是异常通知。",
+        "chapter": "补充的小题",
+        "type": "input"
+      },
+      {
+        "id": "q-1782723209450-04nu",
+        "number": 23,
+        "question": "MyBatis-Plus业务层通用接口是____。",
+        "options": [],
+        "answer": "IService",
+        "explanation": "解释：MyBatis-Plus提供了IService<T>接口作为业务层的通用基类接口，其中封装了批量操作、分页查询、链式调用等业务层常用方法。开发者自定义的Service接口继承IService，再通过ServiceImpl实现类继承BaseMapper即可快速获得业务层CRUD能力。",
+        "chapter": "补充的小题",
+        "type": "input"
+      },
+      {
+        "id": "q-1782723224095-ga18",
+        "number": 24,
+        "question": "拦截器三个核心方法：preHandle、____、afterCompletion。",
+        "options": [],
+        "answer": "postHandle",
+        "explanation": "Spring MVC拦截器（HandlerInterceptor）定义了三个核心方法：preHandle在请求处理前执行，返回true则继续；postHandle在Controller执行完成后、视图渲染之前执行；afterCompletion在整个请求完成后（视图渲染之后）执行，通常用于资源清理。因此空缺处是postHandle。",
+        "chapter": "补充的小题",
+        "type": "input"
+      },
+      {
+        "id": "q-1782723243487-wz7j",
+        "number": 25,
+        "question": "AOP中把通用功能抽取出来称为____。",
+        "options": [],
+        "answer": "切面（Aspect）",
+        "explanation": "解释：AOP（面向切面编程）的核心思想是将横切关注点（如日志、事务、权限校验等）从业务逻辑中抽取出来，封装成独立的模块，这个模块就称为\"切面\"（Aspect）。切面通过通知（Advice）和切点（Pointcut）来定义在哪些连接点（JoinPoint）执行何种增强逻辑。",
+        "chapter": "补充的小题",
+        "type": "input"
+      },
+      {
+        "id": "q-1782723257462-w1jw",
+        "number": 26,
+        "question": "MyBatis-Plus根据主键查询单个方法是____。",
+        "options": [],
+        "answer": "selectById",
+        "explanation": "解释：MyBatis-Plus的BaseMapper接口中提供了selectById方法，用于根据主键ID查询单条记录，返回对应的实体对象。这是最常用的按主键查询方法，参数类型通常为主键字段的类型。其他查询方法如selectOne用于按条件查询单条，selectList用于查询列表，都不符合\"根据主键查询单个\"的描述。",
+        "chapter": "补充的小题",
+        "type": "input"
       }
     ],
-    "wrongIds": [
-      "q-1-1782288965858-y64i",
-      "q-2-1782288965858-7fey",
-      "q-1782524154378-gvu3",
-      "q-1782524909923-zjke",
-      "q-1782524678440-4pmm",
-      "q-5-1782288965859-3wq5",
-      "q-11-1782288965858-cj2z",
-      "q-9-1782288965859-rlrm"
-    ]
+    "wrongIds": []
   },
   "quiz-subjects": [
     {
@@ -6049,7 +6400,7 @@
         ],
         "answer": "A、B、D（多选题）",
         "explanation": "Selenium官方支持的主流浏览器包括Internet Explorer、Mozilla Firefox、Google Chrome等。360安全浏览器是基于Chromium内核的浏览器，虽然在某些情况下可能可以通过ChromeDriver驱动，但不是Selenium官方支持的主流浏览器。因此正确答案是A、B、D。",
-        "type": "choice"
+        "type": "multiple"
       },
       {
         "id": "q-124-1782221097401-mlmm",
@@ -6063,7 +6414,7 @@
         ],
         "answer": "A、B、C（多选题）",
         "explanation": "Selenium支持在Windows、Linux、macOS等主流操作系统上运行。但Selenium主要用于Web应用测试，不直接支持Android（移动端测试），Android测试通常使用Appium等工具。因此正确答案是A、B、C。",
-        "type": "choice"
+        "type": "multiple"
       },
       {
         "id": "q-125-1782221097401-3136",
@@ -6077,7 +6428,7 @@
         ],
         "answer": "A、B、C、D（多选题）",
         "explanation": "Selenium支持多种元素定位方式，包括通过ID（BY.ID）、名称（BY.NAME）、标签名（BY.TAG_NAME）、类名（BY.CLASS_NAME）、CSS选择器、XPath等。因此A、B、C、D都是Selenium支持的定位方式，正确答案是全部选项。",
-        "type": "choice"
+        "type": "multiple"
       },
       {
         "id": "q-126-1782221097401-atjw",
@@ -6332,9 +6683,62 @@
         "answer": "POST",
         "explanation": "在HTTP协议中，常用的请求方法包括GET（获取资源）、POST（新增/提交数据）、PUT（更新资源）、DELETE（删除资源）等。POST方法通常用于向服务器提交数据，创建新的资源。因此空格处应填\"POST\"。",
         "type": "input"
+      },
+      {
+        "id": "q-1782723639527-ldpq",
+        "number": 1,
+        "question": "LoRunner工作流程",
+        "options": [],
+        "answer": "制定测试计划\n创建测试脚本\n设计测试场景\n运行测试场景\n分析测试结果",
+        "explanation": "背答案",
+        "chapter": "大题",
+        "type": "essay"
+      },
+      {
+        "id": "q-1782723715239-sqg8",
+        "number": 2,
+        "question": "白盒测试/黑盒测试的区别",
+        "options": [],
+        "answer": "黑盒：不看代码，只测功能输入输出\n白盒：看源码，测代码内部逻辑分支",
+        "explanation": "大概意思对就行",
+        "chapter": "大题",
+        "type": "essay"
+      },
+      {
+        "id": "q-1782723830446-0657",
+        "number": 3,
+        "question": "软件缺陷的严重程度分级",
+        "options": [],
+        "answer": "致命\n严重\n一般\n较小",
+        "explanation": "背就行",
+        "chapter": "大题",
+        "type": "essay"
+      },
+      {
+        "id": "q-1782724103564-elur",
+        "number": 1,
+        "question": "完成 Java 判断是否成年，年满18返回true：\njava\n运行\n//判断是否成年，年满18返回true\npublic static boolean isAdult(int age){\n    if(____1____){\n        return true;\n    }\n    return false;\n}\n@Test\npublic void testAdult(){\n    assertTrue(isAdult(20));\n    ____2____;//填空2，以16岁为例\n}\n完成 Java 判断是否成年，年满18返回true：\njava\n运行\n//判断是否成年，年满18返回true\npublic static boolean isAdult(int age){\n    if(____1____){//填空1\n        return true;\n    }\n    return false;\n}\n@Test\npublic void testAdult(){\n    assertTrue(isAdult(20));\n    ____2____;//填空2，以16岁为例\n}",
+        "options": [],
+        "answer": "age>=18\nassertFalse(isAdult(16))",
+        "explanation": "填空 1：age >= 18\n判断年龄大于等于 18 周岁，满足则返回成年 true。\n填空 2：assertFalse (isAdult (16))\nassertFalse 代表断言结果为 false；16 岁未满 18，isAdult 返回 false，断言通过。",
+        "chapter": "程序填空",
+        "type": "essay"
+      },
+      {
+        "id": "q-1782724160671-b3pb",
+        "number": 2,
+        "question": "接口测试填空\n// 断言响应状态码为200\n____3____.test(\"请求HTTP状态码为200\", function () {  // 填空3\n    pm.response.to.have.status(____4____);// 填空4\n});\n\n// 解析响应JSON\nvar jsonData = pm.response.json();\n\n// 断言账号已存在\npm.test(\"返回【账号已存在】提示\", function () {\n    pm.expect(jsonData.msg).____5____(\"账号已存在\"); // 填空5 \n});",
+        "options": [],
+        "answer": "pm\n200\neql",
+        "explanation": "填空 3 pm\npm 是 Postman 内置全局对象，所有测试方法都靠它调用。\n填空 4 200\nHTTP200 代表请求成功，断言接口返回状态码等于 200。\n填空 5 eql\n完全匹配，校验返回 msg 字符串和 “账号已存在” 一模一样。",
+        "chapter": "程序填空",
+        "type": "essay"
       }
     ],
-    "wrongIds": []
+    "wrongIds": [
+      "q-1-1782221097400-kvh7",
+      "q-1782724103564-elur"
+    ]
   },
   "quiz-wrong-ids": [
     "q-13-1781945322636-5yuj",
@@ -6358,20 +6762,24 @@
   },
   "quiz-theme": "light",
   "quiz-mascot-enabled": true,
-  "quiz-active-subject": "subj-1782026926147-1",
+  "quiz-active-subject": "subj-1782028018297-1",
   "quiz-sound-muted": false,
   "quiz-progress-subj-1782028018297-1": {
     "currentIndex": 0,
     "answers": {
-      "q-1-1782028289292-8roy": "C. 程序及其文档"
+      "q-1782724103564-elur": "age>=18"
     },
     "submittedIds": [
-      "q-1-1782028289292-8roy"
+      "q-1782724103564-elur"
     ],
     "quizMode": "sequential",
     "shuffledQuestions": null,
-    "selectedChapters": [],
+    "selectedChapters": [
+      "程序填空"
+    ],
     "selectedTypes": [],
-    "isFinished": false
+    "isFinished": false,
+    "optionShuffled": false,
+    "shuffledOptionMap": {}
   }
 }
