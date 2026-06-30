@@ -227,7 +227,7 @@ export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOp
         className={`border-2 border-dashed transition-all p-12 mb-6 cursor-pointer rounded-xl ${
           isDragOver
             ? "border-accent bg-accent/10"
-            : "border-border/60 bg-foreground/[0.02] hover:border-accent/40 hover:bg-accent/5"
+            : "border-border/40 glass bg-transparent hover:border-accent/40 hover:bg-accent/5"
         }`}
       >
         <input
@@ -266,7 +266,7 @@ export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOp
           variant="ghost"
           size="sm"
           onClick={() => setShowManualDialog(true)}
-          className="w-full gap-2 text-[10px] font-mono tracking-wider uppercase h-auto py-2 mt-3 border border-dashed border-border/40 hover:border-accent/30 text-muted-foreground hover:text-accent"
+          className="w-full gap-2 text-[10px] font-mono tracking-wider uppercase h-auto py-2 mt-3 border border-dashed border-border/40 hover:border-accent/30 text-foreground/60 hover:text-accent"
         >
           <Plus size={12} strokeWidth={1.5} />
           手动添加题目
@@ -277,14 +277,13 @@ export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOp
       <div className="flex flex-col sm:flex-row gap-3 mt-4">
         <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="flex-1">
           <Button
-            variant="outline"
             size="lg"
             onClick={() => {
               if (!text.trim()) return
               setShowAiDialog(true)
             }}
             disabled={!text.trim()}
-            className="w-full gap-3 text-sm font-mono tracking-wider uppercase h-auto py-4"
+            className="w-full gap-3 text-sm font-mono tracking-wider uppercase h-auto py-4 glass bg-transparent border-border/40 hover:bg-accent/10 text-foreground hover:text-accent disabled:opacity-40"
           >
             <Wand2 size={18} strokeWidth={1.5} />
             用 AI 格式化
@@ -296,7 +295,7 @@ export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOp
             size="lg"
             onClick={handleImport}
             disabled={!text.trim()}
-            className="w-full gap-3 text-sm font-mono tracking-wider uppercase h-auto py-4"
+            className="w-full gap-3 text-sm font-mono tracking-wider uppercase h-auto py-4 glass bg-transparent border-border/40 hover:bg-accent/10 text-foreground hover:text-accent disabled:opacity-40"
           >
             <FileText size={14} strokeWidth={1.5} />
             导入题目
@@ -331,10 +330,9 @@ export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOp
           className="mt-3"
         >
           <Button
-            variant="outline"
             size="lg"
             onClick={onOpenWrongBook}
-            className="w-full flex items-center justify-between h-auto py-5 px-5 border-accent/30 bg-accent/5 hover:bg-accent/10 text-accent"
+            className="w-full flex items-center justify-between h-auto py-5 px-5 glass bg-transparent border-border/40 hover:bg-accent/10 text-foreground hover:text-accent"
           >
             <span className="text-sm font-mono">错题本</span>
             <span className="text-sm font-mono font-bold">{wrongCount} 题待巩固</span>
@@ -348,10 +346,10 @@ export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOp
         animate={{ opacity: 1, y: 0 }}
         className="mt-3"
       >
-        <Card className="border-border/40 shadow-sm bg-card/80 backdrop-blur-xl">
+        <Card className="border-border/40 shadow-lg glass bg-transparent">
           <CardContent className="p-4">
             <div className="flex items-center justify-between gap-2">
-              <span className="text-xs font-mono text-muted-foreground">题库文件</span>
+              <span className="text-xs font-mono text-foreground/70">题库文件</span>
               <div className="flex items-center gap-1">
                 <Button
                   variant="ghost"
@@ -392,10 +390,10 @@ export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOp
           animate={{ opacity: 1, y: 0 }}
           className="mt-3"
         >
-          <Card className="border-border/40 shadow-sm bg-card/80 backdrop-blur-xl">
+        <Card className="border-border/40 shadow-lg glass bg-transparent">
             <CardContent className="p-5">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-mono text-muted-foreground">
+                <span className="text-sm font-mono text-foreground/70">
                   已导入题库
                 </span>
                 <div className="flex items-center gap-3">
@@ -408,7 +406,7 @@ export function ImportPanel({ onImport, onClear, questionCount, wrongCount, onOp
                     onClick={() => {
                       if (confirm("确认清空当前科目的所有题目？")) onClear()
                     }}
-                    className="gap-1 text-[10px] font-mono text-muted-foreground hover:text-destructive"
+                    className="gap-1 text-[10px] font-mono text-foreground/60 hover:text-destructive"
                   >
                     <Trash2 size={10} strokeWidth={1.5} />
                     清空

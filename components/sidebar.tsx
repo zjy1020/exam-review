@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { motion } from "framer-motion"
 import { BookOpen, Plus, Trash2, ChevronLeft, Pencil, FileText, BookX, KeyRound } from "lucide-react"
 import type { Subject } from "@/lib/types"
@@ -24,6 +24,7 @@ interface SidebarProps {
   questionCount: number
   collapsed: boolean
   onToggle: () => void
+  onSetCollapsed: (v: boolean) => void
 }
 
 export function Sidebar({
@@ -37,12 +38,27 @@ export function Sidebar({
   questionCount,
   collapsed,
   onToggle,
+  onSetCollapsed,
 }: SidebarProps) {
   const [showNewInput, setShowNewInput] = useState(false)
   const [newName, setNewName] = useState("")
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editName, setEditName] = useState("")
+  const [sheetOpen, setSheetOpen] = useState(false)
   const sidebarImportRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    function update() {
+      if (window.innerWidth >= 1024) {
+        setSheetOpen(false)
+      } else {
+        setSheetOpen(!collapsed)
+      }
+    }
+    update()
+    window.addEventListener("resize", update)
+    return () => window.removeEventListener("resize", update)
+  }, [collapsed])
 
   const handleCreate = () => {
     if (newName.trim()) {
@@ -88,10 +104,10 @@ export function Sidebar({
       <ScrollArea className="flex-1 py-2">
         {subjects.length === 0 && (
           <div className="px-4 py-6 text-center">
-            <p className="text-xs font-mono text-muted-foreground">
+            <p className="text-xs font-mono text-foreground/60">
               暂无科目
             </p>
-            <p className="text-xs font-mono text-muted-foreground mt-1">
+            <p className="text-xs font-mono text-foreground/60 mt-1">
               点击下方新建
             </p>
           </div>
@@ -123,12 +139,12 @@ export function Sidebar({
               <button
                 onClick={() => {
                   onSelect(s.id)
-                  if (window.innerWidth < 1024) onToggle()
+                  if (window.innerWidth < 1024) { setSheetOpen(false); onSetCollapsed(true) }
                 }}
                 className={`w-full flex items-center gap-2 px-3 py-2.5 text-xs font-mono text-left transition-all duration-200 border-l-2 group rounded-r-lg ${
                   activeSubjectId === s.id
                     ? "border-accent bg-accent/10 text-accent"
-                    : "border-transparent text-muted-foreground hover:text-foreground hover:bg-accent/5 hover:border-l-accent/30"
+                    : "border-transparent text-foreground/70 hover:text-foreground hover:bg-accent/5 hover:border-l-accent/30"
                 }`}
               >
                 <BookOpen size={12} strokeWidth={1.5} className="shrink-0" />
@@ -160,7 +176,7 @@ export function Sidebar({
       {/* Stats */}
       {activeSubjectId && (
         <div className="px-4 py-2 border-t border-foreground/10 space-y-1">
-          <div className="flex items-center justify-between text-xs font-mono text-muted-foreground">
+          <div className="flex items-center justify-between text-xs font-mono text-foreground/70">
             <span className="flex items-center gap-1">
               <FileText size={10} strokeWidth={1.5} />
               题目
@@ -205,10 +221,10 @@ export function Sidebar({
           </div>
         ) : (
           <Button
-            variant="outline"
+            variant="ghost"
             size="sm"
             onClick={() => setShowNewInput(true)}
-            className="w-full gap-1.5 border-dashed text-xs font-mono"
+            className="w-full gap-1.5 border border-dashed border-border/40 text-xs font-mono text-foreground hover:text-accent hover:bg-accent/10"
           >
             <Plus size={12} strokeWidth={1.5} />
             新建科目
@@ -220,7 +236,7 @@ export function Sidebar({
       <div className="px-3 py-3 border-t border-foreground/10 space-y-2">
         <div className="flex gap-2">
           <Button
-            variant="outline"
+            variant="ghost"
             size="sm"
             onClick={() => {
               const input = prompt("请输入暗号")
@@ -244,15 +260,15 @@ export function Sidebar({
               a.click()
               URL.revokeObjectURL(url)
             }}
-            className="flex-1 gap-1 text-xs font-mono"
+            className="flex-1 gap-1 text-xs font-mono border border-border/40 text-foreground hover:text-accent hover:bg-accent/10"
           >
             导出数据
           </Button>
           <Button
-            variant="outline"
+            variant="ghost"
             size="sm"
             onClick={() => sidebarImportRef.current?.click()}
-            className="flex-1 gap-1 text-xs font-mono"
+            className="flex-1 gap-1 text-xs font-mono border border-border/40 text-foreground hover:text-accent hover:bg-accent/10"
           >
             导入数据
           </Button>
@@ -293,7 +309,7 @@ export function Sidebar({
 
         {/* 一键导入 */}
         <Button
-          variant="outline"
+          variant="ghost"
           size="sm"
           onClick={() => {
             const input = prompt("请输入暗号")
@@ -323,7 +339,7 @@ export function Sidebar({
               })
               .catch(() => alert("备份文件读取失败"))
           }}
-          className="w-full gap-2 text-xs font-mono border-accent/30 text-accent hover:bg-accent/10"
+          className="w-full gap-2 text-xs font-mono border border-border/40 text-foreground hover:text-accent hover:bg-accent/10"
         >
           <KeyRound size={12} strokeWidth={1.5} />
           一键导入
@@ -336,8 +352,8 @@ export function Sidebar({
     <>
       {/* Mobile Sheet */}
       <div className="lg:hidden">
-        <Sheet open={!collapsed} onOpenChange={(open) => { if (!open) onToggle() }}>
-          <SheetContent side="left" className="w-[240px] p-0" hideCloseButton>
+        <Sheet open={sheetOpen} onOpenChange={(open) => { setSheetOpen(open); if (!open) onSetCollapsed(true) }}>
+          <SheetContent side="left" className="w-[240px] p-0 glass bg-transparent" hideCloseButton>
             <SheetTitle className="sr-only">科目列表</SheetTitle>
             {sidebarContent}
           </SheetContent>
@@ -355,3 +371,4 @@ export function Sidebar({
     </>
   )
 }
+
