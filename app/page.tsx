@@ -30,7 +30,7 @@ function parseBg(bg: string) {
   if (bg === "none|") return { type: "none" as const, value: "" }
   const pipe = bg.indexOf("|")
   if (pipe === -1) return { type: "image" as const, value: bg }
-  return { type: bg.substring(0, pipe) as "image" | "gradient" | "custom", value: bg.substring(pipe + 1) }
+  return { type: bg.substring(0, pipe) as "image" | "gradient" | "custom" | "video", value: bg.substring(pipe + 1) }
 }
 
 export default function Page() {
@@ -49,12 +49,34 @@ export default function Page() {
   const [showAppBgPicker, setShowAppBgPicker] = useState(false)
   const appBgBtnRef = useRef<HTMLButtonElement>(null)
   const appBgGridRef = useRef<HTMLDivElement>(null)
-  const [appBg, setAppBg] = useState("image|/images/BZ.png")
+  const [appBg, setAppBg] = useState("video|/images/wp-coffee-mv.mp4")
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const bgRef = useRef(appBg)
+  const bgUploadRef = useRef<HTMLInputElement>(null)
+
+  const handleBgUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (file.type === "video/mp4") {
+      const url = URL.createObjectURL(file)
+      localStorage.setItem("quiz-bg", `video|${url}`)
+      setAppBg(`video|${url}`)
+      setShowAppBgPicker(false)
+    } else {
+      const reader = new FileReader()
+      reader.onload = (ev) => {
+        const dataUrl = ev.target?.result as string
+        localStorage.setItem("quiz-bg", `custom|${dataUrl}`)
+        setAppBg(`custom|${dataUrl}`)
+        setShowAppBgPicker(false)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
   const appBgPresets = [
     { id: "none", name: "无壁纸", value: "none" },
     { id: "bz", name: "默认", value: "/images/BZ.png" },
+    { id: "coffee", name: "台阶咖啡屋", value: "/images/wp-coffee-mv.mp4" },
     { id: "lumen", name: "Lumen骑士", value: "/images/wp-lumen.png" },
     { id: "anime-girl", name: "动漫女孩", value: "/images/wp-anime-girl.png" },
     { id: "catfeather", name: "猫羽雫", value: "/images/wp-catfeather.png" },
@@ -72,10 +94,10 @@ export default function Page() {
 
   useEffect(() => {
     const stored = localStorage.getItem("quiz-bg")
-    if (stored) { setAppBg(stored); bgRef.current = stored }
+    if (stored && stored !== "image|/images/BZ.png") { setAppBg(stored); bgRef.current = stored }
     const iv = setInterval(() => {
       const updated = localStorage.getItem("quiz-bg")
-      if (updated && updated !== bgRef.current) { setAppBg(updated); bgRef.current = updated }
+      if (updated && updated !== bgRef.current && updated !== "image|/images/BZ.png") { setAppBg(updated); bgRef.current = updated }
     }, 800)
     return () => clearInterval(iv)
   }, [])
@@ -179,7 +201,9 @@ export default function Page() {
 
       {/* Background layer */}
       <div className="fixed inset-0 z-0">
-        {bgStyle.type === "none" || !bgStyle.value ? null : bgStyle.type === "image" || bgStyle.type === "custom" ? (
+        {bgStyle.type === "none" || !bgStyle.value ? null : bgStyle.type === "video" ? (
+          <video src={bgStyle.value} autoPlay muted loop playsInline className="w-full h-full object-cover" />
+        ) : bgStyle.type === "image" || bgStyle.type === "custom" ? (
           <img src={bgStyle.value} alt="" className="w-full h-full object-cover" draggable={false} />
         ) : (
           <div className="w-full h-full" style={{ background: bgStyle.value }} />
@@ -293,7 +317,8 @@ export default function Page() {
                           {appBgPresets.map((p) => {
                             const curVal = appBg.split("|").slice(1).join("|")
                             const isGrad = p.value === "grad"
-                            const isActive = p.id === "none" ? (curVal === "" || curVal === "none") : isGrad ? curVal.includes("linear-gradient") && curVal.includes(p.name) : curVal === p.value
+                            const isVideo = p.value.endsWith(".mp4")
+                            const isActive = p.id === "none" ? (curVal === "" || curVal === "none") : isGrad ? curVal.includes("linear-gradient") && curVal.includes(p.name) : isVideo ? curVal === p.value : curVal === p.value
                             return (
                               <div key={p.id} className="relative">
                                 <button onClick={() => {
@@ -309,6 +334,9 @@ export default function Page() {
                                     const val = gradMap[p.name]
                                     localStorage.setItem("quiz-bg", `gradient|${val}`)
                                     setAppBg(`gradient|${val}`)
+                                  } else if (isVideo) {
+                                    localStorage.setItem("quiz-bg", `video|${p.value}`)
+                                    setAppBg(`video|${p.value}`)
                                   } else {
                                     localStorage.setItem("quiz-bg", `image|${p.value}`)
                                     setAppBg(`image|${p.value}`)
@@ -321,6 +349,8 @@ export default function Page() {
                                     </div>
                                   ) : isGrad ? (
                                     <div className="w-full h-full" style={{ background: p.name === "深空蓝" ? "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)" : p.name === "暖琥珀" ? "linear-gradient(135deg, #1a0a00 0%, #4a1a00 50%, #1a0a00 100%)" : p.name === "冷松绿" ? "linear-gradient(135deg, #001a1a 0%, #003d33 50%, #001a1a 100%)" : p.name === "皇家紫" ? "linear-gradient(135deg, #0d001a 0%, #2d004d 50%, #0d001a 100%)" : p.name === "炭黑" ? "linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%)" : "linear-gradient(135deg, #1a0500 0%, #4a1000 50%, #1a0500 100%)" }} />
+                                  ) : isVideo ? (
+                                    <video src={p.value} className="w-full h-full object-cover" muted />
                                   ) : (
                                     <img src={p.value} alt={p.name} className="w-full h-full object-cover" />
                                   )}
@@ -331,10 +361,23 @@ export default function Page() {
                             )
                           })}
                         </div>
+                        <div className="mt-3 pt-3 border-t border-border/30">
+                          <button onClick={() => bgUploadRef.current?.click()}
+                            className="w-full flex items-center justify-center gap-2 py-2 rounded-lg border border-dashed border-border/40 text-[10px] font-mono text-muted-foreground hover:text-foreground hover:border-accent/30 transition-all">
+                            <Upload size={12} strokeWidth={1.5} />
+                            上传自定义图片
+                          </button>
+                          <input ref={bgUploadRef} type="file" accept="image/*,video/mp4" className="hidden" onChange={handleBgUpload} />
+                        </div>
                       </div>
                     )}
-                  </div>
-                  <ThemeToggle />
+                    </div>
+                    <button onClick={() => setCoverDismissed(false)}
+                      className="flex items-center justify-center w-7 h-7 rounded-full bg-muted/40 text-muted-foreground hover:text-foreground hover:bg-muted/70 transition-all"
+                      title="返回封面">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-6l-2-2H5a2 2 0 0 0-2 2Z"/><path d="m9 14 2 2 4-4"/></svg>
+                    </button>
+                    <ThemeToggle />
                 </div>
               </div>
             </div>

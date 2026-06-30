@@ -10,6 +10,7 @@ const BG_KEY = "quiz-bg"
 const PRESETS = [
   { id: "none", name: "无壁纸", type: "none" as const, value: "" },
   { id: "bz", name: "默认", type: "image" as const, value: "/images/BZ.png" },
+  { id: "coffee", name: "台阶咖啡屋", type: "video" as const, value: "/images/wp-coffee-mv.mp4" },
   { id: "iso", name: "等距", type: "image" as const, value: "/images/about-isometric.jpg" },
   { id: "lumen", name: "Lumen骑士", type: "image" as const, value: "/images/wp-lumen.png" },
   { id: "anime-girl", name: "动漫女孩", type: "image" as const, value: "/images/wp-anime-girl.png" },
@@ -32,7 +33,7 @@ interface CoverPageProps { onDismiss: () => void }
 function getBgStyle(bg: string) {
   const pipe = bg.indexOf("|")
   if (pipe === -1) return { type: "image" as const, value: bg }
-  return { type: bg.substring(0, pipe) as "image" | "gradient" | "custom" | "none", value: bg.substring(pipe + 1) }
+  return { type: bg.substring(0, pipe) as "image" | "gradient" | "custom" | "none" | "video", value: bg.substring(pipe + 1) }
 }
 
 function PresetGrid({ currentId, customBgs, onSelect, onUploadClick, onDeleteCustom, onClose }: {
@@ -64,7 +65,7 @@ function PresetGrid({ currentId, customBgs, onSelect, onUploadClick, onDeleteCus
           return (
             <div key={p.id} className="relative group">
               <button onClick={() => onSelect(p.id)} className={`relative w-full aspect-[3/2] rounded-lg overflow-hidden border-2 transition-all ${isActive ? "border-accent ring-1 ring-accent/50" : "border-white/10 hover:border-white/30"}`}>
-                {p.type === "none" ? <div className="w-full h-full bg-white/5 flex items-center justify-center"><span className="text-[8px] font-mono text-white/20">×</span></div> : p.type === "image" ? <img src={p.value} alt={p.name} className="w-full h-full object-cover" /> : <div className="w-full h-full" style={{ background: p.value }} />}
+                {p.type === "none" ? <div className="w-full h-full bg-white/5 flex items-center justify-center"><span className="text-[8px] font-mono text-white/20">×</span></div> : p.type === "video" ? <video src={p.value} className="w-full h-full object-cover" muted /> : p.type === "image" ? <img src={p.value} alt={p.name} className="w-full h-full object-cover" /> : <div className="w-full h-full" style={{ background: p.value }} />}
                 {isActive && <div className="absolute inset-0 flex items-center justify-center bg-black/30"><Check size={16} className="text-accent" strokeWidth={3} /></div>}
               </button>
               <p className="text-[9px] font-mono text-white/40 text-center mt-1 truncate">{p.name}</p>
@@ -89,35 +90,58 @@ export function CoverPage({ onDismiss }: CoverPageProps) {
   const [showSettings, setShowSettings] = useState(false)
   const [showBgPicker, setShowBgPicker] = useState(false)
   const [visible, setVisible] = useState(true)
-  const [currentBg, setCurrentBg] = useState(`image|${PRESETS[0].value}`)
+  const [currentBg, setCurrentBg] = useState("video|/images/wp-coffee-mv.mp4")
   const [currentBgId, setCurrentBgId] = useState(PRESETS[0].id)
   const [customBgs, setCustomBgs] = useState<CustomBg[]>([])
   const sliderRef = useRef<HTMLDivElement>(null)
   const bgBtnRef = useRef<HTMLButtonElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const hydrated = useRef(false)
 
   useEffect(() => {
-    const saved = localStorage.getItem(BLUR_KEY); const initial = saved ? Number(saved) : 4
-    setBlur(initial); document.documentElement.style.setProperty("--cover-blur", `${initial}px`)
+    hydrated.current = true
+    const savedBlur = localStorage.getItem(BLUR_KEY)
+    if (savedBlur) { setBlur(Number(savedBlur)); document.documentElement.style.setProperty("--cover-blur", `${savedBlur}px`) }
     const storedBg = localStorage.getItem(BG_KEY)
-    if (storedBg) setCurrentBg(storedBg)
+    if (storedBg && storedBg !== "image|/images/BZ.png") {
+      setCurrentBg(storedBg)
+      const pipe = storedBg.indexOf("|")
+      const val = pipe === -1 ? storedBg : storedBg.substring(pipe + 1)
+      const found = PRESETS.find(p => p.type !== "none" && (p.type === "image" && p.value === val || p.type === "gradient" && p.value === val || p.type === "video" && p.value === val))
+      if (found) setCurrentBgId(found.id)
+    }
     try { const raw = localStorage.getItem("quiz-bg-customs"); if (raw) setCustomBgs(JSON.parse(raw)) } catch {}
   }, [])
 
   useEffect(() => { localStorage.setItem(BLUR_KEY, String(blur)); document.documentElement.style.setProperty("--cover-blur", `${blur}px`) }, [blur])
-  useEffect(() => { localStorage.setItem(BG_KEY, currentBg) }, [currentBg])
+
+  useEffect(() => {
+    if (!hydrated.current) return
+    localStorage.setItem(BG_KEY, currentBg)
+  }, [currentBg])
 
   const selectBg = useCallback((id: string) => {
     const found = PRESETS.find(p => p.id === id) || customBgs.find(c => c.id === id)
     if (found) {
       setCurrentBgId(id)
       if (found.type === "image") setCurrentBg(`image|${found.value}`)
+      else if (found.type === "video") setCurrentBg(`video|${found.value}`)
       else if (found.type == "none") setCurrentBg(`none|`)
       else setCurrentBg(`gradient|${found.value}`)
   }
   }, [customBgs])
 
   const handleUpload = useCallback((file: File) => {
+    if (file.type === "video/mp4") {
+      const url = URL.createObjectURL(file)
+      const id = `video-${Date.now()}`
+      const newBg: CustomBg = { id, name: file.name.substring(0, 12), type: "custom", value: url }
+      const updated = [...customBgs, newBg]; setCustomBgs(updated)
+      localStorage.setItem("quiz-bg-customs", JSON.stringify(updated))
+      localStorage.setItem(BG_KEY, `video|${url}`)
+      setCurrentBgId(id); setCurrentBg(`video|${url}`)
+      return
+    }
     const reader = new FileReader()
     reader.onload = (e) => {
       const img = new Image()
@@ -180,11 +204,13 @@ export function CoverPage({ onDismiss }: CoverPageProps) {
           onClick={handleBgClick}
         >
           {/* File input at CoverPage level (not inside PresetGrid) */}
-          <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+          <input ref={fileInputRef} type="file" accept="image/*,video/mp4" className="hidden" onChange={handleFileChange} />
 
           <div className="absolute inset-0">
             {bgStyle.type === "none" || (bgStyle.type === "image" && !bgStyle.value) ? (
               <div className="w-full h-full bg-[#0a0a0a]" />
+            ) : bgStyle.type === "video" ? (
+              <video src={bgStyle.value} autoPlay muted loop playsInline className="w-full h-full object-cover" />
             ) : bgStyle.type === "image" || bgStyle.type === "custom" ? (
               <img src={bgStyle.value} alt="" className="w-full h-full object-cover" draggable={false} />
             ) : <div className="w-full h-full" style={{ background: bgStyle.value }} />}

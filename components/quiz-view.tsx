@@ -671,10 +671,12 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
       }
 
       if (key === "ArrowLeft" && currentIndex > 0) {
+        if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
         e.preventDefault()
         goPrev()
       }
       if (key === "ArrowRight" && currentIndex < displayQuestions.length - 1) {
+        if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
         e.preventDefault()
         goNext()
       }
