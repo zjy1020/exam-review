@@ -76,7 +76,6 @@ export default function Page() {
   const appBgPresets = [
     { id: "none", name: "无壁纸", value: "none" },
     { id: "bz", name: "默认", value: "/images/BZ.png" },
-    { id: "coffee", name: "台阶咖啡屋", value: "/images/wp-coffee-mv.mp4" },
     { id: "lumen", name: "Lumen骑士", value: "/images/wp-lumen.png" },
     { id: "anime-girl", name: "动漫女孩", value: "/images/wp-anime-girl.png" },
     { id: "catfeather", name: "猫羽雫", value: "/images/wp-catfeather.png" },
@@ -214,7 +213,7 @@ export default function Page() {
       {/* Main layout */}
       <div className="relative z-10 flex min-h-screen">
         {/* Desktop sidebar */}
-        <div className="hidden lg:block">
+        <div className="hidden lg:block sticky top-0 h-screen">
           <Sidebar
             subjects={subjects}
             activeSubjectId={activeSubjectId}

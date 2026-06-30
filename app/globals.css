@@ -201,19 +201,6 @@ video::-webkit-media-controls-start-playback-button {
   display: none !important;
 }
 
-/* Hide scrollbar but keep scrolling */
-html::-webkit-scrollbar,
-body::-webkit-scrollbar {
-  display: none;
-}
-html {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-body {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
 
 /* Mobile: slightly larger base font for readability on high-DPI screens */
 @media (max-width: 480px) {

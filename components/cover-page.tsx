@@ -10,7 +10,6 @@ const BG_KEY = "quiz-bg"
 const PRESETS = [
   { id: "none", name: "无壁纸", type: "none" as const, value: "" },
   { id: "bz", name: "默认", type: "image" as const, value: "/images/BZ.png" },
-  { id: "coffee", name: "台阶咖啡屋", type: "video" as const, value: "/images/wp-coffee-mv.mp4" },
   { id: "iso", name: "等距", type: "image" as const, value: "/images/about-isometric.jpg" },
   { id: "lumen", name: "Lumen骑士", type: "image" as const, value: "/images/wp-lumen.png" },
   { id: "anime-girl", name: "动漫女孩", type: "image" as const, value: "/images/wp-anime-girl.png" },
