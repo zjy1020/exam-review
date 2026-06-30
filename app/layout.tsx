@@ -48,6 +48,9 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{
           __html: `(function(){try{var t=localStorage.getItem('quiz-theme');if(t==='light'){document.documentElement.classList.remove('dark')}else{document.documentElement.classList.add('dark')}}catch(e){}})();`
         }} />
+        <script dangerouslySetInnerHTML={{
+          __html: `(function(){try{var v=localStorage.getItem('quiz-ver');if(v&&v!=='0.2.0'){localStorage.clear()}localStorage.setItem('quiz-ver','0.2.0')}catch(e){}})();`
+        }} />
         {children}
       </body>
     </html>
