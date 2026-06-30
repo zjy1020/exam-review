@@ -4,6 +4,7 @@ import { useCallback, useRef, useState, useEffect } from "react"
 
 export function useSound() {
   const ctxRef = useRef<AudioContext | null>(null)
+  const correctAudioRef = useRef<HTMLAudioElement | null>(null)
   const [muted, setMuted] = useState<boolean>(() => {
     try { return localStorage.getItem("quiz-sound-muted") === "true" }
     catch { return false }
@@ -13,6 +14,14 @@ export function useSound() {
     try { localStorage.setItem("quiz-sound-muted", muted ? "true" : "false") }
     catch { /* ignore */ }
   }, [muted])
+
+  useEffect(() => {
+    const audio = new Audio("/sounds/laugh.mp3")
+    audio.loop = true
+    audio.volume = 0.6
+    correctAudioRef.current = audio
+    return () => { audio.pause(); audio.src = "" }
+  }, [])
 
   const getCtx = useCallback(() => {
     if (!ctxRef.current) ctxRef.current = new AudioContext()
@@ -36,10 +45,27 @@ export function useSound() {
     } catch { /* ignore */ }
   }, [muted, getCtx])
 
-  const playCorrect = useCallback(() => playTone(880, 0.15), [playTone])
+  const playCorrect = useCallback(() => {
+    if (muted) return
+    try {
+      const audio = correctAudioRef.current
+      if (audio) {
+        audio.currentTime = 0
+        audio.play()
+      }
+    } catch { /* ignore */ }
+  }, [muted])
+
+  const stopCorrect = useCallback(() => {
+    try {
+      const audio = correctAudioRef.current
+      if (audio) { audio.pause(); audio.currentTime = 0 }
+    } catch { /* ignore */ }
+  }, [])
+
   const playWrong = useCallback(() => playTone(220, 0.25, "square"), [playTone])
 
   const toggleMute = useCallback(() => setMuted((m) => !m), [])
 
-  return { playCorrect, playWrong, muted, toggleMute }
+  return { playCorrect, stopCorrect, playWrong, muted, toggleMute }
 }
