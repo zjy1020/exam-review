@@ -202,7 +202,7 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
 
   // Engagement hooks
   const { streak, onAnswer, resetStreak, hasMilestoneTriggered } = useStreak()
-  const { playCorrect, stopCorrect, playWrong, muted, toggleMute } = useSound()
+  const { playCorrect, playWrong, muted, toggleMute } = useSound()
   const { newUnlocks, checkAchievements, clearNewUnlocks, unlockedDetails } = useAchievements()
   const [timerEnabled, setTimerEnabled] = useState(false)
   const [celebrationKey, setCelebrationKey] = useState(0)
@@ -537,7 +537,6 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
   }
 
   const goNext = () => {
-    stopCorrect()
     setLastCorrect(null)
     if (currentIndex < displayQuestions.length - 1) {
       setCurrentIndex((i) => i + 1)
@@ -546,7 +545,6 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
   }
 
   const goPrev = () => {
-    stopCorrect()
     setLastCorrect(null)
     if (currentIndex > 0) {
       setCurrentIndex((i) => i - 1)
@@ -555,7 +553,6 @@ export function QuizView({ questions, onReset, onUpdateWrong, onClearWrong, onRe
   }
 
   const handleFinish = () => {
-    stopCorrect()
     setIsFinished(true)
     setCelebrationKey((k) => k + 1)
     setCelebrationType("complete")
