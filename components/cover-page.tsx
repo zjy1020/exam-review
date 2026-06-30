@@ -65,7 +65,7 @@ function PresetGrid({ currentId, customBgs, onSelect, onUploadClick, onDeleteCus
           return (
             <div key={p.id} className="relative group">
               <button onClick={() => onSelect(p.id)} className={`relative w-full aspect-[3/2] rounded-lg overflow-hidden border-2 transition-all ${isActive ? "border-accent ring-1 ring-accent/50" : "border-white/10 hover:border-white/30"}`}>
-                {p.type === "none" ? <div className="w-full h-full bg-white/5 flex items-center justify-center"><span className="text-[8px] font-mono text-white/20">×</span></div> : p.type === "video" ? <video src={p.value} className="w-full h-full object-cover" muted /> : p.type === "image" ? <img src={p.value} alt={p.name} className="w-full h-full object-cover" /> : <div className="w-full h-full" style={{ background: p.value }} />}
+                {p.type === "none" ? <div className="w-full h-full bg-white/5 flex items-center justify-center"><span className="text-[8px] font-mono text-white/20">×</span></div> : p.type === "video" ? <video src={p.value} className="w-full h-full object-cover" muted preload="auto" /> : p.type === "image" ? <img src={p.value} alt={p.name} className="w-full h-full object-cover" /> : <div className="w-full h-full" style={{ background: p.value }} />}
                 {isActive && <div className="absolute inset-0 flex items-center justify-center bg-black/30"><Check size={16} className="text-accent" strokeWidth={3} /></div>}
               </button>
               <p className="text-[9px] font-mono text-white/40 text-center mt-1 truncate">{p.name}</p>
@@ -90,7 +90,7 @@ export function CoverPage({ onDismiss }: CoverPageProps) {
   const [showSettings, setShowSettings] = useState(false)
   const [showBgPicker, setShowBgPicker] = useState(false)
   const [visible, setVisible] = useState(true)
-  const [currentBg, setCurrentBg] = useState("video|/images/wp-coffee-mv.mp4")
+  const [currentBg, setCurrentBg] = useState("image|/images/BZ.png")
   const [currentBgId, setCurrentBgId] = useState(PRESETS[0].id)
   const [customBgs, setCustomBgs] = useState<CustomBg[]>([])
   const sliderRef = useRef<HTMLDivElement>(null)
@@ -103,12 +103,14 @@ export function CoverPage({ onDismiss }: CoverPageProps) {
     const savedBlur = localStorage.getItem(BLUR_KEY)
     if (savedBlur) { setBlur(Number(savedBlur)); document.documentElement.style.setProperty("--cover-blur", `${savedBlur}px`) }
     const storedBg = localStorage.getItem(BG_KEY)
-    if (storedBg && storedBg !== "image|/images/BZ.png") {
+    if (storedBg && storedBg !== "image|/images/BZ.png" && storedBg !== "video|/images/wp-coffee-mv.mp4") {
       setCurrentBg(storedBg)
       const pipe = storedBg.indexOf("|")
       const val = pipe === -1 ? storedBg : storedBg.substring(pipe + 1)
       const found = PRESETS.find(p => p.type !== "none" && (p.type === "image" && p.value === val || p.type === "gradient" && p.value === val || p.type === "video" && p.value === val))
       if (found) setCurrentBgId(found.id)
+    } else {
+      localStorage.setItem(BG_KEY, "image|/images/BZ.png")
     }
     try { const raw = localStorage.getItem("quiz-bg-customs"); if (raw) setCustomBgs(JSON.parse(raw)) } catch {}
   }, [])
@@ -210,7 +212,7 @@ export function CoverPage({ onDismiss }: CoverPageProps) {
             {bgStyle.type === "none" || (bgStyle.type === "image" && !bgStyle.value) ? (
               <div className="w-full h-full bg-[#0a0a0a]" />
             ) : bgStyle.type === "video" ? (
-              <video src={bgStyle.value} autoPlay muted loop playsInline className="w-full h-full object-cover" />
+              <video src={bgStyle.value} autoPlay muted loop playsInline preload="auto" className="w-full h-full object-cover" />
             ) : bgStyle.type === "image" || bgStyle.type === "custom" ? (
               <img src={bgStyle.value} alt="" className="w-full h-full object-cover" draggable={false} />
             ) : <div className="w-full h-full" style={{ background: bgStyle.value }} />}

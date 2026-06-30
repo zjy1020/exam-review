@@ -35,7 +35,6 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   viewportFit: 'cover',
-  userScalable: false,
 }
 
 export default function RootLayout({

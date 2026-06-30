@@ -49,7 +49,7 @@ export default function Page() {
   const [showAppBgPicker, setShowAppBgPicker] = useState(false)
   const appBgBtnRef = useRef<HTMLButtonElement>(null)
   const appBgGridRef = useRef<HTMLDivElement>(null)
-  const [appBg, setAppBg] = useState("video|/images/wp-coffee-mv.mp4")
+  const [appBg, setAppBg] = useState("image|/images/BZ.png")
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const bgRef = useRef(appBg)
   const bgUploadRef = useRef<HTMLInputElement>(null)
@@ -94,10 +94,10 @@ export default function Page() {
 
   useEffect(() => {
     const stored = localStorage.getItem("quiz-bg")
-    if (stored && stored !== "image|/images/BZ.png") { setAppBg(stored); bgRef.current = stored }
+    if (stored && stored !== "image|/images/BZ.png" && stored !== "video|/images/wp-coffee-mv.mp4") { setAppBg(stored); bgRef.current = stored }
     const iv = setInterval(() => {
       const updated = localStorage.getItem("quiz-bg")
-      if (updated && updated !== bgRef.current && updated !== "image|/images/BZ.png") { setAppBg(updated); bgRef.current = updated }
+      if (updated && updated !== bgRef.current && updated !== "image|/images/BZ.png" && updated !== "video|/images/wp-coffee-mv.mp4") { setAppBg(updated); bgRef.current = updated }
     }, 800)
     return () => clearInterval(iv)
   }, [])
@@ -202,7 +202,7 @@ export default function Page() {
       {/* Background layer */}
       <div className="fixed inset-0 z-0">
         {bgStyle.type === "none" || !bgStyle.value ? null : bgStyle.type === "video" ? (
-          <video src={bgStyle.value} autoPlay muted loop playsInline className="w-full h-full object-cover" />
+          <video src={bgStyle.value} autoPlay muted loop playsInline preload="auto" className="w-full h-full object-cover" />
         ) : bgStyle.type === "image" || bgStyle.type === "custom" ? (
           <img src={bgStyle.value} alt="" className="w-full h-full object-cover" draggable={false} />
         ) : (
@@ -350,7 +350,7 @@ export default function Page() {
                                   ) : isGrad ? (
                                     <div className="w-full h-full" style={{ background: p.name === "深空蓝" ? "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)" : p.name === "暖琥珀" ? "linear-gradient(135deg, #1a0a00 0%, #4a1a00 50%, #1a0a00 100%)" : p.name === "冷松绿" ? "linear-gradient(135deg, #001a1a 0%, #003d33 50%, #001a1a 100%)" : p.name === "皇家紫" ? "linear-gradient(135deg, #0d001a 0%, #2d004d 50%, #0d001a 100%)" : p.name === "炭黑" ? "linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%)" : "linear-gradient(135deg, #1a0500 0%, #4a1000 50%, #1a0500 100%)" }} />
                                   ) : isVideo ? (
-                                    <video src={p.value} className="w-full h-full object-cover" muted />
+                                    <video src={p.value} className="w-full h-full object-cover" muted preload="auto" />
                                   ) : (
                                     <img src={p.value} alt={p.name} className="w-full h-full object-cover" />
                                   )}

@@ -312,11 +312,7 @@ export function Sidebar({
           variant="ghost"
           size="sm"
           onClick={() => {
-            const input = prompt("请输入暗号")
-            if (!input || input.trim() !== AUTHOR_BIRTHDAY) {
-              if (input) alert("暗号错误")
-              return
-            }
+            if (!confirm("确定一键导入备份数据？")) return
             fetch("/backup.json")
               .then((r) => {
                 if (!r.ok) throw new Error("找不到备份文件")
